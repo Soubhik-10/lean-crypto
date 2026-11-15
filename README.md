@@ -4,11 +4,10 @@ An independent, verification-only Rust implementation of the experimental
 leanSPHINCS configuration specified by
 [EthLib at `03547dd83f298a63e6dcceff0a0b75f6142490aa`](https://github.com/ethereum/EthLib/tree/03547dd83f298a63e6dcceff0a0b75f6142490aa/EthLib/Cryptography/Sphincs).
 
-The package uses Alloy `B256` public keys and message digests, borrows signatures
-in their wire encoding, and performs no heap allocation during verification.
-The library is `no_std`, forbids unsafe code, and has one direct Git dependency:
-`alloy-primitives`, with its default features disabled. Optional `asm-keccak`
-selects Alloy's optimized hashing backend.
+`lean-sphincs` is a `no_std` library for allocation-free signature verification.
+Public keys and message digests use Alloy's `B256` type, and signatures are
+verified directly from serialized bytes. The optional `asm-keccak` feature
+enables assembly-accelerated Keccak hashing.
 
 ```rust
 use lean_sphincs::{B256, SIGNATURE_BYTES, verify};
