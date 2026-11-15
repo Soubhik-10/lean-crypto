@@ -56,3 +56,54 @@ fn keccak256(bencher: Bencher, bytes: usize) {
     let input = [0x42; 1072];
     bencher.bench(|| alloy_primitives::keccak256(black_box(&input[..bytes])));
 }
+
+// The dependency uses its own hashing backend in both feature configurations.
+#[divan::bench(args = [0, 1, 2])]
+fn reference_verify_wire(bencher: Bencher, index: usize) {
+    let case = &fixtures().cases[index];
+    bencher.bench(|| {
+        super::reference::verify(
+            black_box(&case.public_key),
+            black_box(&case.message),
+            black_box(case.signature.as_slice()),
+        )
+    });
+}
+
+// Parsed inputs expose the cost of verification without wire decoding.
+#[divan::bench(args = [0, 1, 2])]
+fn reference_verify_parsed(bencher: Bencher, index: usize) {
+    let case = &fixtures().cases[index];
+    bencher.bench(|| {
+        super::reference::verify_parsed(
+            black_box(&case.reference_key),
+            black_box(&case.message.0),
+            black_box(&case.reference_signature),
+        )
+    });
+}
+
+#[divan::bench(args = [0, 1, 2])]
+fn reference_sign(bencher: Bencher, index: usize) {
+    let case = &fixtures().cases[index];
+    bencher.bench(|| super::reference::sign(black_box(&case.seed), black_box(&case.message)));
+}
+
+#[divan::bench]
+fn reference_key_gen(bencher: Bencher) {
+    let case = &fixtures().cases[0];
+    bencher.bench(|| super::reference::key_gen(black_box(&case.seed)));
+}
+
+#[divan::bench]
+fn reference_late_reject(bencher: Bencher) {
+    let fixtures = fixtures();
+    let case = &fixtures.cases[0];
+    bencher.bench(|| {
+        super::reference::verify(
+            black_box(&case.public_key),
+            black_box(&case.message),
+            black_box(fixtures.late_reject.as_slice()),
+        )
+    });
+}

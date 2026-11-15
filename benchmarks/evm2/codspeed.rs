@@ -1,3 +1,5 @@
+mod reference;
+
 #[cfg(not(feature = "asm-keccak"))]
 #[path = "codspeed_cases.rs"]
 mod portable;
@@ -17,6 +19,8 @@ struct Case {
     message: B256,
     public_key: B256,
     signature: Signature,
+    reference_key: reference::PublicKey,
+    reference_signature: reference::ParsedSignature,
 }
 
 struct Fixtures {
@@ -44,12 +48,23 @@ fn fixtures() -> &'static Fixtures {
                 let signature = sign(&seed, &message).unwrap();
                 let expected: Signature = case["expected"].as_str().unwrap().parse().unwrap();
                 assert_eq!(signature, expected);
+                assert_eq!(reference::key_gen(&seed), public_key);
+                assert_eq!(reference::sign(&seed, &message), expected);
+                assert!(reference::verify(
+                    &public_key,
+                    &message,
+                    signature.as_slice()
+                ));
+                let reference_key = reference::PublicKey::from_bytes(&public_key.0);
+                let reference_signature = reference::ParsedSignature::from_bytes(&signature.0);
                 assert!(verify(&public_key, &message, signature.as_slice()));
                 Case {
                     seed,
                     message,
                     public_key,
                     signature,
+                    reference_key,
+                    reference_signature,
                 }
             })
             .collect();
@@ -60,6 +75,11 @@ fn fixtures() -> &'static Fixtures {
             &cases[0].public_key,
             &cases[0].message,
             late_reject.as_slice()
+        ));
+        assert!(!reference::verify(
+            &cases[0].public_key,
+            &cases[0].message,
+            late_reject.as_slice(),
         ));
         let ec_message = B256::repeat_byte(42);
         let secret = SecretKey::from_secret_bytes([1; 32]).unwrap();

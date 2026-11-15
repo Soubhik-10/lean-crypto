@@ -1,5 +1,6 @@
 #[path = "../../tests/common/mod.rs"]
 mod common;
+mod reference;
 
 use alloy_primitives::B256;
 use evm2::precompiles;
@@ -33,6 +34,10 @@ struct Report {
     os: &'static str,
     architecture: &'static str,
     rustc: String,
+    source_revision: String,
+    tracked_changes: bool,
+    rustflags: Option<String>,
+    reference_git_source: String,
     evm2_git_source: String,
     alloy_git_source: String,
     ecrecover_backend: &'static str,
@@ -145,6 +150,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         "0x0b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186".parse()?;
     assert_eq!(key_gen(&signing_seed), key);
     assert_eq!(sign(&signing_seed, &message)?.as_slice(), late_reject);
+    assert_eq!(
+        reference::sign(&signing_seed, &message).as_slice(),
+        late_reject
+    );
     *late_reject.last_mut().ok_or("empty fixture")? ^= 1;
     assert!(!verify(&key, &message, &late_reject));
 
@@ -162,6 +171,20 @@ fn main() -> Result<(), Box<dyn Error>> {
     expected_word[..12].fill(0);
     assert_eq!(expected, expected_word.0);
 
+    // Cross-check identical wire bytes before either implementation is timed.
+    assert_eq!(reference::key_gen(&signing_seed), key);
+    let parsed: Vec<_> = valid
+        .iter()
+        .map(|(key, message, signature)| {
+            assert!(reference::verify(key, message, signature));
+            (
+                reference::PublicKey::from_bytes(&key.0),
+                *message,
+                reference::ParsedSignature::from_bytes(signature.as_slice().try_into().unwrap()),
+            )
+        })
+        .collect();
+    assert!(!reference::verify(&key, &message, &late_reject));
     let sample_time = Duration::from_millis(sample_ms);
     let ecrecover = measure("evm2/ecrecover", sample_count, sample_time, || {
         black_box(provider.secp256k1_ecrecover(
@@ -200,6 +223,42 @@ fn main() -> Result<(), Box<dyn Error>> {
     let key_generation = measure("lean_sphincs/key_gen", sample_count, sample_time, || {
         black_box(key_gen(black_box(&signing_seed)));
     });
+    let mut wire_index = 0usize;
+    let reference_wire = measure("reference/verify_wire", sample_count, sample_time, || {
+        let (key, message, signature) = &valid[wire_index % valid.len()];
+        wire_index = wire_index.wrapping_add(1);
+        black_box(reference::verify(
+            black_box(key),
+            black_box(message),
+            black_box(signature),
+        ));
+    });
+    let mut parsed_index = 0usize;
+    let reference_parsed = measure("reference/verify_parsed", sample_count, sample_time, || {
+        let (key, message, signature) = &parsed[parsed_index % parsed.len()];
+        parsed_index = parsed_index.wrapping_add(1);
+        black_box(reference::verify_parsed(
+            black_box(key),
+            black_box(&message.0),
+            black_box(signature),
+        ));
+    });
+    let reference_late = measure("reference/late_reject", sample_count, sample_time, || {
+        black_box(reference::verify(
+            black_box(&key),
+            black_box(&message),
+            black_box(&late_reject),
+        ));
+    });
+    let reference_sign = measure("reference/sign", sample_count, sample_time, || {
+        black_box(reference::sign(
+            black_box(&signing_seed),
+            black_box(&message),
+        ));
+    });
+    let reference_key_gen = measure("reference/key_gen", sample_count, sample_time, || {
+        black_box(reference::key_gen(black_box(&signing_seed)));
+    });
     let ratio = verification.median_ns / ecrecover.median_ns;
     let report = Report {
         cpu: env::var("BENCH_CPU")
@@ -209,6 +268,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         os: env::consts::OS,
         architecture: env::consts::ARCH,
         rustc: command_output("rustc", &["--version"])?,
+        source_revision: command_output("git", &["rev-parse", "HEAD"])?,
+        tracked_changes: !command_output(
+            "git",
+            &["status", "--porcelain", "--untracked-files=no"],
+        )?
+        .is_empty(),
+        rustflags: env::var("RUSTFLAGS").ok(),
+        reference_git_source: git_source("lean_sphincs")?,
         evm2_git_source: git_source("evm2")?,
         alloy_git_source: git_source("alloy-primitives")?,
         ecrecover_backend: if cfg!(feature = "secp256k1") {
@@ -222,11 +289,22 @@ fn main() -> Result<(), Box<dyn Error>> {
             "Alloy default (RustCrypto sha3)"
         },
         sample_ms,
-        measurements: vec![ecrecover, verification, late, signing, key_generation],
+        measurements: vec![
+            ecrecover,
+            verification,
+            late,
+            signing,
+            key_generation,
+            reference_wire,
+            reference_parsed,
+            reference_late,
+            reference_sign,
+            reference_key_gen,
+        ],
         verification_to_ecrecover_ratio: ratio,
         time_ratio_gas_at_3000: ratio * 3000.0,
         time_ratio_frame_gas_at_2800: ratio * 2800.0,
-        methodology: "Single-threaded batches; calibration and fixture setup excluded. Valid verification rotates all three valid EthLib cases. Late rejection changes the last signature byte. Signing and key generation include full computation from a fixed reference seed, with setup and correctness checks excluded. Ecrecover calls evm2's actual Crypto provider, including compact-signature parsing, recovery, serialization and address hashing; provider initialization is excluded. Percentiles describe batch-average ns/op, not individual-call latency. Gas numbers are ratios of medians on this machine, not consensus prices or cross-client calibration.",
+        methodology: "Single-threaded batches; calibration and fixture setup excluded. Valid verification rotates all three valid EthLib cases. Late rejection changes the last signature byte. Signing and key generation include full computation from a fixed reference seed, with setup and correctness checks excluded. Reference wire verification includes decoding; parsed verification excludes it. Reference signing includes serialization and full tree computation, and uses the dependency's own hash backend in both configurations. Ecrecover calls evm2's actual Crypto provider, including compact-signature parsing, recovery, serialization and address hashing; provider initialization is excluded. Percentiles describe batch-average ns/op, not individual-call latency. Gas numbers are ratios of medians on this machine, not consensus prices or cross-client calibration.",
     };
     println!(
         "CPU: {}\n{}\n{}\n{}",
