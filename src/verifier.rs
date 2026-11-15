@@ -3,13 +3,13 @@
 use crate::{
     fors::recover_fors,
     hash::{Address, message_digest},
+    params::LAYER_HEIGHTS,
     signature::Reader,
     tree::climb,
     wots::recover_wots,
 };
 use alloy_primitives::{B128, B256};
 
-const LAYER_HEIGHTS: [u32; 3] = [8, 8, 10];
 // FIPS 205 address domain for hypertree nodes.
 const HYPERTREE: u32 = 2;
 

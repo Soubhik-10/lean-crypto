@@ -1,4 +1,4 @@
-//! Verification of the leanSPHINCS configuration in EthLib at
+//! Key generation, signing and verification for the leanSPHINCS configuration in EthLib at
 //! `03547dd83f298a63e6dcceff0a0b75f6142490aa`.
 //!
 //! This is the Keccak-256 / WOTS+C / FORS configuration with a three-layer
@@ -7,7 +7,9 @@
 //!
 //! Public keys and message digests are Alloy [`B256`] values. Signatures are
 //! borrowed directly from their wire encoding. Verification needs no allocator,
-//! signing key, operating system, or VM. All values processed here are public.
+//! signing key, operating system, or VM. Key generation and signing accept a
+//! secret seed and also require no allocator. Signing caches approximately 32 KiB
+//! of public tree nodes on the stack; verification processes only public values.
 //!
 //! The protocol and its parameters are still experimental. Passing the reference
 //! vectors is not a security audit or a proof of this implementation.
@@ -17,12 +19,15 @@
 
 mod fors;
 mod hash;
+mod params;
 mod signature;
+mod signing;
 mod tree;
 mod verifier;
 mod wots;
 
 pub use alloy_primitives::B256;
+pub use signing::{SignError, key_gen, sign};
 
 /// Size of a public key, encoded as `PK.seed || PK.root`.
 pub const PUBLIC_KEY_BYTES: usize = 32;
@@ -32,6 +37,9 @@ pub const MESSAGE_BYTES: usize = 32;
 
 /// Size of a complete serialized signature.
 pub const SIGNATURE_BYTES: usize = 7740;
+
+/// A complete serialized leanSPHINCS signature.
+pub type Signature = alloy_primitives::FixedBytes<SIGNATURE_BYTES>;
 
 /// Verifies a signature over a 32-byte message digest.
 ///

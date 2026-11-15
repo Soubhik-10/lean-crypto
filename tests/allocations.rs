@@ -2,7 +2,7 @@
 
 mod common;
 
-use lean_sphincs::verify;
+use lean_sphincs::{B256, key_gen, sign, verify};
 use std::alloc::{GlobalAlloc, Layout, System};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
@@ -39,12 +39,19 @@ unsafe impl GlobalAlloc for CountingAllocator {
 static ALLOCATOR: CountingAllocator = CountingAllocator;
 
 #[test]
-fn verification_allocates_nothing() {
+fn signature_operations_allocate_nothing() {
     let (public_key, message, signature) = common::known_answer();
     assert!(verify(&public_key, &message, &signature));
+    let seed: B256 = "0x0b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186"
+        .parse()
+        .unwrap();
     COUNTING.store(true, Ordering::SeqCst);
     let valid = verify(&public_key, &message, &signature);
+    let generated_key = key_gen(&seed);
+    let generated_signature = sign(&seed, &message);
     COUNTING.store(false, Ordering::SeqCst);
     assert!(valid);
+    assert_eq!(generated_key, public_key);
+    assert_eq!(generated_signature.unwrap().as_slice(), signature);
     assert_eq!(ALLOCATIONS.load(Ordering::SeqCst), 0);
 }

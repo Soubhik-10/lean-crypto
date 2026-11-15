@@ -1,25 +1,28 @@
 # lean-sphincs
 
-An independent, verification-only Rust implementation of the experimental
+A native Rust implementation of the experimental
 leanSPHINCS configuration specified by
 [EthLib at `03547dd83f298a63e6dcceff0a0b75f6142490aa`](https://github.com/ethereum/EthLib/tree/03547dd83f298a63e6dcceff0a0b75f6142490aa/EthLib/Cryptography/Sphincs).
 
-`lean-sphincs` is a `no_std` library for allocation-free signature verification.
-Public keys and message digests use Alloy's `B256` type, and signatures are
-verified directly from serialized bytes. The optional `asm-keccak` feature
-enables assembly-accelerated Keccak hashing.
+The library supports key generation, deterministic signing and verification in
+`no_std` environments. Its API uses Alloy types and performs no heap allocation.
+The optional `asm-keccak` feature enables assembly-accelerated Keccak hashing.
 
 ```rust
-use lean_sphincs::{B256, SIGNATURE_BYTES, verify};
+use lean_sphincs::{B256, SignError, key_gen, sign, verify};
 
-let public_key = B256::ZERO;
-let message = B256::ZERO;
-let signature = [0; SIGNATURE_BYTES];
-assert!(!verify(&public_key, &message, &signature));
+fn round_trip(secret_seed: &B256, message: &B256) -> Result<(), SignError> {
+    let public_key = key_gen(secret_seed);
+    let signature = sign(secret_seed, message)?;
+    assert!(verify(&public_key, message, signature.as_slice()));
+    Ok(())
+}
 ```
 
-The caller supplies the exact 32-byte digest that was signed. This crate does
-not compute a transaction's signing hash or decide its signing domain.
+The caller supplies a secret seed containing 32 uniformly random bytes and keeps
+it secret. Messages are exact 32-byte digests; the caller computes the transaction
+hash and signing domain. A seed must sign at most `2^30` messages, including
+attestations. The library does not generate randomness or track that budget.
 
 ## Configuration
 
@@ -37,7 +40,7 @@ not compute a transaction's signing hash or decide its signing domain.
 This is not a verifier for the standard FIPS 205 SHA2/SHAKE parameter sets.
 Older leanSPHINCS layouts using `root || public parameter` are incompatible.
 The specification rates one key for at most `2^30` signatures; enforcing that
-budget belongs to the signer, which this crate does not implement.
+budget belongs to the caller.
 
 ## Implementation and provenance
 
@@ -49,6 +52,11 @@ WOTS chain ends are streamed into Alloy hashers instead of collecting temporary
 arrays. Small addressed hashes use contiguous stack buffers. It does not
 implement its own Keccak permutation, use CPU-specific intrinsics, or create a
 thread pool.
+
+Signing builds each tree once. A roughly 32 KiB stack cache retains the public
+nodes of the top tree so its root and selected authentication path share the
+same computation. Key generation uses a streaming tree builder with a small
+stack instead of retaining the full tree.
 
 Conformance fixtures are derived from EthLib's CC0-1.0 test data, with source
 revision and raw-file hashes retained in [tests/vectors](tests/vectors/README.md).
@@ -65,9 +73,25 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo doc --no-deps --all-features
 ```
 
-Tests cover all 26 pinned verification vectors, every-byte mutation of a valid
-signature/public key/message, every truncation, appended bytes, deterministic
-arbitrary full-length encodings, and allocation counting.
+Tests cover all 35 pinned key-generation, signing and verification vectors,
+byte-for-byte deterministic signatures, round trips, counter-exhaustion errors,
+every-byte mutation checks, malformed encodings, and zero allocations across
+all three operations.
+
+## Continuous benchmarks
+
+The CodSpeed workflow runs on pushes to `main`, pull requests and manual
+dispatch. It tracks key generation, signing, valid verification, late rejection,
+Keccak hashing and evm2 ecrecover for both default and assembly Keccak builds.
+Backend-specific benchmark names keep the two configurations distinct.
+
+CodSpeed uses CPU simulation for regression tracking. Its results are not native
+wall-clock timings or gas prices. The local harness below measures elapsed time.
+
+```sh
+cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed
+cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --features asm-keccak
+```
 
 ## Benchmark against evm2
 
@@ -92,7 +116,8 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench verify \
 ```
 
 Timings are for verification and ecrecover work, not complete transaction cost.
-The harness reports `3000 * verify_time / ecrecover_time` and, separately,
+The wall-clock harness also measures complete signing and key generation.
+It reports `3000 * verify_time / ecrecover_time` and, separately,
 `2800 * verify_time / ecrecover_time` for the frame-signature baseline. These
 are local calibration estimates, not recommended or agreed consensus gas costs.
 Signature calldata, bandwidth, aggregation, and cross-client/hardware variation

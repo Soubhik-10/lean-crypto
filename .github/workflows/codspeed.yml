@@ -1,0 +1,52 @@
+name: CodSpeed
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: codspeed-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmarks:
+    name: Benchmarks (${{ matrix.backend }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - backend: portable
+            features: ""
+          - backend: assembly
+            features: asm-keccak
+    defaults:
+      run:
+        working-directory: benchmarks/evm2
+    env:
+      RUSTUP_TOOLCHAIN: 1.97.1
+      FEATURES: ${{ matrix.features }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Install Rust toolchain
+        run: rustup toolchain install 1.97.1 --profile minimal
+      - name: Validate signatures
+        run: cargo test --manifest-path ../../Cargo.toml --release --locked --features "$FEATURES"
+      - name: Install cargo-codspeed
+        run: cargo install cargo-codspeed --git https://github.com/CodSpeedHQ/codspeed-rust --rev aa1bc87957a9c69f09c40fc2de1cf2355a96b7aa --locked
+      - name: Build benchmarks
+        run: cargo codspeed build --bench codspeed --features "$FEATURES"
+      - name: Run and upload benchmarks
+        uses: CodSpeedHQ/action@af75f77f17a054769abefaa42fe8dc2975469b5f # v5
+        with:
+          mode: simulation
+          working-directory: benchmarks/evm2
+          run: cargo codspeed run

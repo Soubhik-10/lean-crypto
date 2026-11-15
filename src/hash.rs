@@ -2,7 +2,7 @@
 
 use alloy_primitives::{B128, B256, Keccak256, keccak256};
 
-const NODE_BYTES: usize = 16;
+use crate::params::NODE_BYTES;
 const PREFIX_BYTES: usize = 48;
 
 // Every tweakable hash begins with PK.seed and FIPS 205's 32-byte address.
@@ -63,6 +63,13 @@ impl Address {
         input[..PREFIX_BYTES].copy_from_slice(&self.0);
         input[PREFIX_BYTES..PREFIX_BYTES + NODE_BYTES].copy_from_slice(message.as_slice());
         input[PREFIX_BYTES + NODE_BYTES..].copy_from_slice(counter);
+        truncate(keccak256(input))
+    }
+
+    pub(crate) fn derive_secret(&self, seed: &B256) -> B128 {
+        let mut input = [0; PREFIX_BYTES + 32];
+        input[..PREFIX_BYTES].copy_from_slice(&self.0);
+        input[PREFIX_BYTES..].copy_from_slice(seed.as_slice());
         truncate(keccak256(input))
     }
 
