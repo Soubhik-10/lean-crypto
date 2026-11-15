@@ -13,6 +13,9 @@ categories = ["cryptography", "no-std"]
 [dependencies]
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
 
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+wide = { version = "0.7.33", default-features = false }
+
 [dev-dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -76,3 +76,42 @@ revision:
 - `src/verifier.rs`: `a16716885d5f4e89df076df68c55a3fa8b3e9c39825fd677e7abb0be81972095`.
 
 Reproduction commands and methodology are in [the harness README](benchmarks/evm2/README.md).
+
+## Paired FORS hashing
+
+Measured 15 November 2026 on an Intel Core i5-1340P running Windows x86-64
+with the MSVC target. Both builds used Rust 1.97.1 (8bab26f4f, LLVM 22.1.6),
+thin LTO, one codegen unit, and the default target CPU. Runs were pinned to
+logical CPU 2 (affinity mask 0x4). Each before/after pair used the pinned
+evm2 Crypto provider with libsecp256k1 and 30 samples of at least 100 ms
+per operation. The before binaries were built from baseline revision
+[356d55e](https://github.com/Soubhik-10/lean-sphincs/commit/356d55e).
+
+Phase timing on the baseline put roughly 94% of elapsed verification time
+in FORS and WOTS+C for both valid and late-rejected signatures. FORS alone
+accounted for about 52%. A full verification hashes 24 FORS leaves and
+240 FORS parent nodes.
+
+On baseline x86-64, the verifier now processes two independent FORS openings
+at a time with SSE2 and feeds their roots to the same streaming hasher in
+signature order. The paired permutation follows [FIPS 202, section 3.2][fips202]
+and uses the original Keccak padding specified by [the pinned EthLib
+configuration][ethlib-sphincs]. AVX2 builds and other targets use Alloy for
+each FORS hash. Alloy still handles WOTS+C, root compression, the message
+digest, and the hypertree with the selected backend on every target. Short
+hashes reuse their stack buffer for the encoded address and payload.
+
+| Alloy Keccak | Operation | Before (us) | After (us) | Time reduction | Time / ecrecover, before to after |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Default | evm2/ecrecover | 45.55 | 45.77 | | |
+| Default | Valid verification | 169.47 | 134.28 | 20.8% | 3.721x to 2.934x |
+| Default | Late rejection | 168.87 | 137.42 | 18.6% | 3.708x to 3.003x |
+| Assembly | evm2/ecrecover | 46.67 | 46.49 | | |
+| Assembly | Valid verification | 135.23 | 123.24 | 8.9% | 2.898x to 2.651x |
+| Assembly | Late rejection | 133.40 | 124.03 | 7.0% | 2.859x to 2.668x |
+
+The ratios compare CPU time to the ecrecover median from the same run.
+Protocol gas pricing is outside the scope of this crate.
+
+[fips202]: https://csrc.nist.gov/pubs/fips/202/final
+[ethlib-sphincs]: https://github.com/ethereum/EthLib/tree/03547dd83f298a63e6dcceff0a0b75f6142490aa/EthLib/Cryptography/Sphincs

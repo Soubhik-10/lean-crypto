@@ -49,9 +49,9 @@ deviations.
 
 The implementation reads fixed-size signature fields in place. FORS roots and
 WOTS chain ends are streamed into Alloy hashers instead of collecting temporary
-arrays. Small addressed hashes use contiguous stack buffers. It does not
-implement its own Keccak permutation, use CPU-specific intrinsics, or create a
-thread pool.
+arrays. Small addressed hashes reuse a contiguous stack buffer. On baseline
+x86-64, independent FORS openings use paired SSE2 Keccak hashing through safe
+SIMD types. AVX2 builds and other targets use the selected Alloy backend.
 
 Signing builds each tree once. A roughly 32 KiB stack cache retains the public
 nodes of the top tree so its root and selected authentication path share the
