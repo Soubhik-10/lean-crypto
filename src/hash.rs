@@ -9,7 +9,7 @@ use alloy_primitives::{B128, B256, Keccak256, keccak256_uncached};
 ))]
 mod pair;
 
-pub(crate) const NODE_BYTES: usize = 16;
+use crate::params::NODE_BYTES;
 const PREFIX_BYTES: usize = 48;
 const NODE_INPUT_BYTES: usize = PREFIX_BYTES + NODE_BYTES;
 const PARENT_INPUT_BYTES: usize = PREFIX_BYTES + 2 * NODE_BYTES;
@@ -82,6 +82,11 @@ impl Address {
         self.0[PREFIX_BYTES..NODE_INPUT_BYTES].copy_from_slice(message.as_slice());
         self.0[NODE_INPUT_BYTES..ENCODE_INPUT_BYTES].copy_from_slice(counter);
         truncate(keccak256_uncached(&self.0[..ENCODE_INPUT_BYTES]))
+    }
+
+    pub(crate) fn derive_secret(&mut self, seed: &B256) -> B128 {
+        self.0[PREFIX_BYTES..].copy_from_slice(seed.as_slice());
+        truncate(keccak256_uncached(self.0))
     }
 
     pub(crate) fn accumulator(&self) -> Keccak256 {

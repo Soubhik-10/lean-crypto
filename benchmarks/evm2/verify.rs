@@ -3,7 +3,7 @@ mod common;
 
 use alloy_primitives::B256;
 use evm2::precompiles;
-use lean_sphincs::verify;
+use lean_sphincs::{key_gen, sign, verify};
 use secp256k1::{Message, SecretKey, ecdsa::RecoverableSignature};
 use serde::Serialize;
 use std::{
@@ -141,6 +141,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         assert!(verify(key, message, signature));
     }
     let (key, message, mut late_reject) = common::known_answer();
+    let signing_seed: B256 =
+        "0x0b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186".parse()?;
+    assert_eq!(key_gen(&signing_seed), key);
+    assert_eq!(sign(&signing_seed, &message)?.as_slice(), late_reject);
     *late_reject.last_mut().ok_or("empty fixture")? ^= 1;
     assert!(!verify(&key, &message, &late_reject));
 
@@ -189,6 +193,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             ));
         },
     );
+    let signing = measure("lean_sphincs/sign", sample_count, sample_time, || {
+        black_box(sign(black_box(&signing_seed), black_box(&message)))
+            .expect("valid signing fixture");
+    });
+    let key_generation = measure("lean_sphincs/key_gen", sample_count, sample_time, || {
+        black_box(key_gen(black_box(&signing_seed)));
+    });
     let ratio = verification.median_ns / ecrecover.median_ns;
     let report = Report {
         cpu: env::var("BENCH_CPU")
@@ -211,11 +222,11 @@ fn main() -> Result<(), Box<dyn Error>> {
             "Alloy default (RustCrypto sha3)"
         },
         sample_ms,
-        measurements: vec![ecrecover, verification, late],
+        measurements: vec![ecrecover, verification, late, signing, key_generation],
         verification_to_ecrecover_ratio: ratio,
         time_ratio_gas_at_3000: ratio * 3000.0,
         time_ratio_frame_gas_at_2800: ratio * 2800.0,
-        methodology: "Single-threaded batches; calibration and fixture setup excluded. Valid verification rotates all three valid EthLib cases. Late rejection changes the last signature byte. Ecrecover calls evm2's actual Crypto provider, including compact-signature parsing, recovery, serialization and address hashing; provider initialization is excluded. Percentiles describe batch-average ns/op, not individual-call latency. Gas numbers are ratios of medians on this machine, not consensus prices or cross-client calibration.",
+        methodology: "Single-threaded batches; calibration and fixture setup excluded. Valid verification rotates all three valid EthLib cases. Late rejection changes the last signature byte. Signing and key generation include full computation from a fixed reference seed, with setup and correctness checks excluded. Ecrecover calls evm2's actual Crypto provider, including compact-signature parsing, recovery, serialization and address hashing; provider initialization is excluded. Percentiles describe batch-average ns/op, not individual-call latency. Gas numbers are ratios of medians on this machine, not consensus prices or cross-client calibration.",
     };
     println!(
         "CPU: {}\n{}\n{}\n{}",

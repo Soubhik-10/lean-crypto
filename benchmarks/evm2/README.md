@@ -45,3 +45,22 @@ all samples, median and p05/p95. Percentiles describe batch-average ns/op and
 are not individual-call latency percentiles. Local gas estimates use ratios
 of medians to the 3,000-gas ecrecover precompile and the 2,800-gas frame scheme.
 They do not establish a consensus price or include signature-data costs.
+
+## CodSpeed
+
+The `codspeed` target uses the Git-pinned CodSpeed Divan compatibility layer.
+It registers all three positive reference cases for signing and verification,
+plus key generation, full-work late rejection, evm2 ecrecover and representative
+64-, 80- and 1,072-byte Keccak inputs. Fixtures are validated before measurement.
+Every signing/key-generation iteration computes its result from the secret seed;
+no precomputed key or tree is substituted for the measured operation.
+
+```sh
+cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed
+cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --features asm-keccak
+```
+
+In CI, each backend has its own benchmark namespace (`portable` or `assembly`).
+The workflow uses OIDC authentication and CodSpeed CPU simulation on Linux for
+consistent regression comparisons. The existing wall-clock target remains the
+source of local elapsed-time measurements and ecrecover-relative gas estimates.

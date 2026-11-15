@@ -13,6 +13,8 @@ secp256k1 = { version = "0.33.1", features = ["recovery"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
+divan = { package = "codspeed-divan-compat", git = "https://github.com/CodSpeedHQ/codspeed-rust", rev = "aa1bc87957a9c69f09c40fc2de1cf2355a96b7aa", version = "6.0.0" }
+
 [features]
 default = ["secp256k1"]
 secp256k1 = ["evm2/secp256k1"]
@@ -21,6 +23,11 @@ asm-keccak = ["lean-sphincs/asm-keccak", "evm2/asm-keccak"]
 [[bench]]
 name = "verify"
 path = "verify.rs"
+harness = false
+
+[[bench]]
+name = "codspeed"
+path = "codspeed.rs"
 harness = false
 
 [profile.bench]

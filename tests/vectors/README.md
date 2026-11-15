@@ -1,26 +1,30 @@
-# EthLib conformance data
+# Pinned conformance data
 
 Source: `ethereum/EthLib`, commit
-`03547dd83f298a63e6dcceff0a0b75f6142490aa`, directory
-`tests/cryptography/sphincs/verify`.
+`03547dd83f298a63e6dcceff0a0b75f6142490aa`, under
+`tests/cryptography/sphincs`.
 
-Upstream license: CC0-1.0. These fixtures are attributed test data, not Rust
-implementation code. The `verify_valid_known_answer` fixture is EthLib's
-independent known-answer case; the other valid cases include a zero message
-and a zero seed.
+Upstream license: CC0-1.0. These are attributed test data, not Rust implementation
+code. The known-answer cases pin independent reference outputs.
 
-`ethlib.json` preserves the hex inputs and expected result of each of the 26
-upstream YAML cases. `null` means the input has a malformed length. The Rust
-API rejects an invalid signature length with `false`; public-key and message
-lengths are enforced by its Alloy `B256` argument types.
+| File | Operation | Cases |
+| --- | --- | ---: |
+| `key_gen.json` | Public-key derivation | 4 |
+| `sign.json` | Deterministic signing | 5 |
+| `ethlib.json` | Verification | 26 |
 
-`SHA256SUMS` records SHA-256 digests of the original downloaded YAML bytes,
-before normalization. Regenerate deterministically with:
+Each JSON file preserves the hex inputs and expected output of its upstream
+YAML cases. `null` means a malformed input length. Seed, public-key and message
+lengths are enforced by the public API's Alloy `B256` types; the verifier rejects
+an incorrect signature length with `false`.
+
+`SHA256SUMS` records SHA-256 digests of the original YAML bytes before
+normalization. Regenerate all 35 cases deterministically with:
 
 ```sh
 python scripts/sync_vectors.py
 ```
 
-The importer deliberately accepts only this pinned YAML schema and requires
-no third-party Python packages. Changing the reference revision requires an
-explicit source change and a new conformance review.
+The importer deliberately accepts only the pinned schemas and needs no
+third-party Python packages. A revision change requires an explicit source change
+and conformance review.
