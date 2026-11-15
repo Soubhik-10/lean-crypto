@@ -15,7 +15,12 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+mod fors;
+mod hash;
+mod signature;
+mod tree;
 mod verifier;
+mod wots;
 
 pub use alloy_primitives::B256;
 

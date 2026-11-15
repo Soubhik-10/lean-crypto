@@ -67,7 +67,10 @@ transaction execution. It does not establish that 12,600 is high or low.
 
 ## Source fingerprints
 
-SHA-256 fingerprints of the measured verifier source:
+These measurements were collected from
+[`f647032`](https://github.com/Soubhik-10/lean-sphincs/commit/f647032dcf9397389962e1e3070aafee8b534713),
+before the verifier was split into modules. The fingerprints identify that measured
+revision:
 
 - `src/lib.rs`: `1ab0d77b319dcee12d8e15e05e7ef2fa8bc1012f225fea1245680aa0011ad00a`.
 - `src/verifier.rs`: `a16716885d5f4e89df076df68c55a3fa8b3e9c39825fd677e7abb0be81972095`.
