@@ -17,9 +17,9 @@ const PARENT_INPUT_BYTES: usize = PREFIX_BYTES + 2 * NODE_BYTES;
 // Every tweakable hash begins with PK.seed and FIPS 205's 32-byte address.
 // The prefix stays in place between hashes. The tail holds the current payload.
 #[derive(Clone)]
-pub(crate) struct Address([u8; PARENT_INPUT_BYTES]);
+pub(crate) struct HashContext([u8; PARENT_INPUT_BYTES]);
 
-impl Address {
+impl HashContext {
     pub(crate) fn new(public_key: &B256) -> Self {
         let mut input = [0; PARENT_INPUT_BYTES];
         input[..NODE_BYTES].copy_from_slice(&public_key[..NODE_BYTES]);
@@ -101,7 +101,7 @@ impl Address {
     target_feature = "sse2",
     not(target_feature = "avx2")
 ))]
-impl Address {
+impl HashContext {
     pub(crate) fn hash_node_pair(
         addresses: &mut [Self; 2],
         values: [&[u8; NODE_BYTES]; 2],

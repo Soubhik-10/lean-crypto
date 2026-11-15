@@ -2,7 +2,7 @@
 
 use crate::{
     fors::recover_fors,
-    hash::{Address, message_digest},
+    hash::{HashContext, message_digest},
     params::LAYER_HEIGHTS,
     signature::Reader,
     tree::climb,
@@ -20,7 +20,7 @@ pub(super) fn recover_root(public_key: &B256, message: &B256, signature: &[u8]) 
     // The six unused high bits of byte 30 are deliberately discarded.
     let tree = u32::from_be_bytes([0, digest[30], digest[31], digest[32]]) & ((1 << 18) - 1);
     let mut index = u64::from((tree << 8) | u32::from(digest[33]));
-    let mut address = Address::new(public_key);
+    let mut address = HashContext::new(public_key);
     address.set_tree(0, u64::from(tree));
     let mut node = recover_fors(&mut address, &mut reader, &digest, u32::from(digest[33]))?;
 

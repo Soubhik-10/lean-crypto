@@ -1,7 +1,7 @@
 //! FORS signing and public-key recovery from serialized tree openings.
 
 use crate::{
-    hash::{Address, truncate},
+    hash::{HashContext, truncate},
     params::{FORS_HEIGHT, FORS_OPENING_BYTES, FORS_TREES, NODE_BYTES},
     signature::Reader,
 };
@@ -12,7 +12,7 @@ const FORS_TREE: u32 = 3;
 const FORS_PUBLIC_KEY: u32 = 4;
 
 pub(crate) fn recover_fors(
-    address: &mut Address,
+    address: &mut HashContext,
     reader: &mut Reader<'_>,
     digest: &[u8; 34],
     key_pair: u32,
@@ -39,7 +39,7 @@ fn leaf_position(digest: &[u8; 34], tree: usize) -> u32 {
     not(target_feature = "avx2")
 )))]
 fn recover_trees(
-    address: &mut Address,
+    address: &mut HashContext,
     reader: &mut Reader<'_>,
     digest: &[u8; 34],
     roots: &mut Keccak256,
@@ -67,7 +67,7 @@ fn recover_trees(
     not(target_feature = "avx2")
 ))]
 fn recover_trees(
-    address: &mut Address,
+    address: &mut HashContext,
     reader: &mut Reader<'_>,
     digest: &[u8; 34],
     roots: &mut Keccak256,
@@ -86,13 +86,14 @@ fn recover_trees(
         for (address, position) in addresses.iter_mut().zip(positions) {
             address.set_position(0, position);
         }
-        let mut nodes = Address::hash_node_pair(&mut addresses, [first_secret, second_secret]);
+        let mut nodes = HashContext::hash_node_pair(&mut addresses, [first_secret, second_secret]);
         for (level, (first, second)) in first_path.iter().zip(second_path).enumerate() {
             let parents = positions.map(|position| position >> 1);
             for (address, parent) in addresses.iter_mut().zip(parents) {
                 address.set_position(level as u32 + 1, parent);
             }
-            nodes = Address::hash_parent_pair(&mut addresses, &nodes, [first, second], positions);
+            nodes =
+                HashContext::hash_parent_pair(&mut addresses, &nodes, [first, second], positions);
             positions = parents;
         }
         for node in nodes {
@@ -105,7 +106,7 @@ fn recover_trees(
 const FORS_PRF: u32 = 6;
 
 pub(crate) fn sign(
-    address: &mut Address,
+    address: &mut HashContext,
     seed: &B256,
     digest: &[u8; 34],
     key_pair: u32,

@@ -2,7 +2,7 @@
 
 use crate::{
     Signature, fors,
-    hash::{Address, message_digest, truncate},
+    hash::{HashContext, message_digest, truncate},
     params::{FORS_BYTES, LAYER_HEIGHTS, MAX_TREE_HEIGHT, NODE_BYTES, SEED_TAG, WOTS_BYTES},
     tree::{TopTree, build_xmss},
     wots,
@@ -42,7 +42,7 @@ pub fn key_gen(secret_seed: &B256) -> B256 {
     let (pk_seed, _) = expand_key(secret_seed);
     let mut public_key = B256::ZERO;
     public_key[..NODE_BYTES].copy_from_slice(pk_seed.as_slice());
-    let mut address = Address::new(&public_key);
+    let mut address = HashContext::new(&public_key);
     address.set_tree(2, 0);
     let root = build_xmss(
         &mut address,
@@ -98,7 +98,7 @@ fn sign_with_limit(
     let (pk_seed, sk_prf) = expand_key(seed);
     let mut public_key = B256::ZERO;
     public_key[..NODE_BYTES].copy_from_slice(pk_seed.as_slice());
-    let mut address = Address::new(&public_key);
+    let mut address = HashContext::new(&public_key);
     let top = TopTree::new(&mut address, seed);
     public_key[NODE_BYTES..].copy_from_slice(top.root().as_slice());
 

@@ -1,7 +1,7 @@
 //! Streaming Merkle construction, authentication paths and top-tree caching.
 
 use crate::{
-    hash::Address,
+    hash::HashContext,
     params::{LAYER_HEIGHTS, MAX_TREE_HEIGHT},
     signature::Reader,
     wots,
@@ -9,7 +9,7 @@ use crate::{
 use alloy_primitives::{B128, B256};
 
 pub(crate) fn climb(
-    address: &mut Address,
+    address: &mut HashContext,
     reader: &mut Reader<'_>,
     mut position: u32,
     height: u32,
@@ -27,12 +27,12 @@ const HYPERTREE: u32 = 2;
 const TOP_LEAVES: usize = 1 << MAX_TREE_HEIGHT;
 
 pub(crate) fn build_tree(
-    address: &mut Address,
+    address: &mut HashContext,
     height: u32,
     target: u32,
     path: &mut [B128],
-    mut leaf: impl FnMut(&mut Address, u32) -> B128,
-    mut parent: impl FnMut(&mut Address, u32, u32, &B128, &B128) -> B128,
+    mut leaf: impl FnMut(&mut HashContext, u32) -> B128,
+    mut parent: impl FnMut(&mut HashContext, u32, u32, &B128, &B128) -> B128,
 ) -> B128 {
     let mut stack = [B128::ZERO; MAX_TREE_HEIGHT + 1];
     for index in 0..1 << height {
@@ -64,7 +64,7 @@ pub(crate) fn build_tree(
 }
 
 pub(crate) fn build_xmss(
-    address: &mut Address,
+    address: &mut HashContext,
     seed: &B256,
     height: u32,
     target: u32,
@@ -91,7 +91,7 @@ pub(crate) struct TopTree {
 }
 
 impl TopTree {
-    pub(crate) fn new(address: &mut Address, seed: &B256) -> Self {
+    pub(crate) fn new(address: &mut HashContext, seed: &B256) -> Self {
         address.set_tree((LAYER_HEIGHTS.len() - 1) as u32, 0);
         let mut nodes = [B128::ZERO; 2 * TOP_LEAVES];
         for index in 0..TOP_LEAVES {

@@ -1,7 +1,7 @@
 //! WOTS+C signing, codeword validation and public-key recovery.
 
 use crate::{
-    hash::{Address, truncate},
+    hash::{HashContext, truncate},
     params::{CHAIN_END, NODE_BYTES, TARGET_SUM, WOTS_CHAINS},
     signature::Reader,
 };
@@ -14,7 +14,7 @@ const WOTS_ENCODING: u32 = 7;
 const WOTS_PRF: u32 = 5;
 
 pub(crate) fn recover_wots(
-    address: &mut Address,
+    address: &mut HashContext,
     reader: &mut Reader<'_>,
     key_pair: u32,
     message: B128,
@@ -42,7 +42,7 @@ fn codeword(code: &B128) -> Option<[u8; WOTS_CHAINS]> {
     (digits.iter().map(|&digit| u16::from(digit)).sum::<u16>() == TARGET_SUM).then_some(digits)
 }
 
-fn chain_start(address: &mut Address, seed: &B256, key_pair: u32, chain: u32) -> B128 {
+fn chain_start(address: &mut HashContext, seed: &B256, key_pair: u32, chain: u32) -> B128 {
     address.set_domain(WOTS_PRF, key_pair);
     address.set_position(chain, 0);
     let secret = address.derive_secret(seed);
@@ -50,7 +50,7 @@ fn chain_start(address: &mut Address, seed: &B256, key_pair: u32, chain: u32) ->
     secret
 }
 
-pub(crate) fn public_leaf(address: &mut Address, seed: &B256, key_pair: u32) -> B128 {
+pub(crate) fn public_leaf(address: &mut HashContext, seed: &B256, key_pair: u32) -> B128 {
     address.set_domain(WOTS_PUBLIC_KEY, key_pair);
     let mut ends = address.accumulator();
     for chain in 0..WOTS_CHAINS {
@@ -65,7 +65,7 @@ pub(crate) fn public_leaf(address: &mut Address, seed: &B256, key_pair: u32) -> 
 }
 
 pub(crate) fn sign(
-    address: &mut Address,
+    address: &mut HashContext,
     seed: &B256,
     key_pair: u32,
     message: &B128,
