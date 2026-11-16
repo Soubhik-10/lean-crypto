@@ -1,8 +1,16 @@
-//! Keccak-256 for two independent short inputs on baseline x86-64.
+//! Keccak-256 for independent short inputs on x86-64.
 
 use super::NODE_BYTES;
 use alloy_primitives::B128;
-use wide::u64x2;
+#[cfg(not(target_feature = "avx2"))]
+use wide::u64x2 as Word;
+#[cfg(target_feature = "avx2")]
+use wide::u64x4 as Word;
+
+#[cfg(not(target_feature = "avx2"))]
+pub(crate) const WIDTH: usize = 2;
+#[cfg(target_feature = "avx2")]
+pub(crate) const WIDTH: usize = 4;
 
 const STATE_LANES: usize = 25;
 const RATE_LANES: usize = 17; // 136-byte rate for Keccak-256.
@@ -39,23 +47,20 @@ const ROTATIONS: [u32; STATE_LANES] = {
     rotations
 };
 
-pub(super) fn hash<const N: usize>(first: &[u8; N], second: &[u8; N]) -> [B128; 2] {
+pub(super) fn hash<const N: usize>(inputs: [&[u8; N]; WIDTH]) -> [B128; WIDTH] {
     const { assert!(N.is_multiple_of(8) && N / 8 < RATE_LANES) };
 
-    // Each SIMD word holds the same lane from two independent sponge states.
-    let mut state = [u64x2::new([0; 2]); STATE_LANES];
-    for (lane, (first, second)) in state.iter_mut().zip(
-        first
-            .as_chunks::<8>()
-            .0
-            .iter()
-            .zip(second.as_chunks::<8>().0),
-    ) {
-        *lane = u64x2::new([u64::from_le_bytes(*first), u64::from_le_bytes(*second)]);
+    // Each SIMD word holds the same lane from independent sponge states.
+    let chunks = inputs.map(|input| input.as_chunks::<8>().0);
+    let mut state = [Word::new([0; WIDTH]); STATE_LANES];
+    for (i, lane) in state[..N / 8].iter_mut().enumerate() {
+        *lane = Word::new(core::array::from_fn(|input| {
+            u64::from_le_bytes(chunks[input][i])
+        }));
     }
     // Whole-lane inputs fit in one block. EthLib H uses Keccak's 0x01 suffix.
-    state[N / 8] = u64x2::new([0x01; 2]);
-    state[RATE_LANES - 1] |= u64x2::new([1 << 63; 2]);
+    state[N / 8] = Word::new([0x01; WIDTH]);
+    state[RATE_LANES - 1] |= Word::new([1 << 63; WIDTH]);
     permute(&mut state);
 
     let low = state[0].to_array();
@@ -69,7 +74,7 @@ pub(super) fn hash<const N: usize>(first: &[u8; N], second: &[u8; N]) -> [B128; 
 }
 
 #[inline(always)]
-fn rotate<const N: u32>(word: u64x2) -> u64x2 {
+fn rotate<const N: u32>(word: Word) -> Word {
     if N == 0 {
         word
     } else {
@@ -77,7 +82,7 @@ fn rotate<const N: u32>(word: u64x2) -> u64x2 {
     }
 }
 
-fn permute(state: &mut [u64x2; STATE_LANES]) {
+fn permute(state: &mut [Word; STATE_LANES]) {
     for constant in ROUND_CONSTANTS {
         let parity: [_; 5] = core::array::from_fn(|x| {
             state[x] ^ state[x + 5] ^ state[x + 10] ^ state[x + 15] ^ state[x + 20]
@@ -109,7 +114,7 @@ fn permute(state: &mut [u64x2; STATE_LANES]) {
                 row[x] = input_row[x] ^ (!input_row[(x + 1) % 5] & input_row[(x + 2) % 5]);
             }
         }
-        state[0] ^= u64x2::new([constant; 2]);
+        state[0] ^= Word::new([constant; WIDTH]);
     }
 }
 
@@ -119,22 +124,23 @@ mod tests {
     use crate::hash::{NODE_INPUT_BYTES, PARENT_INPUT_BYTES};
     use alloy_primitives::keccak256_uncached;
 
-    fn check<const N: usize>(first: &[u8; N], second: &[u8; N]) {
+    fn check<const N: usize>(inputs: [&[u8; N]; WIDTH]) {
         let expected =
-            [first, second].map(|input| B128::from_slice(&keccak256_uncached(input)[..NODE_BYTES]));
-        assert_eq!(hash(first, second), expected);
+            inputs.map(|input| B128::from_slice(&keccak256_uncached(input)[..NODE_BYTES]));
+        assert_eq!(hash(inputs), expected);
     }
 
     #[test]
-    fn paired_hashes_match_alloy() {
+    fn batched_hashes_match_alloy() {
         for pattern in 0u8..=u8::MAX {
-            let first =
-                core::array::from_fn::<_, PARENT_INPUT_BYTES, _>(|i| pattern.wrapping_add(i as u8));
-            let second = first.map(|byte| !byte);
-            check(&first, &second);
+            let inputs: [[u8; PARENT_INPUT_BYTES]; WIDTH] = core::array::from_fn(|lane| {
+                core::array::from_fn(|i| pattern.wrapping_add((i + lane * 83) as u8))
+            });
+            check(inputs.each_ref());
             check(
-                first.first_chunk::<NODE_INPUT_BYTES>().unwrap(),
-                second.first_chunk::<NODE_INPUT_BYTES>().unwrap(),
+                inputs
+                    .each_ref()
+                    .map(|input| input.first_chunk::<NODE_INPUT_BYTES>().unwrap()),
             );
         }
     }

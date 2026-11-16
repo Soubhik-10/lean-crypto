@@ -24,7 +24,7 @@ binary hashes, C compiler settings and compiled backend selection are retained.
 The pinned comparison package has no production Cargo feature switches.
 Its scalar, vector and single-state accelerated paths are selected by compiler
 target features. The binary description records AVX2, AVX-512, paired FORS
-selection and actual batch width; labels are not inferred from the CPU name.
+selection and actual batch widths for FORS, WOTS+C and leanVM.
 
 ## Comparison contract
 
@@ -40,9 +40,9 @@ Both implementations are compiled into the same binary with the same target,
 optimization and LTO settings. Any `no-vectorize-slp` setting applies to both.
 The reference implementation is an unmodified pinned Git dependency. The
 RustCrypto, tiny-keccak and asm-keccak labels select this crate's Alloy Keccak
-implementation; they do not select leanVM's hashing implementation. Our SSE2 and
-SSE4.2 verification builds additionally use paired SSE2 FORS hashing. leanVM
-selects its own scalar, AVX2 or AVX-512 paths from compiler target features.
+implementation; they do not select leanVM's hashing implementation. Verification
+uses two-lane FORS hashing on SSE2 and four-lane FORS and WOTS+C hashing on AVX2.
+leanVM selects its own scalar, AVX2 or AVX-512 paths from compiler target features.
 These are comparisons of complete implementations, not measurements of two
 algorithms forced through the same hash implementation.
 

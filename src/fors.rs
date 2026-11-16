@@ -33,11 +33,7 @@ fn leaf_position(digest: &[u8; 34], tree: usize) -> u32 {
     ((tree as u32) << FORS_HEIGHT) | leaf
 }
 
-#[cfg(not(all(
-    target_arch = "x86_64",
-    target_feature = "sse2",
-    not(target_feature = "avx2")
-)))]
+#[cfg(not(all(target_arch = "x86_64", target_feature = "sse2")))]
 fn recover_trees(
     address: &mut HashContext,
     reader: &mut Reader<'_>,
@@ -59,41 +55,41 @@ fn recover_trees(
     Some(())
 }
 
-// The baseline x86-64 Keccak backend hashes one input at a time. SSE2 can
-// process a pair of independent FORS openings without changing root order.
-#[cfg(all(
-    target_arch = "x86_64",
-    target_feature = "sse2",
-    not(target_feature = "avx2")
-))]
+// Independent FORS openings use the target's SIMD width. Compress their roots
+// in the same order as the serialized openings.
+#[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
 fn recover_trees(
     address: &mut HashContext,
     reader: &mut Reader<'_>,
     digest: &[u8; 34],
     roots: &mut Keccak256,
 ) -> Option<()> {
-    const OPENING_NODES: usize = 1 + FORS_HEIGHT as usize;
-    const OPENING_BYTES: usize = OPENING_NODES * NODE_BYTES;
-    const { assert!(FORS_TREES.is_multiple_of(2)) };
+    use crate::hash::VERIFY_BATCH_WIDTH;
 
-    let mut addresses = [address.clone(), address.clone()];
-    for tree in (0..FORS_TREES).step_by(2) {
-        let first = reader.take::<OPENING_BYTES>()?.as_chunks::<NODE_BYTES>().0;
-        let second = reader.take::<OPENING_BYTES>()?.as_chunks::<NODE_BYTES>().0;
-        let [first_secret, first_path @ ..] = first.first_chunk::<OPENING_NODES>()?;
-        let [second_secret, second_path @ ..] = second.first_chunk::<OPENING_NODES>()?;
-        let mut positions = [leaf_position(digest, tree), leaf_position(digest, tree + 1)];
+    const BATCH_BYTES: usize = FORS_OPENING_BYTES * VERIFY_BATCH_WIDTH;
+    const { assert!(FORS_TREES.is_multiple_of(VERIFY_BATCH_WIDTH)) };
+
+    let mut addresses = core::array::from_fn(|_| address.clone());
+    for tree in (0..FORS_TREES).step_by(VERIFY_BATCH_WIDTH) {
+        let openings = reader
+            .take::<BATCH_BYTES>()?
+            .as_chunks::<FORS_OPENING_BYTES>()
+            .0
+            .first_chunk::<VERIFY_BATCH_WIDTH>()?
+            .each_ref()
+            .map(|bytes| bytes.as_chunks::<NODE_BYTES>().0);
+        let mut positions = core::array::from_fn(|lane| leaf_position(digest, tree + lane));
         for (address, position) in addresses.iter_mut().zip(positions) {
             address.set_position(0, position);
         }
-        let mut nodes = HashContext::hash_node_pair(&mut addresses, [first_secret, second_secret]);
-        for (level, (first, second)) in first_path.iter().zip(second_path).enumerate() {
+        let mut nodes = HashContext::hash_nodes(&mut addresses, openings.map(|nodes| &nodes[0]));
+        for level in 1..=FORS_HEIGHT {
             let parents = positions.map(|position| position >> 1);
             for (address, parent) in addresses.iter_mut().zip(parents) {
-                address.set_position(level as u32 + 1, parent);
+                address.set_position(level, parent);
             }
-            nodes =
-                HashContext::hash_parent_pair(&mut addresses, &nodes, [first, second], positions);
+            let siblings = openings.map(|nodes| &nodes[level as usize]);
+            nodes = HashContext::hash_parents(&mut addresses, &nodes, siblings, positions);
             positions = parents;
         }
         for node in nodes {

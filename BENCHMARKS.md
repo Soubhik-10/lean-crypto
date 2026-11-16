@@ -115,3 +115,22 @@ Protocol gas pricing is outside the scope of this crate.
 
 [fips202]: https://csrc.nist.gov/pubs/fips/202/final
 [ethlib-sphincs]: https://github.com/ethereum/EthLib/tree/03547dd83f298a63e6dcceff0a0b75f6142490aa/EthLib/Cryptography/Sphincs
+
+## AVX2 verification batching
+
+Measured 16 November 2026 against main at
+[b2d82e4](https://github.com/Soubhik-10/lean-sphincs/commit/b2d82e4f02717fe2c21fdee33789cbaf0faa641b).
+Both builds used assembly Keccak, Rust 1.97.1, Thin LTO, one codegen unit and
+disabled LLVM SLP vectorization. Runs used an Intel Core i5-1340P with Windows
+x86-64 MSVC, pinned to logical CPU 2. The matrix harness used 22 samples per
+case, a 30 ms batch target, and 11 valid fixtures.
+
+| Compiler target | Valid before → after (µs) | Late rejection before → after (µs) | evm2 ecrecover before → after (µs) |
+| --- | ---: | ---: | ---: |
+| x86-64 | 128.98 → 132.65 | 128.53 → 131.13 | 48.49 → 49.55 |
+| x86-64-v3 (AVX2) | 154.40 → 93.95 | 154.30 → 92.64 | 50.54 → 48.59 |
+
+The AVX2 build spent 39.1% less time on valid verification and 40.0% less time
+on late rejection in this run. Valid verification went from 3.06× to 1.93×
+the time of the pinned evm2 libsecp256k1 provider. On the baseline x86-64 build
+that ratio was 2.66× before and 2.68× after.

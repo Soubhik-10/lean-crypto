@@ -2,12 +2,11 @@
 
 use alloy_primitives::{B128, B256, Keccak256, keccak256_uncached};
 
-#[cfg(all(
-    target_arch = "x86_64",
-    target_feature = "sse2",
-    not(target_feature = "avx2")
-))]
-mod pair;
+#[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
+mod batch;
+
+#[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
+pub(crate) use batch::WIDTH as VERIFY_BATCH_WIDTH;
 
 use crate::params::NODE_BYTES;
 const PREFIX_BYTES: usize = 48;
@@ -96,31 +95,31 @@ impl HashContext {
     }
 }
 
-#[cfg(all(
-    target_arch = "x86_64",
-    target_feature = "sse2",
-    not(target_feature = "avx2")
-))]
+#[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
 impl HashContext {
-    pub(crate) fn hash_node_pair(
-        addresses: &mut [Self; 2],
-        values: [&[u8; NODE_BYTES]; 2],
-    ) -> [B128; 2] {
-        let [first, second] = addresses;
-        pair::hash(first.node_input(values[0]), second.node_input(values[1]))
+    pub(crate) fn hash_nodes(
+        addresses: &mut [Self; VERIFY_BATCH_WIDTH],
+        values: [&[u8; NODE_BYTES]; VERIFY_BATCH_WIDTH],
+    ) -> [B128; VERIFY_BATCH_WIDTH] {
+        let mut values = values.into_iter();
+        batch::hash(
+            addresses
+                .each_mut()
+                .map(|address| address.node_input(values.next().expect("one node per address"))),
+        )
     }
 
-    pub(crate) fn hash_parent_pair(
-        addresses: &mut [Self; 2],
-        values: &[B128; 2],
-        siblings: [&[u8; NODE_BYTES]; 2],
-        positions: [u32; 2],
-    ) -> [B128; 2] {
-        let [first, second] = addresses;
-        pair::hash(
-            first.parent_input(&values[0], siblings[0], positions[0] & 1 != 0),
-            second.parent_input(&values[1], siblings[1], positions[1] & 1 != 0),
-        )
+    pub(crate) fn hash_parents(
+        addresses: &mut [Self; VERIFY_BATCH_WIDTH],
+        values: &[B128; VERIFY_BATCH_WIDTH],
+        siblings: [&[u8; NODE_BYTES]; VERIFY_BATCH_WIDTH],
+        positions: [u32; VERIFY_BATCH_WIDTH],
+    ) -> [B128; VERIFY_BATCH_WIDTH] {
+        let mut inputs = values.iter().zip(siblings).zip(positions);
+        batch::hash(addresses.each_mut().map(|address| {
+            let ((value, sibling), position) = inputs.next().expect("one pair per address");
+            address.parent_input(value, sibling, position & 1 != 0)
+        }))
     }
 }
 

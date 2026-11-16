@@ -36,6 +36,8 @@ struct Build {
     avx2: bool,
     avx512f: bool,
     paired_fors: bool,
+    fors_batch_lanes: usize,
+    wots_batch_lanes: usize,
     reference_batch_lanes: usize,
 }
 
@@ -63,6 +65,18 @@ fn build() -> Build {
             target_feature = "sse2",
             not(target_feature = "avx2")
         )),
+        fors_batch_lanes: if cfg!(all(target_arch = "x86_64", target_feature = "avx2")) {
+            4
+        } else if cfg!(all(target_arch = "x86_64", target_feature = "sse2")) {
+            2
+        } else {
+            1
+        },
+        wots_batch_lanes: if cfg!(all(target_arch = "x86_64", target_feature = "avx2")) {
+            4
+        } else {
+            1
+        },
         reference_batch_lanes: reference_keccak::LANES,
     }
 }

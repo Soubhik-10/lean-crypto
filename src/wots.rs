@@ -5,7 +5,7 @@ use crate::{
     params::{CHAIN_END, NODE_BYTES, TARGET_SUM, WOTS_CHAINS},
     signature::Reader,
 };
-use alloy_primitives::{B128, B256};
+use alloy_primitives::{B128, B256, Keccak256};
 
 // FIPS 205 chain/key domains and leanSPHINCS's WOTS+C encoding domain.
 const WOTS_CHAIN: u32 = 0;
@@ -26,7 +26,18 @@ pub(crate) fn recover_wots(
     address.set_domain(WOTS_PUBLIC_KEY, key_pair);
     let mut ends = address.accumulator();
     address.set_domain(WOTS_CHAIN, key_pair);
-    for (chain, digit) in digits.into_iter().enumerate() {
+    recover_chains(address, reader, &digits, &mut ends)?;
+    Some(truncate(ends.finalize()))
+}
+
+#[cfg(not(all(target_arch = "x86_64", target_feature = "avx2")))]
+fn recover_chains(
+    address: &mut HashContext,
+    reader: &mut Reader<'_>,
+    digits: &[u8; WOTS_CHAINS],
+    ends: &mut Keccak256,
+) -> Option<()> {
+    for (chain, &digit) in digits.iter().enumerate() {
         let mut value = B128::new(*reader.take()?);
         for step in digit..CHAIN_END {
             address.set_position(chain as u32, u32::from(step));
@@ -34,7 +45,67 @@ pub(crate) fn recover_wots(
         }
         ends.update(value);
     }
-    Some(truncate(ends.finalize()))
+    Some(())
+}
+
+#[cfg(all(target_arch = "x86_64", target_feature = "avx2"))]
+fn recover_chains(
+    address: &mut HashContext,
+    reader: &mut Reader<'_>,
+    digits: &[u8; WOTS_CHAINS],
+    ends: &mut Keccak256,
+) -> Option<()> {
+    use crate::hash::VERIFY_BATCH_WIDTH;
+
+    // Buffer a window of chains so independent steps can be batched and the
+    // finished nodes can still be streamed into the hasher in chain order.
+    const CHAINS_PER_WINDOW: usize = 16;
+    const WINDOW_BYTES: usize = CHAINS_PER_WINDOW * NODE_BYTES;
+    const { assert!(WOTS_CHAINS.is_multiple_of(CHAINS_PER_WINDOW)) };
+
+    let mut addresses = core::array::from_fn(|_| address.clone());
+    for (window, digits) in digits.as_chunks::<CHAINS_PER_WINDOW>().0.iter().enumerate() {
+        let offset = window * CHAINS_PER_WINDOW;
+        let mut nodes = reader
+            .take::<WINDOW_BYTES>()?
+            .as_chunks::<NODE_BYTES>()
+            .0
+            .first_chunk::<CHAINS_PER_WINDOW>()?
+            .map(B128::new);
+
+        for step in 0..CHAIN_END {
+            let mut chains = [0; VERIFY_BATCH_WIDTH];
+            let mut count = 0;
+            for (chain, &digit) in digits.iter().enumerate() {
+                if digit > step {
+                    continue;
+                }
+                chains[count] = chain;
+                count += 1;
+                if count == VERIFY_BATCH_WIDTH {
+                    for (address, chain) in addresses.iter_mut().zip(chains) {
+                        address.set_position((offset + chain) as u32, u32::from(step));
+                    }
+                    let next = HashContext::hash_nodes(
+                        &mut addresses,
+                        chains.map(|chain| &nodes[chain].0),
+                    );
+                    for (chain, node) in chains.into_iter().zip(next) {
+                        nodes[chain] = node;
+                    }
+                    count = 0;
+                }
+            }
+            for &chain in &chains[..count] {
+                address.set_position((offset + chain) as u32, u32::from(step));
+                nodes[chain] = address.hash_node(&nodes[chain].0);
+            }
+        }
+        for node in nodes {
+            ends.update(node);
+        }
+    }
+    Some(())
 }
 
 fn codeword(code: &B128) -> Option<[u8; WOTS_CHAINS]> {
