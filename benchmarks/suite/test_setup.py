@@ -176,6 +176,26 @@ class MachineTests(unittest.TestCase):
 
 
 class ReportTests(unittest.TestCase):
+    def test_published_passes_keep_their_own_iteration_counts(self):
+        import json
+        import tempfile
+        from suite import publication
+        data = {"schema_version": 2,
+                "sampling": {"passes": 2, "samples_per_case": 5, "outliers_removed": 0},
+                "cpu": {"Name": "Synthetic CPU"}, "rustc": "synthetic compiler",
+                "reference_revision": "synthetic", "configurations": {"example": {}},
+                "measurements": [{"configuration": "example", "operation": "example", "passes": [
+                    {"iterations": 2, "work_items_per_iteration": 4, "elapsed_ns": [8, 16, 24, 800, 808]},
+                    {"iterations": 1, "work_items_per_iteration": 2, "elapsed_ns": [8, 10, 12, 14, 16]},
+                ]}]}
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "measurements.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            _, rows = publication.load_measurements(path, resamples=100)
+            self.assertEqual(rows[0]["median_ns"], 5.5)
+            self.assertEqual(rows[0]["samples"], 10)
+            self.assertEqual(rows[0]["pass_medians_ns"], [3, 6])
+
     def test_published_batch_denominators_and_missing_samples(self):
         import json
         import tempfile
@@ -217,7 +237,7 @@ class ReportTests(unittest.TestCase):
                                 "name": "macro/batched/verify_wire/mixed", "median_ns": 100000}]
         batched_draft = publication.render(state, batched_rows)
         self.assertIn("leanVM + local SIMD batching adapter", batched_draft)
-        self.assertIn("| native | tiny-keccak | enabled | 200.00 | 300.00 | 100.00 | -50.0% |", batched_draft)
+        self.assertIn("| native | tiny-keccak | enabled | 200.00 | 300.00 | 100.00 | +100.0% |", batched_draft)
         for value in ["PRIVATE_POWER_POLICY", "PRIVATE_BIOS", "PRIVATE_LOCAL_NOTES", "no-slp", "Alternative Rust"]:
             self.assertNotIn(value, draft)
         with self.assertRaises(ValueError):

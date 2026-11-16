@@ -1,0 +1,1408 @@
+{
+  "schema_version": 2,
+  "role": "configuration sweep",
+  "method": "Native encoded-input/output APIs; SIMD batching occurs within a single signature operation. Equal corpus weighting per pass, shuffled interleaving, no timed sample removed.",
+  "implementation_labels": {
+    "native": "lean-sphincs",
+    "reference": "leanVM (unmodified, pinned revision)",
+    "batched": "leanVM + local SIMD batching adapter (experimental benchmark code)"
+  },
+  "source_revision": "223195a129d9fcdd963c860a11d5ef8ec1132846",
+  "measurement_source_commit": "75268418b47f99042c9176a0e8efaa080138a454",
+  "source_tracked_changes": true,
+  "source_tree_sha256": "e57be7f300044558188651235556255f8f59c935bc06a4f1a387260eadd87106",
+  "source_files_sha256": {
+    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
+    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
+    "benchmarks/evm2/Cargo.lock": "a69c4ef001686d63625e979b2433653352c6f4e3ebba1fbfaacabdd45fdd1c72",
+    "benchmarks/evm2/Cargo.toml": "eefb5744a8c1419172e8d8e82daa5f8a9046e17f570daad2c6ad0470af1c0fe9",
+    "benchmarks/evm2/README.md": "83d11469d4670ba85b3acddec99ff689b799cb4497093ea5c92fce57b7e1462c",
+    "benchmarks/evm2/batched/fors.rs": "b058d86d38564c906acaee9f12354262fca2b7ed84a9aa39379f0390267aea18",
+    "benchmarks/evm2/batched/mod.rs": "adc4c1d2caa720acfebd2d70148e9468b87fd6f687b0c7c3c7944e5f7c118d9e",
+    "benchmarks/evm2/batched/trees.rs": "6195781a9dad29699822096e15cc83d98a47ac8da9eb44a890d240b2c1b1add3",
+    "benchmarks/evm2/batched/wots.rs": "3450f4a5e2a88a7f18be654b2b071b1bf70967852df06e3005830f5d95225bee",
+    "benchmarks/evm2/batched_tests.rs": "7f14820cbe8a91ac2c0731867057f722b62f0879055c39d3e22444ab5d81e247",
+    "benchmarks/evm2/codspeed.rs": "ad70cf075c48f60b5217435998cdba7140a666fd6ee560171e77444f3aebe636",
+    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
+    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
+    "benchmarks/evm2/matrix.rs": "babdb1edba003e9110f632ef3c322ca0d6f7577643809e07e855da904b232317",
+    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
+    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
+    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
+    "benchmarks/evm2/verify.rs": "f5ce7dcd40c03edfd4a407c33ebd66771aafb25e91c370dc94c95da312455091",
+    "benchmarks/run.py": "584af7df1405f310e26dc8b95951100d241ea7020fd52e870db1a484b173ab83",
+    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
+    "benchmarks/suite/config.json": "f1da5a7c6d221fdfa0b143c705d75864c997144416f7168e4a3a9a8992b197db",
+    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
+    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
+    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
+    "benchmarks/suite/publication.py": "10e5f3b2e2f0b5049a8205082123208e0711b121b7ffcc30c8c6f66a39d9761e",
+    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
+    "benchmarks/suite/test_setup.py": "03750eadf846f074c82b30d168c60ca551cc3d038280eddc7e08649f647fec56",
+    "src/fors.rs": "1c07ea86ff0221d87cd0176a0e6cc55d09dde8eb4ec5c8212cce0bb11cf1d009",
+    "src/hash.rs": "0b80273e8003276d803d656ce1be6e1a9695faeb527717d7e9d3f6d261c51e55",
+    "src/hash/pair.rs": "04fbf2437d1a54dca21dab6593f5418c0301f84eab3519a9d2634c105ee673ea",
+    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
+    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
+    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
+    "src/signing.rs": "562b9efe19d35f381eca60678c811f487b72b8f7fe9e409d7c46fa90cf4b2dc7",
+    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
+    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
+    "src/wots.rs": "5b7a99e8b1303694ba596f65fd1582ca59d29a630862c6bd16ce7a17f37ddeab",
+    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
+    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
+    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
+    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
+    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
+  },
+  "reference_revision": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+  "specification_revision": "03547dd83f298a63e6dcceff0a0b75f6142490aa",
+  "corpus_sha256": "82652fcc5c3756de7567b147c0d477d3b0a31d5adb224b5289dc2803f813798b",
+  "cpu": {
+    "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
+    "NumberOfCores": 16,
+    "NumberOfLogicalProcessors": 32
+  },
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
+  "sampling": {
+    "passes": 1,
+    "samples_per_case": 11,
+    "positive_fixtures": 11,
+    "batch_target_ms": 10,
+    "warmup_ms": 100,
+    "shuffle_seed": 20261115,
+    "outliers_removed": 0
+  },
+  "configurations": {
+    "baseline-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "baseline-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "29eee875532e74590a516f5f62ac4c33902ef2c777ff8eac32fb8e1f1f7e0aeb",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "baseline-assembly-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "baseline-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "11d51bdc4155db531f88141757f12ee695050afb206b11df463d0b2c9db67a4c",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "baseline-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "baseline-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "3747562d32f39ce37b7daaef5e8f45d898762c2696a49022121c9b95993f449e",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "baseline-portable-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "baseline-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "35634b13939f01b4af309e1514b0674b1fc724d9e625c90520bc3be53e540bee",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "baseline-tiny-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "baseline-tiny-libsecp256k1",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "615902d66b2c774ebff2c53a9459492b38fbd440367b4355cbcd0b4570aee654",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "native-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "native-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "34729f303a36ae4eefdb887f8b76dbfcaf9b89878425ea5dd8221a4ffa008080",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "native-assembly-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "native-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "887f9cb23792d75964c7cedbe5c9c0938462b9db48bb85a5ae266b358a57aa68",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "native-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "native-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "862eeec32d18dcf77b580eee481f54eefb1e4589ce4922a92876d3dfd40f945d",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "native-portable-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "native-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "112be7954048abb51898324b1a9ae7eeac4bf790c421e09f477c5839a25dcb28",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "native-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "native-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "e4e7ff9494615ee9c1a323bec90d1f878930938e39331c2f5ac296f9c8596980",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "v2-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v2-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "6d007ceb0938a970e829a88f094d865a01fe6bd0a686955c925144a9aae800e6",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "v2-assembly-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v2-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "e58e7f2122c20ce20216359329e407544051ad290b84e206eb4647d1a67fefd2",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "v2-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v2-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "03228e251ad2d3da70119951c9086ba397a3ce1df1fa4766dd36029bc58fbfcf",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "v2-portable-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v2-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "b42cd8bca2088163bcbb824aec9887ba1b82bcf0c3215e5dadf388e3aba656a4",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "v2-tiny-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v2-tiny-libsecp256k1",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "d2bfb36a0ae662c102c14a0a2cb484ece1e80aa61de3c48ec5fc428b5a8f1a75",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 1
+    },
+    "v3-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v3-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "2b01f799c94fd27539fbad1924b01b9d4eb709562a613354e7d70ce0d504c2c7",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 4
+    },
+    "v3-assembly-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v3-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "3a5bcc50d0aba74400853e18998d6fa2ec98663804d776d3c9f25c646855e5e8",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 4
+    },
+    "v3-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v3-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "eefa6085041f7d76fc4530ba7f738c37797ffa38d8aebae3037f7f17fed100f9",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 4
+    },
+    "v3-portable-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v3-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "486f88cdb16148f08dda44cbbd4b095ca65d396d18c1b5f43897e8e7ae812aa1",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 4
+    },
+    "v3-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v3-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "3eaeae6e730383a21acebb28dc0ca810f8e31153dd59327aa8aac71c3ab37770",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch_lanes": 4
+    },
+    "v4-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v4-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "22e0d0d2d3ace3f28a5cd807055d2d1eecf728f459f8e686ac11a412cc7205ee",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "v4-assembly-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v4-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "e85362e8c9cada9d584d3211090c2c801797ee507e198a1bfd7e0040433a1d00",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "v4-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v4-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "458d9b618470c569c5e4f7eca2ae3876549904f35ad11a128287d95e431a5d3b",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "v4-portable-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v4-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "a3b7dc189b9b89051559cd916021455987bc306297c1082d06096476dc1c4978",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    },
+    "v4-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 11,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro",
+          "batched"
+        ],
+        "id": "v4-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "183915ade0ddd37bfcab0ce49060ce6901f89bf918bcf59fde7d90df52de5589",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch_lanes": 8
+    }
+  },
+  "measurements": [
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [65226800, 69043300, 65170600, 65445800, 70401700, 65647400, 74793500, 65220100, 65283400, 68142000, 76336300], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [123734900, 124456600, 140927300, 163997400, 150964100, 126983000, 165064800, 136211000, 120443700, 169342200, 127074700], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16409300, 16476000, 16465800, 16520900, 16508700, 17283400, 16661500, 16622400, 16460500, 16522800, 16454200], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19781400, 19743600, 19755200, 19704900, 19749200, 19707300, 19756300, 19748600, 19737300, 19808900, 19916200], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [54990900, 55158700, 57836400, 55278400, 55233100, 55281600, 55119900, 55382800, 70478400, 55383400, 55773800], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [105591700, 104131200, 117845400, 120121600, 123542900, 136035600, 113883400, 111752500, 106140700, 126746600, 106018300], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11568600, 11554400, 11526400, 11545600, 11531000, 11509400, 11530200, 11564700, 13918500, 11503400, 11539300], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [74243000, 74389200, 74378200, 74406400, 75375700, 74727100, 76232600, 75888600, 74341300, 81989700, 74191300], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [140618900, 139119700, 149856200, 148117500, 163201600, 141981000, 149986200, 150426000, 135477400, 159461900, 144268800], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [32851100, 18155100, 18332100, 19666900, 24977800, 18161500, 18173300, 18452700, 18150900, 18082900, 18564500], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [18174700, 18179900, 18204100, 18153500, 18189000, 18149100, 18140700, 18869100, 19341200, 18722400, 18184200], "raw_report_sha256": "cfd264d98acdb06f2409429bd7adef3433a15841f623f5d84a5387e86ccf02c3"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [64993200, 64970000, 65055300, 65031600, 65054500, 64987400, 65025500, 64957000, 64964400, 64979500, 64986200], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119760700, 123027300, 132638300, 131394800, 147137000, 123634900, 133723800, 132377000, 119195300, 117952600, 125010000], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16293800, 16353500, 16367900, 16376400, 16394600, 16361600, 16361200, 16373200, 16366800, 16374400, 16357600], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19644400, 19691400, 19706300, 19669600, 19674800, 19723400, 19711300, 19661900, 19670500, 19684400, 19669600], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [54505000, 54438100, 54558800, 54598200, 54655900, 54512100, 54476800, 54485300, 54509800, 54940700, 54925800], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [101064600, 103584500, 111336200, 110385100, 122989200, 104555400, 112661900, 111486200, 100363600, 99820300, 105310700], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11420900, 11455200, 11431600, 11405400, 11462000, 11461200, 11440600, 11451000, 11434400, 11412600, 11447100], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [73708200, 73379400, 73600800, 73453900, 73439700, 73416200, 73675600, 73344900, 73502600, 73454900, 73669700], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [133996300, 136962600, 145991100, 145019000, 160139800, 137755800, 147252700, 146136500, 133275000, 132380900, 139110700], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [17737000, 17762200, 17674200, 17740200, 17709900, 17730900, 17764500, 17747600, 17753500, 17718700, 17754000], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [17724700, 17749300, 17796200, 17777300, 17736500, 17758800, 17772200, 17736600, 17878700, 17769700, 17753400], "raw_report_sha256": "940307f0682edf40fe4c10e632542d67bd768cd648fe9751e85c843a3b193223"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [65167400, 66107900, 65604600, 72173000, 65250600, 65265000, 68228500, 87393200, 65566200, 65496900, 65265200], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [120977600, 125230000, 133488500, 170914700, 160672100, 124471900, 136307100, 135360600, 119610600, 124565200, 129066000], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16426800, 16874100, 16570500, 16512700, 16450300, 18139000, 16455300, 16930400, 16689400, 18324200, 16464500], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19808800, 19880700, 21033000, 20047700, 19920500, 19878000, 19833100, 27376700, 19821400, 19896200, 20021200], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [73100300, 72996000, 75099300, 83491200, 86587100, 74430900, 72938000, 72892700, 73811100, 73049000, 74582000], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [132941900, 182778200, 141895000, 153088400, 155275100, 132008000, 141248100, 140909900, 130529400, 126211200, 136132600], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [13033400, 13114300, 13150000, 19657200, 13063600, 12973000, 13355700, 13066800, 13245900, 13082200, 13342900], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [74342300, 74638300, 75106200, 79438900, 76337500, 76266900, 74828600, 74437100, 75525600, 74334000, 74933100], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [138857500, 141603300, 153085100, 167969200, 167218000, 141468800, 154266700, 150579700, 165026900, 165813400, 144465700], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [18267800, 18263800, 18251600, 18335200, 19626400, 18203400, 18271200, 18301900, 18236600, 18193500, 19008400], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [18181800, 20902100, 18662100, 27125400, 18458600, 18198300, 18252200, 20331800, 18460500, 18565300, 18762900], "raw_report_sha256": "3de57f48cc9e9aed6fdaa3c4c7202777e4abeb5e496b56e61ff58f9230e5dbed"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [64988100, 64990600, 64997800, 64968400, 65032800, 64993100, 64954300, 64932000, 65006700, 64983500, 65020600], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119766100, 123315700, 132156800, 131270000, 146913200, 123725600, 133374800, 132292600, 118818900, 117950900, 124910200], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16323200, 16364600, 16357200, 16396200, 16352300, 16339600, 16372100, 16361600, 16353800, 16358000, 16362100], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19712000, 19771500, 19754100, 19692400, 19705000, 19756500, 19728900, 19739900, 19714500, 19773700, 19752500], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [69027500, 69075200, 69672800, 69009200, 69046800, 69178600, 69205400, 68960000, 69258200, 69003800, 68902600], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [126275000, 130049600, 138835000, 138264900, 152836700, 130236500, 139707200, 139063000, 125728000, 124751900, 131570200], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [12892200, 12877300, 12896600, 12894000, 12892900, 12896900, 12888700, 12921300, 12886800, 12910900, 12890900], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [73367300, 73336100, 73411800, 73411400, 73370300, 73256200, 73331100, 73278600, 73476100, 73409600, 73724200], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [133947400, 137068400, 146554800, 145469200, 161135600, 138195000, 147549700, 146561000, 133116400, 132118300, 139168500], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [17722700, 17755400, 17661400, 17730600, 17754700, 17705800, 17724300, 17726200, 17758200, 17749200, 17724900], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [17754200, 17807000, 17849100, 17812500, 17837100, 17766900, 17770400, 17742400, 17802300, 17805000, 17710800], "raw_report_sha256": "766102d79e6cf73aef1fcf0a549078ac9d498298e8289d5b35fea3d28f705976"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [64965900, 65179000, 69349800, 74425400, 65330400, 67356400, 67743500, 82024800, 67637500, 69920100, 66272000], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [120300800, 142080700, 140719000, 132392500, 152808400, 126176300, 136864800, 135613200, 142438500, 133794300, 130586400], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16378500, 19978900, 18235800, 16568000, 16520100, 17102300, 16597100, 16664900, 18095800, 17315900, 16708200], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19796700, 22805300, 20441900, 19865200, 20036600, 20645000, 19958700, 21006300, 20180900, 20020400, 20083200], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [71378600, 73661800, 81880300, 75922600, 71774900, 73365700, 73160100, 73041100, 74510400, 75153000, 73795700], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [131101700, 140332100, 147142000, 148347100, 159473900, 138924800, 148010900, 156146800, 134239200, 133611600, 149884200], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [13276100, 13437800, 13384100, 13410900, 13272700, 13435200, 14152200, 13426100, 13822800, 13909200, 13588600], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [74111000, 87516400, 75879900, 75150800, 98029800, 75526600, 75930300, 75296100, 77821400, 76861400, 75620200], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [136147100, 152756800, 164151700, 152314200, 173172100, 160602500, 152694700, 152199400, 145027600, 167886000, 145269500], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [18102600, 19784200, 19525400, 19769700, 20644800, 20708300, 18291300, 30366300, 19253000, 19168800, 19405300], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [18107300, 18426800, 18736100, 18262400, 18381500, 30043600, 18461200, 21445400, 19228500, 21773600, 18945100], "raw_report_sha256": "130e3b239bb0829e06ed1a4d5a86158d138ed1d94f7a1a42a8815fda62caf329"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12041000, 12610900, 12100400, 12167300, 12191900, 13659700, 14028400, 13212800, 13815100, 13802300, 12570700], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22482800, 22515200, 24058200, 25982800, 29724400, 25736900, 24860600, 27330300, 22776400, 24646500, 25990000], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20206600, 19866100, 19918600, 21913800, 20022900, 21474800, 21033700, 20194500, 22328700, 20322600, 21525600], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [12961200, 9832400, 9846500, 9837500, 9945100, 13039000, 14617400, 14480200, 9835200, 13645100, 14594700], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [51395900, 46452500, 47717700, 46456200, 50176000, 52171200, 52163200, 52218600, 49731900, 51315900, 46571600], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [85062200, 86647700, 92898700, 94713700, 108727300, 94585600, 100910400, 99460300, 85868600, 93099500, 95170300], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11724700, 11158200, 11136700, 11211800, 12013300, 13187800, 13343200, 11252500, 12724700, 13194300, 12373700], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62932600, 63846500, 62093100, 64135300, 66051800, 65566000, 66245700, 65895600, 66264100, 65632000, 64730200], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [113430800, 116031300, 123399800, 123218300, 143765400, 125031600, 133868700, 132981000, 118217300, 116091200, 126012400], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15886400, 15800400, 15307800, 15453400, 15641200, 16317700, 15969600, 15554600, 16236600, 15902400, 16059700], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16349700, 15247600, 15270700, 15414900, 16668800, 16388900, 16164400, 16212900, 16420800, 16316500, 16510700], "raw_report_sha256": "5129969e6bd4adba15fa676a62cb3844f33477a5b63db33b03bca9ea3feb7477"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [11979600, 11975500, 12013100, 11975300, 11979600, 12037100, 11961800, 12079600, 12050300, 11960800, 12027600], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22135100, 22483800, 23863100, 23886500, 26491500, 22463200, 24226300, 23949000, 21780000, 21564300, 22705900], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19904300, 19714600, 19849500, 19709800, 19832300, 19843100, 20062700, 19743600, 19733600, 19724500, 19854800], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19637400, 19756400, 19587400, 19913200, 19632000, 19586700, 19731400, 19590400, 19594100, 19645400, 19658100], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [46442800, 46618100, 46528800, 46608400, 46555900, 46603000, 46729900, 46660000, 46541300, 46560400, 46671700], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [85229200, 87318900, 93298500, 92725400, 102470700, 87907500, 94101700, 93394000, 85019400, 84563400, 88779800], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11317300, 11246600, 11231200, 11233200, 11225800, 11291400, 11292600, 11265400, 11248800, 11302800, 11309500], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [61728500, 61379700, 61492100, 61406300, 61469700, 61288700, 61262400, 61503400, 61298600, 61782300, 61320800], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [113663100, 116437000, 125005800, 123666700, 136843000, 117056900, 125261800, 124481900, 112819200, 112284900, 118146500], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15104500, 15032900, 15343600, 15052200, 15152700, 15180500, 15004400, 15168000, 15100700, 15059400, 15028700], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15332900, 15309600, 15336800, 15268700, 15307500, 15221700, 15515100, 15309400, 15313100, 15330000, 15429900], "raw_report_sha256": "c78700a0a640bb9da9b29d15108e68af6189baea2e88a9f29ad503e26b33862e"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [14146900, 13705700, 13668400, 12825700, 13141100, 13826300, 14096900, 13840700, 12372600, 12263700, 12409300], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22418100, 26100900, 26939400, 27148500, 26499800, 24457100, 27174100, 27052000, 24401600, 21746500, 24778000], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [22161600, 21839700, 21148000, 22109100, 22487400, 22089000, 22327000, 20002500, 19991900, 20113400, 20538900], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [23524600, 27847200, 22513000, 28998300, 19717000, 28915700, 30322700, 20211800, 28932900, 19776800, 22079100], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [99078800, 76541700, 72002500, 107421200, 62636500, 86652200, 72083300, 103869500, 61907100, 62643600, 63973800], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [188797800, 112745200, 183328100, 202552700, 228662700, 134545300, 206882300, 159428000, 133346800, 114248000, 118225300], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [14651300, 14670400, 26014800, 27275200, 25056900, 24622400, 26634900, 18310500, 14826700, 15968700, 15505200], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [65841600, 65946500, 66388100, 66260400, 65350500, 65756000, 66547000, 65839300, 65561700, 66452900, 66218000], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119715900, 121217000, 131666300, 130957900, 140582800, 123722600, 125775800, 132294900, 118095300, 114435100, 125811300], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16785700, 16471700, 16624400, 16560400, 16389900, 16808600, 16736600, 16451500, 16978900, 16077300, 16689000], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16054800, 15388700, 16007600, 15914300, 15188300, 15768000, 15704800, 15480900, 15656600, 15771700, 15998300], "raw_report_sha256": "d890d9c4f08b6903cc2f1b03e666c514306dbc22a42df1505770ac8da7137471"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12075800, 12180100, 12252600, 12036200, 12050800, 12293500, 12027300, 12139700, 12290300, 12269500, 12173300], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22421300, 22419700, 24007500, 23840700, 26561500, 22425900, 24453700, 23929500, 21847100, 21873300, 22642200], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [10119900, 9977400, 10245500, 9997300, 10061100, 10184800, 10126800, 10002400, 10102900, 9991400, 10216600], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20377200, 19635500, 19799200, 19896600, 19782900, 19639800, 19636100, 19618800, 19802000, 19666800, 19817100], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [59007000, 58856800, 58792400, 59879900, 58886300, 59211500, 58489000, 58872000, 58880000, 58931200, 58833400], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [107441700, 109831700, 118067700, 117866300, 129185000, 110745500, 118537600, 117580200, 107230500, 106153500, 111621900], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [14473800, 14453900, 14433900, 14461400, 14403900, 14297600, 14267800, 14449100, 14564800, 14442200, 14289500], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [61772800, 62481000, 62228300, 61730700, 61745600, 61938200, 61616400, 62367400, 61905300, 63265400, 61798400], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [114715000, 117507200, 125472700, 125424200, 137474800, 117977100, 126621900, 125387600, 114361300, 113805100, 119408500], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15503200, 15187100, 15364800, 15221000, 15246800, 15397900, 15219500, 15245900, 15313200, 15287500, 15136100], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15223700, 15406300, 15207200, 15353700, 15197900, 15095100, 15007000, 15375800, 15373600, 15312100, 15291700], "raw_report_sha256": "e997f68bdbe3d15812d05c176bab504b9f8bde1dc603b23f8fa6db7b9c4aa49f"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [13402400, 13186700, 13801500, 13921800, 13421300, 13592500, 13763700, 12898400, 13759300, 13970100, 13479000], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [24599200, 26116000, 27900900, 26926600, 30547400, 25473600, 27323400, 26017800, 24811700, 24370400, 25915100], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [10767200, 11495800, 10305300, 10871900, 11160000, 11219200, 11180900, 11367000, 11116200, 11239400, 11237800], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [12666300, 12060400, 13011200, 14697400, 14722700, 13295500, 14676600, 10015500, 13361700, 14660200, 14460400], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [88836400, 101867100, 87720500, 79701600, 100887700, 101684800, 97451500, 63341200, 102038900, 103911800, 103926800], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [161394400, 150780400, 202869800, 183993900, 155932700, 192687000, 162343000, 159545300, 117527300, 183922200, 193007100], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [20246100, 23665000, 24159700, 23959300, 15065000, 26278500, 23800300, 23637000, 26919200, 24884200, 22444800], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [64721100, 65219200, 64302000, 65968200, 65940300, 65994500, 64361800, 65745200, 66051200, 65762700, 65748700], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119145600, 122755400, 132351000, 132894200, 147731900, 125395300, 133838700, 133951700, 120786100, 120061600, 126666500], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16008900, 15948500, 16034500, 16059700, 16474000, 16025800, 16271500, 16385500, 16082600, 16035600, 16374700], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15861500, 15968300, 16378800, 16349400, 16176400, 16299900, 16076000, 16146600, 16008200, 16295300, 16029200], "raw_report_sha256": "28400e42c0a184d0980476e1f9895adb0a55cbeb7df7814d60081202159ade47"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [117869300, 118744700, 117693000, 118337500, 117697500, 120936100, 119274200, 117938100, 118511700, 118596100, 119508900], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [218565300, 221333500, 237389400, 236113500, 264690800, 223080800, 239648700, 236931200, 216647200, 238322700, 255220900], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14872700, 14636800, 14720000, 14609800, 14558200, 14993400, 14626600, 14690600, 14595900, 14533800, 14725600], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19791900, 19661700, 20025200, 28410000, 19750900, 19643500, 19560000, 20793700, 19748800, 19552100, 20239300], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [55607100, 54892500, 55780300, 57465200, 55082300, 56576100, 55552400, 54837700, 58474800, 56043400, 57205700], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [102598400, 107982000, 112189300, 123448000, 122989900, 108141700, 114000600, 127759600, 111282900, 103169400, 115805400], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11624900, 11661900, 11523300, 11703000, 11569600, 11578800, 11616600, 11764600, 11624500, 13038300, 11796700], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [126006600, 125062000, 125148600, 124830200, 134224500, 147857700, 126387800, 135939100, 129484900, 125730600, 129138900], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [237779800, 258242200, 253029100, 265368900, 274241500, 242681600, 253526500, 248883300, 229291300, 228708400, 246766300], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15377200, 16024700, 15306700, 15362700, 17460000, 15221400, 15235300, 15254000, 15269700, 15215700, 15596800], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15346100, 15507900, 15314600, 15429500, 15272300, 15291500, 15316800, 17276800, 15610900, 15566200, 15527600], "raw_report_sha256": "9a15220ede9cd1e9d176e52fc07104b282a5ed03e2ab687eb5d4766a06d2ad97"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [117132200, 117007400, 117149300, 117105700, 116987900, 118076100, 116998800, 117106700, 117239500, 116926700, 117436500], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [215252000, 219613700, 235092700, 233644500, 258886600, 221319900, 237164400, 235499200, 213633400, 212097800, 223323800], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14494400, 14504800, 14627600, 14502300, 14508100, 14619100, 14512300, 14488300, 14488600, 14504300, 14591800], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19675700, 19632900, 19706700, 19777900, 19689100, 19619300, 19535900, 19628800, 19697600, 19510700, 19653300], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [54693900, 55109500, 54730000, 55266600, 54824400, 55080600, 54970800, 55014100, 55104200, 54922600, 55070000], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [100109200, 102711300, 110265200, 109906100, 121706300, 103698900, 110959700, 110343200, 99723800, 98893700, 104565900], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11491900, 11496200, 11462800, 11448600, 11470600, 11522800, 11533800, 11467700, 11516700, 11433900, 11540800], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [123011200, 123409200, 123044600, 122919300, 123129200, 123261000, 123615200, 123365700, 123329900, 123190000, 123051700], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [225950300, 230653100, 245742900, 244607300, 269352700, 232434900, 247631800, 246052200, 224594900, 223487900, 234426500], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15161300, 15009000, 15057800, 15111200, 14999300, 15009100, 15047800, 15005300, 15054900, 14990000, 15018600], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15201600, 15250300, 15104400, 15184400, 15091600, 15076200, 15219500, 15232800, 15195300, 15178300, 15086200], "raw_report_sha256": "df76b8eaa6cfd3c703cd891b523cecaaf2fe5a10cfd19521bfbcd881158e84ad"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [146809500, 118849400, 136376700, 117654200, 118070100, 117488800, 117365500, 124320500, 138010000, 148144200, 117188800], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [215734200, 225451100, 269348600, 244939200, 261179100, 262343000, 240266000, 236233900, 223745500, 216977100, 236639200], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14595900, 14554600, 14522400, 14491600, 14498500, 15624000, 14618400, 14551300, 14746500, 14508000, 14827100], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20133900, 19677100, 20024500, 19688200, 19756800, 19685100, 19691300, 20763600, 19678900, 20781100, 19728200], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [120646900, 124072800, 124370600, 121883500, 150199700, 120713900, 120570700, 123642200, 125975600, 123158400, 132198700], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [220904400, 228038100, 244979900, 239876900, 266600600, 253867600, 243018900, 241185400, 221621400, 225555900, 233264600], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [19140900, 19007500, 19142500, 19249800, 19049100, 19028000, 18962000, 20164600, 19144800, 19042500, 19145700], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [126892500, 132927800, 126435400, 127875200, 124584500, 126882000, 124827000, 124709000, 124401600, 129019900, 124575900], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [242474400, 233353000, 256117500, 246243600, 273167500, 235102700, 253964800, 277608200, 227807200, 227178000, 236862700], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 32, "work_items_per_iteration": 1, "elapsed_ns": [7577600, 7599900, 7614900, 8898000, 10391100, 7571200, 7568600, 7553900, 7691200, 7566400, 7568000], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15206500, 15433400, 15207100, 15778700, 15215900, 15185500, 15739000, 17661900, 15183400, 17644400, 15211800], "raw_report_sha256": "1c2bb8b2765b30ddee32c0c654b00a1e2e02fa2c6e9b8a05e8b884e053dcaf8d"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [117202100, 117032900, 117242600, 117247300, 117192500, 117448100, 117747200, 121493200, 118092400, 117477500, 117238700], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [215146600, 220257200, 235812000, 234894800, 260955200, 222744600, 239726500, 237023700, 214996700, 213278000, 224191800], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14491500, 14486500, 14501100, 14654900, 14516400, 14564600, 14881400, 14833100, 14689900, 14548300, 14558100], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19706800, 19723900, 19716500, 19699100, 19711500, 19701000, 19939100, 20259700, 19689600, 19716000, 19701900], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119692600, 119864000, 119587900, 119600400, 119841300, 119793800, 121628000, 119840500, 120496800, 119739600, 119778500], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [218646000, 223842800, 239092500, 237336700, 262833100, 225949700, 241740200, 242735900, 218149900, 216806300, 227779900], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [19117100, 19086800, 19063300, 19065900, 19078800, 19072000, 19030300, 19657400, 19266900, 19076100, 19095700], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [123613800, 123191600, 123574600, 123958700, 123766100, 123896200, 124429300, 123750500, 123662400, 123769600, 123552000], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [225535300, 230753200, 245501900, 244459700, 269769700, 233883300, 248229800, 246551200, 225300300, 223740200, 234687700], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14998700, 14983900, 15017700, 14997200, 14968800, 15054300, 15135700, 15266600, 15039500, 15050400, 15028500], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15192500, 15183500, 15180700, 15200300, 15307200, 15200900, 15192100, 15446800, 15390600, 15239300, 15234600], "raw_report_sha256": "5bf8b11f0767727650bd185da6262b254e9eb5ec6dd48ca6fff64602643e930b"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [119451600, 119758400, 119913400, 119137000, 119399200, 118805900, 120447900, 152094300, 121525100, 118804600, 124946600], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [217206700, 224105100, 239955900, 263123200, 269677200, 240367800, 243032400, 247909300, 217461500, 216299900, 226626800], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14670000, 14649400, 14749400, 14655400, 14691700, 15731800, 15310500, 14697300, 25051600, 14880700, 14627600], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20215800, 20223000, 19830800, 19781600, 19801600, 19909600, 19787200, 20410600, 20368900, 19972400, 19914300], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [124738300, 126591100, 123537800, 123986300, 124770800, 130304300, 132837700, 123729100, 142054300, 124087600, 142304500], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [225510500, 241933200, 247048600, 245409600, 272418400, 241180100, 253244500, 250093000, 224422200, 221920600, 239197400], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [19580700, 19864700, 19767200, 20597300, 19582500, 19611700, 19647600, 19690800, 24964300, 19606900, 19752100], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [156337500, 129362500, 129001700, 129392800, 126075500, 128818300, 134677800, 128387800, 126935600, 129159500, 126005500], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [233129500, 237800600, 290306900, 250839800, 306132200, 236018800, 254866900, 259438100, 229113500, 237719800, 270616400], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15337800, 15371800, 15327500, 17627600, 16071800, 15360200, 15442100, 15583000, 15275800, 15348700, 15329300], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [15392000, 15486900, 15424300, 16056000, 15412700, 15316700, 16190000, 16857000, 28204100, 17488300, 15425300], "raw_report_sha256": "74088220a9ceb8c96260a2da019c80b6f7089cedc85ec3358ec5b7c7101decfc"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [30429500, 30696600, 30280900, 30779500, 20922100, 28508200, 29679400, 30413700, 30722000, 30391300, 29616200], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [57593500, 47142800, 62921500, 62123900, 45513800, 45780800, 53617700, 62533400, 56757100, 56976000, 41401300], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [10384200, 10101400, 10785400, 10390100, 6439100, 10054400, 6495600, 10626700, 10461800, 8577400, 9509300], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [13145100, 13789700, 9802500, 14610200, 11396200, 14588000, 13356700, 14093900, 13344900, 12439600, 13807800], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [54556500, 52797600, 52930200, 54557600, 53914100, 53758100, 54544100, 54601100, 54613800, 54584300, 54177000], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [100528400, 102946600, 110335100, 109965000, 122239500, 102724200, 111167300, 111258900, 100105800, 98434900, 103819000], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [13633600, 13611000, 13499300, 13432700, 13479800, 13185400, 13695300, 13453600, 13485400, 13288000, 13269200], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [108600700, 109588600, 109692000, 98265100, 95634200, 105489300, 83606400, 109164900, 105711400, 108772000, 65294300], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [189441800, 155118200, 197389100, 214229000, 211487800, 207385700, 208135800, 216697600, 198367300, 167887200, 192252600], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14458500, 14515500, 12016200, 12191600, 9036500, 11962200, 11788400, 14448000, 14715100, 14091400, 7829900], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 64, "work_items_per_iteration": 1, "elapsed_ns": [14221900, 14501500, 14039900, 14258400, 8336500, 10430800, 7849500, 11971100, 12122500, 11973000, 12725400], "raw_report_sha256": "dd66e2a7dd78eb325b888b89f022fed779e8749d5401ac4c69d2fb8a23596fa8"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [20310900, 20272100, 20504100, 20417100, 20383900, 20407400, 20300700, 20213700, 20427900, 20302400, 20382300], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [37388200, 38072800, 40868100, 40557500, 45171900, 38420400, 41310800, 40985500, 36821500, 36730300, 38632500], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [12720800, 12791700, 12908700, 12782500, 12892200, 12831100, 12873100, 12834000, 12755000, 12794900, 12838200], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19664700, 19812900, 19605300, 19627600, 19589500, 19791700, 19885900, 19711300, 19670800, 19851000, 19580400], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [52114600, 52517000, 52184600, 52637800, 52518400, 52509800, 52037400, 52416800, 52165600, 52270100, 52740300], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [95644200, 97655800, 105333100, 104340700, 116102500, 98636200, 106059400, 105110600, 94900100, 94358500, 99475000], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [12991500, 12833500, 12878400, 12850600, 12893500, 12729200, 12662000, 12908600, 12858800, 12881600, 12714400], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [65882900, 65867900, 66065500, 65932600, 65911100, 65873700, 65871600, 66216300, 65744200, 65949600, 65902400], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [116066300, 118599000, 127044100, 125986700, 139593300, 119538300, 128586200, 126814400, 115534000, 114811100, 120610700], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15516200, 15378900, 15290600, 15450700, 15501900, 15580800, 15367900, 15519000, 15631000, 15392900, 15360800], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15499900, 15717800, 15884900, 15761300, 15734100, 15590300, 15545300, 15681000, 15701200, 15745300, 15533200], "raw_report_sha256": "2d094df7f6ec9ea568a17c3edfed3d2d0f2c248552f3e2edf7b0196921dda665"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [20749100, 23624100, 29389900, 29217900, 25224900, 24352500, 23443600, 24190500, 24359200, 24460800, 21641100], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [39263800, 54956500, 52725800, 49061500, 51906500, 46706000, 44551400, 49835800, 45225700, 43058900, 38862400], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [13529800, 15717700, 15484800, 16131400, 16363200, 15588200, 15409500, 15339200, 13276300, 15051000, 12740600], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [10339800, 11395100, 11922700, 12422100, 10365300, 11629800, 12126500, 11243900, 13188400, 11534700, 9925500], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [63807800, 79021900, 68924300, 83072200, 65071700, 75843400, 75617600, 82348300, 70602900, 72839100, 61317400], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [137953500, 133407300, 160594200, 150284000, 168029000, 139872400, 136319400, 147994400, 142263400, 125586900, 151013200], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15872700, 17937900, 21566000, 16096300, 19100900, 18017000, 15545200, 17648500, 15654300, 18310800, 15146500], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [70748000, 70101700, 93046400, 67772400, 74276600, 76526500, 67310100, 79418300, 64683600, 78951000, 62751300], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [130751700, 162999300, 160797100, 151255000, 173454000, 145283400, 156635800, 155213100, 140903300, 130689400, 120247100], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [19041200, 16114200, 18884700, 21692100, 20133200, 18749900, 15926900, 18990700, 21738300, 18366000, 15363300], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [17124000, 19174400, 25863700, 18694100, 19185300, 19835600, 20123100, 18577000, 16649800, 20378600, 15805900], "raw_report_sha256": "5232894fda8783c63a70111f4a672917f83c1e1cc56f307f5c8bb6e7038e8bbc"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [20315600, 20288300, 20238000, 20293200, 20341600, 20262600, 20280500, 20189400, 20231600, 20249900, 20293000], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [37297100, 38064900, 40884800, 40539400, 45221300, 38380100, 41221700, 40900400, 36771300, 36711100, 38698300], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [12725600, 12767700, 12772500, 12783000, 12906800, 12748100, 12888900, 12829200, 12871900, 12795700, 12761200], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19801400, 19806800, 19800100, 19655300, 19721400, 19757600, 19842200, 19730100, 19710400, 19903700, 19718900], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [60483300, 60743200, 60642000, 60794700, 61245200, 60829500, 60526500, 60683900, 60592200, 60561500, 60795300], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [111313300, 114071500, 122276300, 121161300, 134569300, 114586200, 123543000, 122167000, 110525700, 109927200, 115756300], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [14922000, 14937700, 14786500, 14906300, 14771600, 14878600, 14815600, 14986000, 14820000, 14811800, 14781200], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62660500, 62587800, 62720200, 62857500, 62833500, 62845100, 62585200, 62624400, 62503500, 62861800, 62594300], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [115272200, 117933600, 125953200, 125111800, 138732200, 118865900, 127176600, 126085700, 114779700, 114024400, 119579500], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15248900, 15272700, 15245900, 15302100, 15363700, 15422700, 15269800, 15375600, 15462200, 15282600, 15233900], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15456500, 15565900, 15658800, 15543500, 15743600, 15566400, 15488100, 15524600, 15508200, 15613400, 15511200], "raw_report_sha256": "5dc6e793e30a4aee9d3c230e8d4c0b237e7b259dffe7ac01ba8a48180ef6ca9f"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [20471300, 22682500, 30792300, 20381600, 21354200, 20459300, 20776700, 20403800, 20422300, 21112800, 20686500], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [37515100, 39473500, 41106700, 40898200, 46353500, 38770100, 41824200, 42243100, 37401100, 37696800, 39391800], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [12727900, 14054200, 12776500, 14600800, 13129600, 14637000, 12931700, 12958600, 12781200, 13382200, 12984000], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19953800, 20015400, 20803800, 20742200, 20346200, 19839300, 19952500, 20636500, 19916900, 23047000, 21328200], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [67028800, 66672800, 68079500, 66494100, 67147700, 66903700, 67245000, 66026600, 67569100, 66124100, 87596000], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [118440000, 123798400, 131834900, 130292000, 146455600, 122805300, 173258200, 131272400, 121803600, 122702100, 126776300], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15246700, 15210700, 16642100, 15975400, 15441900, 15098900, 20753000, 15224200, 15096100, 15308300, 20457900], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62958000, 62943500, 68508400, 71783200, 66949800, 72081700, 63169000, 71161200, 63674900, 65371400, 67601900], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [116264800, 118732900, 128463000, 131300800, 142583300, 121270800, 135591900, 131544800, 128647300, 115487500, 122371400], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15386300, 15407900, 15363900, 16952300, 16233800, 15573400, 15549200, 15669000, 15716600, 15402200, 15463200], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15833400, 16136700, 25497300, 15892600, 17040100, 15869400, 16217700, 18450000, 16736400, 16608300, 15882500], "raw_report_sha256": "7a6887783cb472074f714b448c52771adfc13c81a8afed232a52def98cc3b081"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [13426300, 12847700, 12153100, 12221500, 12323400, 12251300, 12347600, 12232800, 12382400, 12267500, 12250100], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22331400, 23029600, 24138000, 25211000, 26897300, 22710500, 24464500, 24701000, 22232700, 21684300, 22832100], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20295100, 20069200, 19888900, 20425800, 20269800, 20171200, 19971700, 20140500, 19745100, 20243100, 20133700], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19682600, 24970200, 19717000, 19993500, 19816600, 19796800, 19689700, 19675200, 19920600, 19710400, 19671100], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [47223300, 47188100, 48129700, 47178400, 47185200, 49131500, 47900200, 47241700, 47721500, 47130400, 47191800], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [90789200, 88192800, 94224000, 94288100, 102699500, 88704200, 96058000, 94129300, 89444300, 85962800, 91679500], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11452100, 11397300, 11503200, 13374100, 11458500, 11532100, 11465100, 11502800, 11648200, 11425100, 11735200], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [65772000, 64954900, 64915600, 67508500, 65915900, 64534900, 64473800, 64643700, 65305000, 65789600, 64697800], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [116422000, 122817200, 125227600, 124187800, 137893100, 118734400, 127776600, 127290900, 114692100, 113357100, 119142200], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15822000, 15426300, 15291400, 15547400, 15516300, 15485900, 15227500, 15322600, 15292200, 15344600, 15216900], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15193500, 15155500, 15309200, 16048800, 15413500, 15124700, 15469500, 15646500, 15101000, 15489200, 15222100], "raw_report_sha256": "3cf992d2558cb689b595da7a7b64a01989c16dd8aed3cbff29a76b336132df8d"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12082000, 12195300, 12122300, 12102300, 13673900, 13224900, 12239300, 12293200, 13189600, 12382600, 12501700], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22329700, 22577800, 24193900, 24996300, 27775000, 22898900, 24710800, 26773400, 22860600, 22433300, 24310500], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19920300, 19751000, 19779400, 21117100, 21075900, 20532100, 20144500, 19861100, 21294200, 20497500, 21001400], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19643300, 19647800, 19658700, 19624300, 21376000, 19827700, 19940300, 19897800, 21275200, 20453400, 20927400], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [47609800, 47529800, 47554200, 47504500, 48428700, 47635800, 48143700, 52560800, 50131500, 49091300, 48257500], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [87088500, 89202900, 95436800, 94986800, 105665200, 90687700, 97545600, 97380700, 91894000, 91239700, 95542300], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [11577100, 11516300, 11477600, 11972500, 11725500, 11616000, 11696300, 11591300, 13569000, 12043900, 11788100], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [63338000, 62911200, 62971400, 65580500, 63833600, 63502500, 63478900, 65223900, 66054000, 64962500, 64536500], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [115778000, 118725100, 126594500, 128243100, 142445500, 124529700, 129699800, 130195600, 119029300, 119235000, 123696400], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15402600, 15377400, 15520100, 15380000, 16120400, 16052200, 15474800, 15492400, 15904700, 15840800, 15775200], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-assembly-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15575900, 15520500, 15521700, 15947600, 15797900, 15678600, 15514400, 15925700, 16267500, 16265000, 15851800], "raw_report_sha256": "81462f3fbad13145b8a6b21098628f53409fb4c690cf85a08caae736b0f1b7f8"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12085300, 12572100, 12248500, 12100300, 12294100, 12294400, 12033000, 12162800, 12407500, 12153800, 12195400], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22545400, 22726100, 24068000, 25056900, 27137600, 22579500, 24676800, 24107300, 21931400, 21639600, 22792900], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20279900, 19783000, 20123200, 19791300, 20098600, 20545900, 19974400, 20938500, 21766100, 19752500, 20123200], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20167400, 19750800, 20188200, 19735700, 20125300, 22791300, 19623700, 19712500, 20109600, 19728200, 20570600], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62332100, 62026400, 64014400, 61165500, 71760800, 61118500, 61938300, 60887900, 79573100, 61275300, 63256100], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [139488900, 113708800, 122806900, 120617600, 161298000, 113956800, 122011200, 143121900, 111753600, 109357200, 115800100], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15004100, 15187700, 15138100, 15456400, 15125700, 14822100, 14821400, 23445200, 15101400, 15034800, 14872300], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [63635300, 64186800, 65635100, 63572300, 63913700, 63478000, 63521900, 64109600, 63303800, 65255600, 63460800], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [115364700, 119123700, 125340900, 125005100, 138367300, 118704000, 127685700, 125615900, 114044300, 114824500, 119122600], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15355500, 15030600, 15244300, 15083000, 15416600, 15249000, 14999100, 15120000, 15150400, 15162600, 15010600], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15556000, 15677600, 15511900, 15757700, 15809900, 15325600, 15499700, 15874800, 16049700, 15650900, 15608900], "raw_report_sha256": "b495a6253c029c5493c828068fd6b149099a03b8815ce932c4a318e6d9bfdab3"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12063900, 12161800, 12275600, 12105500, 12107500, 12304000, 12071000, 12156700, 12371500, 12130500, 13555800], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22464000, 22575200, 24113900, 24119800, 26873100, 22654700, 24725900, 24152100, 22003700, 21811300, 23979800], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [10088600, 10033300, 10192900, 9967400, 10026000, 10165800, 10080900, 10005800, 10094000, 128315700, 11146100], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [19675400, 19608000, 19708600, 19730500, 19691500, 19609500, 19619200, 19548300, 19677500, 19726300, 20021000], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [61292500, 61387900, 61280900, 61152400, 61099800, 61403900, 61085700, 61011200, 61056700, 61594400, 63588200], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [111923100, 114240500, 121877300, 121702000, 134525200, 115045000, 123400300, 122514300, 111630900, 111216900, 437773800], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [14836200, 14846600, 14846300, 14827700, 14770000, 14682100, 14696900, 14805600, 14758900, 152976700, 15070600], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62360900, 62940700, 62756200, 62237900, 62195000, 62447600, 62382700, 62835400, 62204300, 63128400, 65745400], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [114253400, 117222300, 125369700, 126865200, 137542300, 118096300, 126627400, 125214400, 113917700, 888111400, 125244600], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15444100, 15157700, 15355600, 15258600, 15264500, 15392100, 15133400, 15236400, 15300200, 15353600, 16065500], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-portable-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15280400, 15496000, 15363500, 15440100, 15268100, 15220700, 15135800, 15450000, 15428300, 15457800, 15689300], "raw_report_sha256": "5523a5a40a65e03d960e30a2e3d0d09ef4a586a742361aa2d0bf5f7612224b87"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/batched/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [12129700, 12632500, 12310200, 12184700, 12209100, 12370600, 12109500, 12211500, 12425400, 12063500, 12523300], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/batched/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [22600400, 22997900, 24345100, 24428100, 27147200, 22791500, 25187100, 25158100, 22516400, 22647800, 23669900], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/batched/verify_wire/mixed", "passes": [{"iterations": 512, "work_items_per_iteration": 1, "elapsed_ns": [20205800, 19813400, 20418700, 21730100, 19914000, 20710400, 19932700, 19807000, 20072400, 19849100, 20180100], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "passes": [{"iterations": 256, "work_items_per_iteration": 1, "elapsed_ns": [10080100, 9835600, 11271700, 9931400, 9937900, 9859400, 9804400, 9831800, 9954800, 13972900, 12545200], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [69343800, 64232100, 65615500, 71310000, 63191000, 62921700, 63688000, 65842600, 64553000, 62716400, 62718200], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [116057000, 119303200, 128641500, 126860500, 139973700, 120567000, 127552800, 136654200, 118274800, 116981500, 125816600], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [15594200, 15417600, 15305500, 15349600, 15286900, 15859800, 15166600, 15304500, 15269100, 19690800, 15177300], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [62863900, 63467800, 63087500, 64069600, 62725000, 62725200, 62573800, 63030100, 62903800, 63419400, 62948000], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "passes": [{"iterations": 1, "work_items_per_iteration": 1, "elapsed_ns": [114882200, 117283900, 125667500, 125592400, 138735600, 120467500, 126561100, 129686600, 114656000, 113483900, 119323900], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16187200, 15840600, 16058600, 15951200, 16213000, 16021200, 15741800, 15910400, 16241100, 15922900, 15803200], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "passes": [{"iterations": 128, "work_items_per_iteration": 1, "elapsed_ns": [16000400, 15895600, 15562800, 15605400, 15562900, 15424700, 15413900, 15914400, 15683000, 15697900, 16190900], "raw_report_sha256": "44f5090b970c6a3be238d6b451524ae97aad16c95f3aa06d27f6584080193180"}]}
+  ]
+}

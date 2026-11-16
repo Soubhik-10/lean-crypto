@@ -90,79 +90,47 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --featur
 
 ## Native benchmark results
 
-CPU: AMD Ryzen 9 8940HX with Radeon Graphics (16 cores, 32 threads).
+CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
 
-Compiler: Rust 1.97.1; LLVM 22.1.6. Optimization level 3, Thin LTO, one codegen unit.
+Compiler: Rust 1.97.1; LLVM 22.1.6; MSVC target. Optimization level 3,
+Thin LTO, one codegen unit. Signature builds use `target-cpu=native` and
+`-C no-vectorize-slp`; explicit AVX-512 instructions remain enabled.
 
-Median time per operation from 40 samples per configuration (1 pass). Measured speedup = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower.
+**leanVM (unmodified, pinned revision)** calls the upstream native Rust
+[key-generation, signing and verification APIs](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs)
+at `4937c851eafb9e93bc7436eebe9e6dc8ae4c227a`. These builds use leanVM's
+AVX-512 single-state Keccak implementation.
 
-Verification starts from encoded signatures; signing and key generation include serialization. Small differences need confirmation across repeat runs.
+**leanVM + local SIMD batching adapter** is an experimental
+[benchmark implementation](benchmarks/evm2/batched/mod.rs) built on that same
+revision's public internals and hashing APIs. It adds local tree/chain scheduling
+and wire handling, using eight-way SIMD hashing within one operation on one
+thread. It is not an upstream leanVM release or a production backend in this crate.
 
-The Keccak column selects lean-sphincs' Alloy backend. Verification also uses paired SSE2 FORS hashing in SSE2 and SSE4.2 builds. leanVM uses its own CPU-selected scalar and SIMD paths. Compiler flags apply to both implementations within each row. See the [measurement method and raw data](benchmarks/SUITE.md#published-measurements).
+A separate 25-configuration sweep selected two builds for confirmation. Each
+operation was then measured over 44 samples per pass, three passes and 11 shared
+key/message pairs. The table reports the lowest complete confirmation median
+for each implementation and operation. Verification starts from encoded
+signatures; signing and key generation include serialization and recompute from
+the seed on every call. All timed samples are retained.
 
-leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum/leanVM/tree/f7ba4999ae523b94c8d0969b32762c3effea4cbd/crates/lean_sphincs).
+lean-sphincs uses `asm-keccak` for its results below. Both leanVM columns use
+leanVM's own hashing code. Adapter speedup is
+`(lean-sphincs time / adapter time - 1) × 100%`, calculated before rounding.
 
-### Verification
+| Operation | lean-sphincs | leanVM (unmodified, pinned revision) | leanVM + local SIMD batching adapter | Adapter speedup over lean-sphincs |
+| --- | ---: | ---: | ---: | ---: |
+| Verification (µs) | 88.33 | 119.12 | 38.71 | +128.2% |
+| Signing (ms) | 89.02 | 119.05 | 22.72 | +291.7% |
+| Key generation (ms) | 46.69 | 61.68 | 12.08 | +286.5% |
 
-| Compiler target | lean-sphincs Keccak | lean-sphincs (µs) | leanVM (µs) | Measured speedup |
-| --- | --- | ---: | ---: | ---: |
-| SSE2 | RustCrypto | 103.07 | 145.11 | +40.8% |
-| SSE2 | tiny-keccak | 102.76 | 146.88 | +42.9% |
-| SSE2 | asm-keccak | 94.58 | 145.47 | +53.8% |
-| SSE4.2 | RustCrypto | 148.45 | 238.13 | +60.4% |
-| SSE4.2 | tiny-keccak | 152.14 | 239.23 | +57.2% |
-| SSE4.2 | asm-keccak | 89.95 | 239.33 | +166.1% |
-| AVX2 | RustCrypto | 116.17 | 121.27 | +4.4% |
-| AVX2 | tiny-keccak | 118.30 | 120.66 | +2.0% |
-| AVX2 | asm-keccak | 99.55 | 120.19 | +20.7% |
-| AVX-512 | RustCrypto | 122.85 | 120.69 | -1.8% |
-| AVX-512 | tiny-keccak | 123.75 | 122.40 | -1.1% |
-| AVX-512 | asm-keccak | 89.63 | 121.66 | +35.7% |
-| native | RustCrypto | 113.21 | 118.94 | +5.1% |
-| native | tiny-keccak | 109.21 | 119.20 | +9.1% |
-| native | asm-keccak | 87.06 | 118.37 | +36.0% |
-
-### Signing
-
-| Compiler target | lean-sphincs Keccak | lean-sphincs (ms) | leanVM (ms) | Measured speedup |
-| --- | --- | ---: | ---: | ---: |
-| SSE2 | RustCrypto | 137.94 | 146.74 | +6.4% |
-| SSE2 | tiny-keccak | 132.35 | 140.02 | +5.8% |
-| SSE2 | asm-keccak | 117.52 | 151.13 | +28.6% |
-| SSE4.2 | RustCrypto | 225.02 | 232.70 | +3.4% |
-| SSE4.2 | tiny-keccak | 238.95 | 235.01 | -1.6% |
-| SSE4.2 | asm-keccak | 103.67 | 233.59 | +125.3% |
-| AVX2 | RustCrypto | 115.62 | 117.41 | +1.5% |
-| AVX2 | tiny-keccak | 116.06 | 118.10 | +1.8% |
-| AVX2 | asm-keccak | 97.55 | 118.60 | +21.6% |
-| AVX-512 | RustCrypto | 122.80 | 120.71 | -1.7% |
-| AVX-512 | tiny-keccak | 128.78 | 118.47 | -8.0% |
-| AVX-512 | asm-keccak | 88.82 | 117.63 | +32.4% |
-| native | RustCrypto | 111.37 | 115.39 | +3.6% |
-| native | tiny-keccak | 110.91 | 116.11 | +4.7% |
-| native | asm-keccak | 86.34 | 115.88 | +34.2% |
-
-### Key generation
-
-| Compiler target | lean-sphincs Keccak | lean-sphincs (ms) | leanVM (ms) | Measured speedup |
-| --- | --- | ---: | ---: | ---: |
-| SSE2 | RustCrypto | 71.87 | 76.07 | +5.8% |
-| SSE2 | tiny-keccak | 70.30 | 75.03 | +6.7% |
-| SSE2 | asm-keccak | 57.70 | 76.96 | +33.4% |
-| SSE4.2 | RustCrypto | 120.39 | 124.17 | +3.1% |
-| SSE4.2 | tiny-keccak | 122.43 | 126.37 | +3.2% |
-| SSE4.2 | asm-keccak | 54.80 | 125.03 | +128.2% |
-| AVX2 | RustCrypto | 61.34 | 63.06 | +2.8% |
-| AVX2 | tiny-keccak | 61.65 | 63.23 | +2.6% |
-| AVX2 | asm-keccak | 51.81 | 63.79 | +23.1% |
-| AVX-512 | RustCrypto | 64.55 | 63.36 | -1.9% |
-| AVX-512 | tiny-keccak | 63.34 | 63.06 | -0.5% |
-| AVX-512 | asm-keccak | 47.15 | 62.35 | +32.2% |
-| native | RustCrypto | 59.82 | 61.99 | +3.6% |
-| native | tiny-keccak | 58.08 | 61.55 | +6.0% |
-| native | asm-keccak | 46.22 | 61.29 | +32.6% |
+[Matched confirmation tables](benchmarks/SIMD_RESULTS.md),
+[complete configuration sweep](benchmarks/SIMD_SWEEP.md), and
+[method, source snapshot and raw measurements](benchmarks/SUITE.md#published-measurements).
 
 ### Ecrecover
+
+Medians from 40 samples per configuration. [Recorded measurements](benchmarks/measurements.json).
 
 #### evm2 libsecp256k1
 

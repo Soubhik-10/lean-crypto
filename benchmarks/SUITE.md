@@ -158,6 +158,11 @@ The sample count is a multiple of the corpus size. With the rotating input
 offset, every input receives equal weight over each complete pass even when
 implementations calibrate different batch iteration counts.
 
+Reproduce the two confirmed configurations with:
+
+    python benchmarks/run.py build --profile comparison --targets native --hashing portable,assembly --recovery libsecp256k1 --disable-slp
+    python benchmarks/run.py run --profile comparison --targets native --hashing portable,assembly --recovery libsecp256k1 --disable-slp
+
 For a best-configuration comparison, first run a short sweep, retaining every
 configuration's samples. Select candidates using complete operation medians,
 then measure those candidates in a separate three-pass run. Report the build
@@ -264,11 +269,27 @@ machine or a CPU-time ratio do not establish consensus gas pricing.
 
 ## Published measurements
 
-[measurements.json](measurements.json) contains the 40 recorded batch times per
-case behind every README timing, plus the parsed-verification diagnostics.
-The README reports one pass over the three positive specification fixtures.
-This is a small conformance corpus, not a representative distribution of signing
-times over arbitrary keys and messages. Signing's counter search is input-dependent.
+The current signature comparison has two separate datasets:
+
+- [simd-sweep.json](simd-sweep.json): all 25 CPU/backend/compiler configurations,
+  11 samples per case and one pass. This selects candidates.
+- [simd-confirmation.json](simd-confirmation.json): both selected native-CPU builds,
+  44 samples per case per pass and three passes, giving 132 samples per case.
+  This supplies the README's signature timings.
+
+Both use the same 11 key/message pairs: three specification fixtures and eight
+deterministic generated cases. The README selects the lowest complete confirmation
+median for each implementation and operation; it does not select individual
+samples or the fastest pass. The selection and exact candidate binaries are
+recorded in the confirmation data. Small differences between the two builds are
+not claimed as statistically significant. Full matched-build tables show both.
+
+The [measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/75268418b47f99042c9176a0e8efaa080138a454)
+was verified byte-for-byte against every recorded source-file hash. The captured
+base revision predates this snapshot because measurement occurred with
+uncommitted changes. `measurement_source_commit` identifies the complete measured
+tree; `source_revision` records that earlier base. The pinned upstream dependency
+is unmodified in both the stock and locally adapted comparison.
 
 The data records iteration and work-item denominators, exact compiler flags,
 binary hashes, source-file hashes, dependency revisions and compiled hash paths.
@@ -276,18 +297,19 @@ The elapsed-time array preserves sampling order; no outliers are removed. Local
 paths, machine policy logs and unrelated session details are excluded. Recompute
 the summaries and README draft without compiling or timing any code:
 
-    python benchmarks/run.py report --measurements benchmarks/measurements.json
+    python benchmarks/run.py report --measurements benchmarks/simd-confirmation.json
+    python benchmarks/run.py report --measurements benchmarks/simd-sweep.json
 
 The generated files are written to the ignored `benchmarks/results/published`
-directory. Confidence intervals describe batch averages within this recorded
-pass; they do not measure between-run or between-machine variation.
+directory. Confidence intervals describe the recorded batch averages across
+these passes; they do not establish performance across machines or arbitrary
+key/message distributions. Signing's counter search is input-dependent.
 
-Signature timings and libsecp256k1 recovery use the dedicated operation-only run.
-k256 recovery uses its isolated recovery run. Both AVX2 tiny-keccak configurations
-were remeasured after applying `no-vectorize-slp`; the complete configurations
-replace their earlier measurements. No individual samples or fastest cases were
-selected. The AVX2, AVX-512 and native tiny-keccak rows use the compiler fix;
-the other rows retain their original compiler settings.
+[measurements.json](measurements.json) retains the earlier 40-sample, single-pass
+matrix over three specification fixtures, including the separate ecrecover
+measurements still shown in the README. Its signature timings are historical,
+not the current SIMD comparison. Its entire AVX2 tiny-keccak configurations were
+remeasured with the compiler fix; no individual timed samples were replaced.
 
 ## Setup validation
 

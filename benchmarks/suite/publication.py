@@ -87,7 +87,7 @@ def render_batched(lines, state, summaries, *, include_reference):
         header = ["Compiler target", "lean-sphincs Keccak", "LLVM SLP", f"lean-sphincs ({unit})"]
         if include_reference:
             header += [f"leanVM (unmodified, pinned revision) ({unit})",
-                       f"leanVM + local SIMD batching adapter ({unit})", "Measured speedup"]
+                       f"leanVM + local SIMD batching adapter ({unit})", "Adapter speedup"]
         lines += [f"### {heading}", "", "| " + " | ".join(header) + " |",
                   "| --- | --- | --- | " + " | ".join(["---:"] * (len(header) - 3)) + " |"]
         for configuration in matching:
@@ -95,7 +95,7 @@ def render_batched(lines, state, summaries, *, include_reference):
             if include_reference:
                 batched_name = f"macro/batched/{operation}/mixed"
                 comparison = values.get((configuration, batched_name))
-                faster = "—" if comparison is None else f"{(comparison / values[(configuration, own_name)] - 1) * 100:+.1f}%"
+                faster = "—" if comparison is None else f"{(values[(configuration, own_name)] / comparison - 1) * 100:+.1f}%"
                 cells += [cell(configuration, f"macro/reference/{operation}/mixed", divisor),
                           cell(configuration, batched_name, divisor), faster]
             lines.append("| " + " | ".join(cells) + " |")
@@ -122,8 +122,10 @@ def render(state, summaries, *, include_reference=True):
     caption = (f"Median time per operation from {profile['samples'] * profile['passes']} samples "
                f"per configuration ({profile['passes']} pass{'es' if profile['passes'] != 1 else ''}).")
     if include_reference:
-        comparison = "leanVM batched adapter" if batched else "leanVM"
-        caption += f" Measured speedup = `({comparison} / lean-sphincs - 1) × 100%`; negative values mean slower."
+        if batched:
+            caption += " Adapter speedup = `(lean-sphincs / batched adapter - 1) × 100%`; negative values mean the adapter is slower."
+        else:
+            caption += " Measured speedup = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower."
     lines += [caption, ""]
     if include_reference:
         lines += ["Verification starts from encoded signatures; signing and key generation include serialization. "

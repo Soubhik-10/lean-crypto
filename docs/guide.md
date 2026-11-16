@@ -300,27 +300,29 @@ SSE2, SSE4.2, AVX2 and AVX-512 name CPU instruction capabilities. They describe 
 
 Newer instructions do not automatically produce faster code. Compiler decisions, data shuffling and the workload all matter. The benchmark builder disables LLVM SLP vectorization for affected tiny-keccak AVX2, AVX-512 and native builds. This setting applies to both implementations in the binary and keeps their explicit SIMD code enabled. The current published rows include this compiler fix.
 
+The latest confirmation also selects this compiler setting for RustCrypto and assembly builds. All signature candidates use the native CPU target with automatic SLP vectorization disabled. leanVM's explicit AVX-512 code remains enabled.
+
 Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](../README.md#native-benchmark-results).
 
 # What the performance numbers actually show
 
-The published signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Each result is a median from 40 batch samples in one pass, rotating three fixed specification fixtures. This checks performance on those inputs; it does not establish the distribution of signing times over arbitrary keys and messages.
+The published signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. A sweep of 25 configurations selects two candidate builds. Those builds are then measured separately, using 44 batch samples per pass over three passes and 11 shared key/message pairs. The headline table uses the lowest complete confirmation median for each operation and implementation. All configurations and samples remain available.
 
-These examples use the native CPU target and our assembly hashing configuration. The leanVM column uses its own hashing implementation with the same compiler target.
+There are now three implementations in the comparison. Our crate uses assembly hashing for its best confirmed results. The unmodified leanVM implementation uses its own AVX-512 single-state hasher. A separate local experimental adapter uses leanVM's public internals and eight-way SIMD hashing, with local scheduling and wire handling. That adapter is benchmark code; its results are not attributed to an upstream leanVM release.
 
-| Operation | Our crate | Pinned leanVM implementation | Comparison |
+| Operation | Our crate | leanVM (unmodified, pinned revision) | leanVM + local SIMD batching adapter |
 | --- | ---: | ---: | ---: |
-| Verification | 87.06 microseconds | 118.37 microseconds | About 1.36 times the speed |
-| Signing | 86.34 milliseconds | 115.88 milliseconds | About 1.34 times the speed |
-| Key generation | 46.22 milliseconds | 61.29 milliseconds | About 1.33 times the speed |
+| Verification | 88.33 microseconds | 119.12 microseconds | 38.71 microseconds |
+| Signing | 89.02 milliseconds | 119.05 milliseconds | 22.72 milliseconds |
+| Key generation | 46.69 milliseconds | 61.68 milliseconds | 12.08 milliseconds |
 
-A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 87.06 microseconds is 0.08706 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
+A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 88.33 microseconds is 0.08833 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
 
-“1.36 times the speed” is computed as the comparison time divided by our time. For verification, 118.37 divided by 87.06 is about 1.36, or a 36 percent speed increase. The elapsed-time reduction is about 26 percent; that is a different way of expressing the comparison. Published percentages are calculated from the unrounded measurements.
+The local adapter has about 2.28 times our verification speed: 88.33 divided by 38.71 is about 2.28. That is about a 128 percent speed increase, or about a 56 percent reduction in elapsed time. These are different ways to describe the same comparison. Published percentages are calculated from the unrounded measurements.
 
-The timing calls the Rust leanSPHINCS implementation from leanVM directly. It does not include generating a VM execution proof, aggregation or network communication.
+The adapter processes independent hashes from one operation together on a single thread. It does not get its result by dividing the time for several signatures by their count. Both implementations recompute keys and signatures from the seed during timing, with no persistent tree cache. All verification starts from encoded signatures, and signing includes producing the encoded result. The timing excludes VM execution proofs, aggregation and network communication.
 
-The measured advantage depends on the configuration. For example, the AVX-512 tiny-keccak verification medians are 123.75 microseconds for our crate and 122.40 microseconds for leanVM. That small difference needs confirmation across repeat runs. Results from one pass do not justify claiming that either implementation always wins.
+Our crate beats the unmodified dependency in this comparison; the local SIMD adapter beats both. Its speedup combines its scheduling and data-flow choices. These results do not establish a universal winner or the maximum possible performance of either codebase. Small differences between builds using the same reference hashing code should not be interpreted as proof of a backend advantage.
 
 The sample size and single-machine setup also limit how widely the results can be generalized. [Complete published benchmark tables](../README.md#native-benchmark-results), [raw measurements and method](../benchmarks/SUITE.md#published-measurements).
 
