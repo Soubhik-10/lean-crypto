@@ -93,9 +93,96 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed
 cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --features asm-keccak
 ```
 
+## Native benchmark results
+
+Measured on 16 November 2026 using an AMD Ryzen 9 8940HX (16 cores,
+32 threads), 32 GB RAM and Windows 11 build 26200. All configurations ran
+on the same machine, pinned to logical CPU 2, on AC power with the Balanced
+power plan and Aggressive processor boost enabled. Windows reported a nominal
+2.401 GHz; effective boost clocks were not measured.
+
+Compiled with Rust 1.97.1 and LLVM 22.1.6 for Windows MSVC, optimization level 3,
+thin LTO and one codegen unit. Library revision: `e0b6b23`.
+Each case collected 30 samples in one pass,
+with a 10 ms target batch duration and three rotating specification fixtures.
+Longer operations ran to completion. Fixture validation, warmup and calibration
+were excluded from timing. All samples were retained.
+
+Values are median time per operation. **Lower is faster.** Microseconds are
+written as µs; milliseconds as ms. This short run is an initial comparison;
+it does not establish stable rankings across CPU settings.
+
+The compilation settings control which instructions the compiler may use:
+
+- **Broad CPU support:** baseline x86-64 instructions, including SSE2.
+- **Extra CPU instructions:** adds instructions including SSE4.2 and POPCNT.
+- **256-bit vector instructions:** additionally allows AVX2, FMA and related instructions.
+- **512-bit vector instructions:** additionally allows AVX-512 instructions.
+- **Tuned for this Ryzen:** enables host-specific instructions and compiler tuning.
+
+The hashing choices are **Default Rust** (RustCrypto), **Alternative Rust**
+(`tiny-keccak`) and **Assembly** (`asm-keccak`). These choices select this
+crate's hashing backend. The reference uses its own hashing implementation
+with the same compilation setting; its pinned dependency is recorded in the
+[benchmark manifest](benchmarks/evm2/Cargo.toml).
+
+Verification includes reading the encoded signature. Signing and key generation
+measure the complete operations from the secret seed.
+
+| Compilation setting | Hashing | Library verify (µs) | Reference verify (µs) | Library sign (ms) | Reference sign (ms) | Library keygen (ms) | Reference keygen (ms) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Broad CPU support | Default Rust | 100.3 | 141.4 | 130.2 | 138.9 | 69.3 | 74.2 |
+| Broad CPU support | Alternative Rust | 102.8 | 141.3 | 132.8 | 138.1 | 73.3 | 73.8 |
+| Broad CPU support | Assembly | 89.1 | 141.5 | 104.2 | 138.4 | 57.7 | 73.6 |
+| Extra CPU instructions | Default Rust | 147.3 | 236.0 | 223.8 | 230.9 | 119.5 | 123.6 |
+| Extra CPU instructions | Alternative Rust | 150.2 | 236.1 | 224.7 | 231.5 | 119.7 | 124.3 |
+| Extra CPU instructions | Assembly | 89.0 | 236.3 | 103.3 | 231.1 | 54.5 | 124.2 |
+| 256-bit vector instructions | Default Rust | 118.7 | 122.2 | 113.6 | 116.7 | 60.8 | 62.4 |
+| 256-bit vector instructions | Alternative Rust | 117.7 | 121.1 | 117.6 | 116.5 | 63.7 | 62.3 |
+| 256-bit vector instructions | Assembly | 99.8 | 119.6 | 97.0 | 116.8 | 51.8 | 62.0 |
+| 512-bit vector instructions | Default Rust | 116.0 | 118.5 | 115.5 | 116.9 | 60.4 | 62.2 |
+| 512-bit vector instructions | Alternative Rust | 245.0 | 121.8 | 240.7 | 117.5 | 129.1 | 63.1 |
+| 512-bit vector instructions | Assembly | 88.9 | 123.3 | 87.9 | 119.2 | 47.0 | 65.0 |
+| Tuned for this Ryzen | Default Rust | 113.9 | 119.4 | 111.1 | 115.8 | 62.4 | 61.3 |
+| Tuned for this Ryzen | Alternative Rust | 244.5 | 118.8 | 245.4 | 115.0 | 129.2 | 61.4 |
+| Tuned for this Ryzen | Assembly | 86.8 | 120.1 | 86.0 | 117.6 | 46.1 | 61.0 |
+
+The alternative Rust hashing backend was substantially slower with 512-bit
+instructions and host-specific tuning in this run. Default Rust timings were
+also slower in the build with extra CPU instructions. The causes of these
+differences need investigation before drawing a performance recommendation.
+
+### Ecrecover
+
+The same builds measured evm2's recovery provider, including signature parsing,
+public-key recovery, serialization and address hashing. Transaction dispatch
+and calldata costs are excluded. `libsecp256k1` is the C backend; `k256` is
+the Rust backend.
+
+| Compilation setting | Hashing | C backend (µs) | Rust backend (µs) |
+| --- | --- | ---: | ---: |
+| Broad CPU support | Default Rust | 38.49 | 50.27 |
+| Broad CPU support | Alternative Rust | 38.34 | 50.23 |
+| Broad CPU support | Assembly | 38.26 | 50.38 |
+| Extra CPU instructions | Default Rust | 38.16 | 49.88 |
+| Extra CPU instructions | Alternative Rust | 38.18 | 49.97 |
+| Extra CPU instructions | Assembly | 38.10 | 49.77 |
+| 256-bit vector instructions | Default Rust | 38.37 | 49.59 |
+| 256-bit vector instructions | Alternative Rust | 38.46 | 49.91 |
+| 256-bit vector instructions | Assembly | 38.23 | 49.80 |
+| 512-bit vector instructions | Default Rust | 38.26 | 49.99 |
+| 512-bit vector instructions | Alternative Rust | 38.33 | 50.25 |
+| 512-bit vector instructions | Assembly | 38.24 | 49.92 |
+| Tuned for this Ryzen | Default Rust | 38.23 | 50.55 |
+| Tuned for this Ryzen | Alternative Rust | 38.59 | 50.79 |
+| Tuned for this Ryzen | Assembly | 38.12 | 50.41 |
+
+These timings describe CPU work on this machine. Gas calibration also needs
+cross-client and cross-hardware analysis.
+
 ## Benchmark against evm2
 
-Measured timings and gas-ratio estimates are in [BENCHMARKS.md](BENCHMARKS.md).
+Earlier measurements and the gas-ratio methodology are in [BENCHMARKS.md](BENCHMARKS.md).
 
 The isolated harness in [benchmarks/evm2](benchmarks/evm2/README.md) calls
 `evm2::precompiles::crypto().secp256k1_ecrecover` directly. evm2 is a benchmark
