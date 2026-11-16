@@ -1,0 +1,3270 @@
+{
+  "alloy_revision": "70a63bd609da78dcf03e593ae772fec883ce7768",
+  "configurations": {
+    "native-assembly-k256": {
+      "binary_sha256": "1f813e616eff96e2277395a771692119e721abf75ece3586896293f2577b4f22",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "native-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ]
+    },
+    "native-assembly-libsecp256k1": {
+      "binary_sha256": "c7ff39c3fb4bab4c524b9de7fddefcadc7613c207c44f4807eaba7aff4d8c322",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ]
+    },
+    "native-assembly-libsecp256k1-no-slp": {
+      "binary_sha256": "6229e14a5279dd2c1aca785aac448c80bc710d3ded670d47224ce89416d52d4d",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-assembly-libsecp256k1-no-slp",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ]
+    },
+    "native-portable-k256": {
+      "binary_sha256": "1ef97551c6a31bb96e5971530debd79123e88153bfc70d1c382d774609ae01ad",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "native-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ]
+    },
+    "native-portable-libsecp256k1": {
+      "binary_sha256": "62ebe7d445a9b4aa20879332dbc6b1cb892b8779ae2b41eaa74a8d5b72e05f9b",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ]
+    },
+    "native-portable-libsecp256k1-no-slp": {
+      "binary_sha256": "9b390ce702344bfe55adef5f71a4976be3790ce418c587c1a4045b07ca106cf3",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-portable-libsecp256k1-no-slp",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ]
+    },
+    "native-tiny-libsecp256k1-no-slp": {
+      "binary_sha256": "6f7449d019ddd22ab42cc9bd9dd79741055c27b225cc38b0f6cb3e26b155d6ba",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "tiny",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": true,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std",
+            "tiny-keccak"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [
+            "default",
+            "keccak"
+          ],
+          "name": "tiny-keccak",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "2.0.2"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ]
+    },
+    "v3-assembly-k256": {
+      "binary_sha256": "d49cc3f033b7349cff710045130243c45de6180361404b134a6286a6fb394ce5",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": false,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 4,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v3-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ]
+    },
+    "v3-assembly-libsecp256k1": {
+      "binary_sha256": "eac170ae965b2c5776c99af36ae44fee5ca5116b125e62e4a0644c50299452dc",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": false,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 4,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v3-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ]
+    },
+    "v3-portable-k256": {
+      "binary_sha256": "7bb6e4530a360547009a2b70cb2bae6e5d2e5995fbfabbd34f63c9495e2531ef",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": false,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 4,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v3-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ]
+    },
+    "v3-portable-libsecp256k1": {
+      "binary_sha256": "f65ce5ba7d62e096bcf1b7bcbb98a651002629e9389517e5dcb0a6c5aa1bdc9c",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": false,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 4,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v3-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ]
+    },
+    "v3-tiny-libsecp256k1-no-slp": {
+      "binary_sha256": "ab1b60bf3eaa4a0b0451646f7c98cb1abb15f5b43a5f80cced21570b84466802",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": false,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "tiny",
+        "paired_fors": false,
+        "reference_batch_lanes": 4,
+        "target_arch": "x86_64",
+        "tiny": true,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v3-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std",
+            "tiny-keccak"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [
+            "default",
+            "keccak"
+          ],
+          "name": "tiny-keccak",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "2.0.2"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ]
+    },
+    "v4-assembly-k256": {
+      "binary_sha256": "e33a76cea7c11a8bf900e88a97ec35ba7df7a65f064c0433a88677bba250cfe2",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v4-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ]
+    },
+    "v4-assembly-libsecp256k1": {
+      "binary_sha256": "dc84260c47f32f09475922fa84f09647755da89498a37c26b4f68cff1bb8bb91",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "assembly",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v4-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ]
+    },
+    "v4-portable-k256": {
+      "binary_sha256": "701fe785033301b086e58cbb8f0a9876d2148da9711f7227f2de688f4b11f497",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "k256",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v4-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ]
+    },
+    "v4-portable-libsecp256k1": {
+      "binary_sha256": "5d95a33cce989efc1751d326a89ef3601cfa88db5e4abdc84e068263be30df0a",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "portable",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": false,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v4-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ]
+    },
+    "v4-tiny-libsecp256k1-no-slp": {
+      "binary_sha256": "9d4b1a67642d93a1fc50ba6fa8d979f7939e152967140c59d67595804b72ad99",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "avx2": true,
+        "avx512f": true,
+        "ecrecover": "libsecp256k1",
+        "experimental_adapter": false,
+        "fors_batch_lanes": 4,
+        "keccak_backend": "tiny",
+        "paired_fors": false,
+        "reference_batch_lanes": 8,
+        "target_arch": "x86_64",
+        "tiny": true,
+        "wots_batch_lanes": 4
+      },
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "v4-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std",
+            "tiny-keccak"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [
+            "default",
+            "keccak"
+          ],
+          "name": "tiny-keccak",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "2.0.2"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ]
+    }
+  },
+  "corpus_sha256": "82652fcc5c3756de7567b147c0d477d3b0a31d5adb224b5289dc2803f813798b",
+  "cpu": {
+    "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
+    "NumberOfCores": 16,
+    "NumberOfLogicalProcessors": 32
+  },
+  "evm2_revision": "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+  "measurement_source_commit": "ffd83f95d9d5fa28e27115c976a12a1f765e157b",
+  "measurements": [
+    {
+      "configuration": "native-assembly-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [13109400, 13092100, 13136700, 13166200, 13151800, 13175600, 13140600, 13096500, 13121300, 13471000, 15015800],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [46725900, 46621700, 46814000, 47934400, 47824900, 46973100, 50038100, 47611500, 46939600, 46891000, 46786200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [85328200, 87067800, 93149900, 93810400, 101688600, 87833000, 94454600, 93318100, 85093100, 85147800, 89481300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [18939800, 19011000, 20086900, 19069300, 19758700, 19099500, 19079500, 19056700, 19088200, 19035400, 19115700],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [62320800, 62452400, 64125200, 64036400, 63294100, 63290200, 64207800, 63154700, 63031400, 64005700, 63713100],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [113817700, 116902400, 126557200, 125366300, 138608800, 118892800, 126592900, 124947700, 120568000, 113620100, 120131300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15336800, 15355200, 15253300, 15424400, 15413000, 15380200, 15499500, 15386300, 15765500, 15354100, 16363100],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19754500, 19820500, 20203500, 21730100, 20018200, 20670600, 20930300, 21496300, 19968600, 20853200, 20026900],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [46893400, 46794400, 46801000, 46876900, 48168300, 46924500, 47959200, 46794200, 47644300, 46885900, 47012900],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [85802200, 87692300, 93738700, 93143000, 102985300, 88431500, 95712600, 94271100, 85484000, 84733800, 91530500],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [18684200, 18741400, 18746100, 18743400, 18868800, 19261600, 18760800, 18666800, 18876600, 18826600, 18979300],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [61734900, 61688300, 61802500, 61778400, 61960000, 61750000, 62308600, 61939900, 62174700, 62862300, 62139600],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [115332300, 117919400, 126266500, 124995400, 139605800, 119382600, 127829900, 126925100, 116860300, 116132100, 121071800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15306700, 15315400, 15188200, 15289900, 15364200, 15345500, 15329800, 15293100, 15714200, 15372500, 15204100],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-assembly-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19671900, 19672200, 19688400, 19634000, 19830200, 19767200, 20015900, 20639200, 19788200, 20488000, 19722300],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [13469900, 13825200, 17279000, 19221900, 14686800, 13584100, 15685000, 15921300, 15222000, 15206800, 13480100],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [60648500, 61238500, 60929700, 61351800, 60930600, 63673800, 61827800, 65913800, 62158700, 68777800, 70098700],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [109583600, 113175200, 120680300, 120378500, 132681800, 115149300, 125379000, 143986000, 119858100, 110392700, 117401300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [10813800, 10706100, 10688800, 10606700, 10639100, 12372500, 10593000, 10614300, 10883700, 17122000, 10858400],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [66397800, 67160700, 67299100, 67563900, 67473200, 68621600, 67243700, 68419600, 67997300, 67651300, 68927400],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [119088300, 122405100, 130098100, 129729600, 142151900, 122823500, 131129500, 129543000, 117687200, 116936500, 122783100],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [16489300, 16487600, 16322500, 16508200, 16375700, 16566300, 16457300, 17159100, 16441800, 16969800, 16375300],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19771100, 19860700, 19897000, 19895800, 19878200, 20187900, 19983700, 21747200, 20059100, 20152200, 20038500],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [59033200, 59396100, 60022000, 59072100, 76697300, 60378600, 62379400, 59741600, 59579700, 77498700, 59975200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [108872000, 113250200, 119064400, 125995100, 131544700, 139468800, 120998300, 120041200, 115986700, 112804100, 142664900],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [16282500, 10708900, 11198300, 11460500, 11776900, 10970700, 10733000, 10632400, 10681400, 10717100, 11020000],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [64163100, 64158200, 63911100, 64165400, 64115500, 63456000, 63347400, 64051400, 64306200, 65370400, 63957600],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [115710200, 118500200, 125541300, 124913900, 142282500, 118639800, 127105300, 126187800, 114981900, 114428600, 119878300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [16527800, 15858500, 15522200, 15810800, 15689800, 15914800, 15939800, 15936300, 15896000, 15571700, 15583000],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-portable-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19690600, 25296800, 21047300, 19941500, 19818400, 21592100, 20317900, 19739900, 19885200, 21169600, 20225400],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [59097100, 59703400, 59763400, 59370500, 59906700, 66457000, 60330300, 67648600, 60434000, 60617500, 60015200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [109656900, 113356400, 120501300, 119072700, 131919400, 117456600, 124657500, 127926000, 119779800, 110390800, 116156000],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [10436600, 10565800, 10569300, 10455100, 10508200, 10572800, 17163400, 10828800, 10614600, 10535700, 13073900],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [63499100, 64513000, 63823900, 63871900, 63593800, 63625800, 63462800, 63766700, 63420800, 64225200, 65507800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [116099300, 122004000, 126451000, 125108500, 138959600, 118999500, 128855800, 127499100, 114635600, 113706000, 119884800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15672900, 15490100, 15274800, 15370500, 15334600, 15805300, 16127900, 15620900, 15722300, 15140400, 15456600],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19807500, 20034500, 19866900, 19839200, 19866000, 20047000, 19989800, 20483100, 20246000, 22431500, 20046000],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [12795300, 12800500, 12787600, 12788800, 12805600, 12783200, 12814400, 12810200, 12784500, 12806700, 12795900],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [52534400, 52847000, 52489300, 52761400, 52654300, 52749400, 52805700, 52710800, 52733000, 52650600, 52742400],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [96525700, 99009600, 105652800, 104933200, 116442100, 99526100, 107237400, 105708000, 98468400, 96331000, 100969000],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [12976100, 12837500, 12986000, 12965500, 12938400, 13033300, 12950500, 12973700, 12855400, 13109400, 14302700],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [64329500, 64669600, 64095800, 64059800, 64068000, 64436900, 63862500, 65871300, 68943300, 65170500, 66560800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [116784800, 119575300, 127904800, 126455000, 139867200, 121602400, 130193700, 129069000, 116938400, 116217500, 125129400],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15654300, 15708600, 15554000, 15618500, 15450600, 15756700, 17488200, 15781900, 17446000, 15825800, 15617500],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-assembly-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [20007300, 20084600, 20015500, 19980400, 19945400, 19871700, 21457500, 21777000, 29322800, 20471600, 20112900],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [12853500, 13777600, 13931200, 13728600, 13586600, 12946600, 14144100, 13154600, 13084600, 13405300, 14402900],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [61484700, 62016000, 62209500, 62163000, 90135100, 62297500, 62140200, 64171200, 62319900, 62515400, 62439300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [112283500, 117220200, 125347600, 126087600, 164912000, 117579700, 124886900, 124250200, 117156000, 112165300, 129487500],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [14315500, 14510800, 14366200, 14497900, 15070600, 16103400, 14496600, 14349600, 14330200, 14357300, 14746900],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [62874500, 64965500, 64224400, 63452700, 69276900, 63637500, 63355000, 63765700, 65556700, 86169700, 63403100],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [115529400, 119520000, 129376600, 132671300, 140195800, 121956200, 128576900, 128658400, 120391100, 115449200, 120734200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15750100, 15776900, 15818800, 15810200, 15907000, 15716200, 16047700, 15749900, 18313100, 15746000, 15987400],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-portable-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19865500, 20931700, 20589600, 21683700, 19912700, 20035400, 19876900, 21161100, 20030000, 21240200, 19870600],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [64928300, 66705700, 64886800, 68541200, 73528500, 84297000, 65818700, 72043500, 63571000, 63941800, 65808500],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [120011100, 128218600, 132483200, 131837800, 155320200, 125064800, 137870900, 136594800, 119844400, 117319200, 125892500],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [14752800, 14692700, 14411700, 15106400, 16772400, 14815500, 14452000, 15509900, 14246400, 14341800, 15762700],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [64291300, 65928800, 65092800, 70315400, 67210100, 66609000, 67860900, 65206300, 65251800, 66382900, 64428300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [120687600, 133420700, 153707700, 166421900, 148058700, 124707200, 146591700, 129166700, 120594700, 116453200, 121771000],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [16739000, 15966600, 15873800, 16227100, 16070300, 17419700, 17903600, 28106900, 16276500, 15642900, 15580600],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v3-tiny-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [20123600, 22286800, 20283300, 20218500, 21959100, 20265700, 20250700, 20526100, 20018600, 21960900, 20150700],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [12916100, 14534000, 13359000, 14116400, 14105600, 14156000, 14940100, 15633100, 14653200, 13134300, 13238700],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [47348400, 47459600, 47562900, 48117700, 52403800, 47630700, 47386500, 47496200, 48439100, 47782500, 47514300],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [86597500, 88806900, 94685000, 94739600, 103291800, 89280100, 97576000, 95823900, 91754000, 86078800, 90151800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [18464500, 18715200, 18653300, 18576200, 18773300, 22594400, 19371600, 18586100, 18562300, 21205800, 19733100],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [63981400, 64234600, 65363100, 64463000, 64469800, 64178400, 65009900, 64508900, 64973600, 64261300, 64428700],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [116333400, 119421800, 127801300, 129832400, 140859100, 120946400, 128082200, 126853700, 116454700, 115867700, 122064200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15334600, 15384600, 15371200, 15370600, 15423200, 15466700, 15695600, 15397300, 15651300, 15371600, 15359100],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-assembly-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19688100, 19975000, 21127700, 19981800, 20397100, 19963300, 20781000, 19873700, 22636400, 20527100, 19941300],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [12831300, 12808300, 12817000, 14199200, 13809400, 14461900, 14353300, 14791300, 14237200, 14588700, 14272500],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [61140300, 61332800, 65156200, 63235200, 62273900, 61796300, 62110100, 62414000, 61778400, 63389700, 62047200],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [112177600, 113952300, 134373700, 146605500, 136620200, 116989000, 124155200, 123187700, 138859500, 140168000, 123514600],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [10420500, 10516000, 10565300, 10494000, 11127300, 12455800, 10499000, 10449500, 10735100, 15812200, 11310800],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [65846700, 65966100, 65848900, 65814400, 65839700, 65596300, 65240300, 66015600, 65451400, 65708700, 65330100],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [115810200, 117722100, 126295600, 125066200, 138107000, 119602800, 127015800, 125774300, 114793600, 114271900, 119986100],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [16262900, 16281400, 15874000, 16003900, 16020200, 16382900, 16170100, 16269600, 16224200, 15879100, 15862400],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-portable-libsecp256k1",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19705500, 19760900, 20775900, 19770500, 20127700, 20192400, 25270300, 21274300, 19947400, 20271700, 20449900],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [62024800, 62634200, 63165600, 63024000, 65197600, 65046900, 64065200, 68087400, 63971300, 62676300, 63012800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "elapsed_ns": [116724200, 119493800, 130029700, 130110600, 143382500, 123304600, 132316900, 130800200, 118237700, 116654900, 151630000],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "elapsed_ns": [10562300, 10592000, 10640200, 10667800, 11326100, 12051100, 12764900, 12036100, 10571400, 12876600, 13289700],
+          "iterations": 256,
+          "pass": 1,
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "elapsed_ns": [63526500, 63617000, 63937700, 64070100, 64786200, 63531000, 63786500, 63777500, 63549700, 63847600, 63399800],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "elapsed_ns": [116033200, 118506600, 127405000, 127851500, 142702200, 120310400, 132589600, 128747000, 115203600, 115205400, 121275500],
+          "iterations": 1,
+          "pass": 1,
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "elapsed_ns": [15969000, 16005600, 15835800, 15998300, 15962300, 16143600, 15940100, 16081400, 16318800, 16582100, 15805000],
+          "iterations": 128,
+          "pass": 1,
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6],
+          "work_items_per_iteration": 1
+        }
+      ]
+    },
+    {
+      "configuration": "v4-tiny-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "elapsed_ns": [19606000, 19678000, 19796800, 19785200, 19792300, 19996600, 20143300, 20310600, 19818900, 21702700, 20073000],
+          "iterations": 512,
+          "pass": 1,
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4],
+          "work_items_per_iteration": 1
+        }
+      ]
+    }
+  ],
+  "method": "Native public API calls and results. leanVM verification inputs are parsed before timing; lean-sphincs borrows encoded bytes. No timed serialization, algorithm adapters or experimental implementation. Ecrecover calls the evm2 Crypto provider directly.",
+  "reference_revision": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+  "role": "Candidate screening only; not mixed into confirmation results",
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
+  "sampling": {
+    "batch_target_ms": 10,
+    "outliers_removed": 0,
+    "passes": 1,
+    "positive_fixtures": 11,
+    "samples_per_case": 11,
+    "shuffle_seed": 20261115,
+    "warmup_ms": 100
+  },
+  "schema_version": 2,
+  "source_files_sha256": {
+    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
+    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
+    "benchmarks/evm2/Cargo.lock": "a69c4ef001686d63625e979b2433653352c6f4e3ebba1fbfaacabdd45fdd1c72",
+    "benchmarks/evm2/Cargo.toml": "efcc4d1536a9ee96b728cb50c851fe4b1b04857019bb026c70e341e23529deaf",
+    "benchmarks/evm2/README.md": "969ec5db6069782e468c7854c18b0cae918b4e2c7185e01465765869079dd241",
+    "benchmarks/evm2/batched/fors.rs": "b058d86d38564c906acaee9f12354262fca2b7ed84a9aa39379f0390267aea18",
+    "benchmarks/evm2/batched/mod.rs": "adc4c1d2caa720acfebd2d70148e9468b87fd6f687b0c7c3c7944e5f7c118d9e",
+    "benchmarks/evm2/batched/trees.rs": "6195781a9dad29699822096e15cc83d98a47ac8da9eb44a890d240b2c1b1add3",
+    "benchmarks/evm2/batched/wots.rs": "3450f4a5e2a88a7f18be654b2b071b1bf70967852df06e3005830f5d95225bee",
+    "benchmarks/evm2/batched_tests.rs": "7f14820cbe8a91ac2c0731867057f722b62f0879055c39d3e22444ab5d81e247",
+    "benchmarks/evm2/codspeed.rs": "f9f7a34ae22a4bd7678ea237149da74d04895f0d2a3bcca8c39a4421b2295a8c",
+    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
+    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
+    "benchmarks/evm2/matrix.rs": "17d6f6291903bb613a6a09c81fae2682bd8481074b3353cf67df2983edcbb98e",
+    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
+    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
+    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
+    "benchmarks/evm2/verify.rs": "4966c1253600187b2949f34d00ef8e88083e0111699c2bf67da223dab9bc7c83",
+    "benchmarks/run.py": "1ad07de2dc9b3ec82cf8a80205612a7f93c72a9f85d010f52cdb15f5f51463c6",
+    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
+    "benchmarks/suite/config.json": "b403aa9f5ebac7185f48469a586b37383a9cb526f4f5722a0669b84c5892f881",
+    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
+    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
+    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
+    "benchmarks/suite/publication.py": "8f797f6176b9a04be436d6c7b0ac712b2bc15d9c9dfaeb7a816283c8fa966cfd",
+    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
+    "benchmarks/suite/test_setup.py": "608180cc4d6174e537ce3096e3efc815fd626aa7e65ee1ac72227d369755b81b",
+    "src/fors.rs": "cee999e9aeaea0841f230ef95f6a8ffc9c4e3c95837889b921310f31329f6741",
+    "src/hash.rs": "906f1488c78a4321753b0eaedc26882a0d22e56c21ff0dcca720d933c472eea9",
+    "src/hash/batch.rs": "7e8a01e66d50cc223ddd8e2192baaea7a82ddc781ca25cb64b820bbf85e7e6c0",
+    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
+    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
+    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
+    "src/signing.rs": "49f6054dd22a841bdc0d64d27c261e40cdfd1f74a3eb3d6c8ae680447c32fea7",
+    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
+    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
+    "src/wots.rs": "e963034d32eab09db7812ad5635438e368de74da0af76d3e12c712c55d8ffb29",
+    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
+    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
+    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
+    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
+    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
+  },
+  "source_revision": "ffd83f95d9d5fa28e27115c976a12a1f765e157b",
+  "source_tracked_changes": false,
+  "specification_revision": "03547dd83f298a63e6dcceff0a0b75f6142490aa"
+}

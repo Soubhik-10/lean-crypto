@@ -295,31 +295,31 @@ Our benchmark uses three hashing choices:
 
 The production crate directly exposes `asm-keccak`; the isolated benchmark manifest also exposes the tiny-keccak comparison configuration.
 
-These labels describe our crate's Alloy hashing choice. The published SSE2 and SSE4.2 measurements used the paired FORS path. The published AVX2 and native measurements predate four-lane verification. leanVM has its own hashing code: on this x86-64 machine its single-state path is scalar or AVX-512, while its batch path selects scalar, four-way AVX2 or eight-way AVX-512 according to the compiler target. Changing our Alloy backend does not switch leanVM to that backend.
+These labels describe our crate's Alloy hashing choice. Earlier SSE2 and SSE4.2 measurements used paired FORS hashing. The current AVX2, AVX-512 and native builds use four-lane FORS and WOTS verification. leanVM has its own hashing code: on this x86-64 machine its single-state path is scalar or AVX-512, while its batch path selects scalar, four-way AVX2 or eight-way AVX-512 according to the compiler target. Changing our Alloy backend does not switch leanVM to that backend.
 
 SSE2, SSE4.2, AVX2 and AVX-512 name CPU instruction capabilities. They describe what the compiler may use. “Native” tells the compiler to tune for the machine doing the build. These are compilation settings, rather than different signature formats.
 
-Newer instructions do not automatically produce faster code. Compiler decisions, data shuffling and the workload all matter. The benchmark builder disables LLVM SLP vectorization for affected tiny-keccak AVX2, AVX-512 and native builds. This setting applies to both implementations in the binary and keeps their explicit SIMD code enabled. The current published rows include this compiler fix.
+Newer instructions do not automatically produce faster code. Compiler decisions, data shuffling and the workload all matter. The benchmark builder disables LLVM SLP vectorization for affected tiny-keccak AVX2, AVX-512 and native builds. This setting applies to both implementations in the binary and keeps their explicit SIMD code enabled. The screening sweep includes this compiler fix.
 
-The current raw API comparison tests native CPU builds with SLP disabled and an AVX-512 build with default SLP. leanVM's explicit AVX-512 code remains enabled in both cases. The full results record the compiler settings for each build.
+The current raw API comparison tests native CPU builds with default SLP and with SLP disabled, plus an AVX-512 assembly build with default SLP. leanVM's explicit AVX-512 code remains enabled in both cases. The full results record the compiler settings for each build.
 
 Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](../README.md#native-benchmark-results).
 
 # What the performance numbers actually show
 
-The published signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Three candidate builds, selected using the earlier configuration sweep, are measured using 44 samples per pass over three passes and 11 shared key/message pairs. The headline table uses the lowest complete median for each operation and implementation. All matched builds and samples remain available.
+The headline signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Four signature candidates, selected from eleven freshly measured signature builds, are measured using 44 samples per pass over three passes and 11 shared key/message pairs. The headline table uses the lowest complete median for each operation and implementation. The detailed matrix separately covers five CPU targets and three hashing backends, with 44 samples per case. All matched builds and samples remain available.
 
 There are two unmodified libraries in this comparison. Our crate uses assembly hashing for its best results. The leanVM column calls its upstream Rust `lean_sphincs` public APIs directly, at the revision linked in the README. Those APIs use leanVM's own AVX-512 single-state hasher in these builds. They do not use its separate batched hashing API. No local experimental implementation is compiled into the measured binaries.
 
 | Operation | Our crate | leanVM (unmodified) |
 | --- | ---: | ---: |
-| Verification | 89.09 microseconds | 119.29 microseconds |
-| Signing | 90.52 milliseconds | 121.02 milliseconds |
-| Key generation | 47.01 milliseconds | 62.42 milliseconds |
+| Verification | 36.64 microseconds | 119.05 microseconds |
+| Signing | 89.32 milliseconds | 119.40 milliseconds |
+| Key generation | 46.51 milliseconds | 62.03 milliseconds |
 
-A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 89.09 microseconds is 0.08909 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
+A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 36.64 microseconds is 0.03664 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
 
-Our measured verification speed is about 1.34 times the unmodified dependency's: 119.29 divided by 89.09 is about 1.34. That is about a 34 percent speed increase, or about a 25 percent reduction in elapsed time. These are different ways to describe the same comparison. Published percentages are calculated from the unrounded measurements.
+Our measured verification speed is about 3.25 times the unmodified dependency's: 119.05 divided by 36.64 is about 3.25. That is about a 225 percent speed increase, or about a 69 percent reduction in elapsed time. These are different ways to describe the same comparison. Published percentages are calculated from the unrounded measurements.
 
 Each API uses its native input and output. Our verification borrows encoded signature bytes; leanVM verification borrows a native signature object parsed before timing. Signing and key generation return their native result types, with no extra serialization added. Both recompute from the seed during timing. This measures native API costs, rather than matching wire-format integration costs. The timing excludes VM execution proofs, aggregation and network communication.
 
