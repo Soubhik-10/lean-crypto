@@ -26,6 +26,35 @@ Its scalar, vector and single-state accelerated paths are selected by compiler
 target features. The binary description records AVX2, AVX-512, paired FORS
 selection and actual batch width; labels are not inferred from the CPU name.
 
+## Comparison contract
+
+The tables compare complete native APIs using identical leanSPHINCS parameters,
+secret seeds, messages and expected wire encodings. Verification starts with a
+32-byte public key and a 7,740-byte signature. It includes leanVM's decoding into
+its internal representation and this crate's in-place reads. Signing includes
+signature serialization on both sides; key generation returns encoded public
+keys on both sides. The separately measured parsed-verification diagnostic is
+excluded from the main tables. No VM execution or proof generation is measured.
+
+Both implementations are compiled into the same binary with the same target,
+optimization and LTO settings. Any `no-vectorize-slp` setting applies to both.
+The reference implementation is an unmodified pinned Git dependency. The
+RustCrypto, tiny-keccak and asm-keccak labels select this crate's Alloy Keccak
+implementation; they do not select leanVM's hashing implementation. Our SSE2 and
+SSE4.2 verification builds additionally use paired SSE2 FORS hashing. leanVM
+selects its own scalar, AVX2 or AVX-512 paths from compiler target features.
+These are comparisons of complete implementations, not measurements of two
+algorithms forced through the same hash implementation.
+
+Inputs and outputs cross `black_box` boundaries. Fixture generation, byte-for-byte
+cross-checks, warmup and calibration are outside the timed region. Kernels are
+interleaved in a seeded, shuffled order each round; the positive corpus rotates
+across iterations and rounds. Every timed batch is retained. Medians and
+percentages are computed from unrounded elapsed times divided by the measured
+operation counts. A small percentage from one pass does not establish a
+repeatable advantage. Confirm small differences across independent passes and
+a larger corpus before attributing them to an optimization.
+
 ## Presets and cost
 
 | Preset | Scope | Samples per case per pass | Separate passes | Batch target |
@@ -73,7 +102,9 @@ generating keys or starting timers.
 Signature cases include complete key generation and deterministic signing from
 a secret seed, wire verification and a separately identified parsed comparison
 API. Three positive specification fixtures and eight deterministic additional
-cases are checked byte-for-byte against both implementations before sampling.
+cases are checked byte-for-byte against both implementations before sampling in
+the publication and comprehensive presets. The rust preset uses the three
+specification fixtures without additional cases.
 Each sampling round rotates the corpus and shuffles kernel order with a recorded
 seed. No key, signature, tree or signature-operation result is reused in place of
 the operation being measured.
@@ -175,7 +206,7 @@ After a complete run:
 This writes a local summary and README-benchmarks.md inside the ignored session
 directory. It does not edit README.md. By default the draft contains this crate's
 results and the pinned comparison. Use `--no-reference` to omit comparison columns.
-The draft contains CPU, RAM, OS, compiler and sample count followed by labeled
+The draft contains CPU, compiler and sample count followed by labeled
 signature and ecrecover tables. Raw policies, affinity, timestamps, clock logs,
 confidence intervals and secondary rejection/hash cases remain in the JSON files.
 
@@ -188,6 +219,33 @@ Before publishing a table, identify the CPU, observed clock source, power/boost
 settings, OS, compiler/LLVM, target flags, hashing/recovery features, fixture
 scope, sample count, number of passes and source revisions. Results from one
 machine or a CPU-time ratio do not establish consensus gas pricing.
+
+## Published measurements
+
+[measurements.json](measurements.json) contains the 40 recorded batch times per
+case behind every README timing, plus the parsed-verification diagnostics.
+The README reports one pass over the three positive specification fixtures.
+This is a small conformance corpus, not a representative distribution of signing
+times over arbitrary keys and messages. Signing's counter search is input-dependent.
+
+The data records iteration and work-item denominators, exact compiler flags,
+binary hashes, source-file hashes, dependency revisions and compiled hash paths.
+The elapsed-time array preserves sampling order; no outliers are removed. Local
+paths, machine policy logs and unrelated session details are excluded. Recompute
+the summaries and README draft without compiling or timing any code:
+
+    python benchmarks/run.py report --measurements benchmarks/measurements.json
+
+The generated files are written to the ignored `benchmarks/results/published`
+directory. Confidence intervals describe batch averages within this recorded
+pass; they do not measure between-run or between-machine variation.
+
+Signature timings and libsecp256k1 recovery use the dedicated operation-only run.
+k256 recovery uses its isolated recovery run. Both AVX2 tiny-keccak configurations
+were remeasured after applying `no-vectorize-slp`; the complete configurations
+replace their earlier measurements. No individual samples or fastest cases were
+selected. The AVX2, AVX-512 and native tiny-keccak rows use the compiler fix;
+the other rows retain their original compiler settings.
 
 ## Setup validation
 

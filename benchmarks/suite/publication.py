@@ -1,8 +1,41 @@
 """Compact README tables; complete metadata and secondary cases remain in JSON."""
 from __future__ import annotations
+import json
+
+from . import stats
 
 TARGETS = {"baseline": "SSE2", "v2": "SSE4.2", "v3": "AVX2", "v4": "AVX-512", "native": "native"}
 BACKENDS = {"portable": "RustCrypto", "tiny": "tiny-keccak", "assembly": "asm-keccak"}
+
+
+def load_measurements(path, *, resamples=2000):
+    """Recompute summaries from the published batch times, without executing Rust."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    sampling = data["sampling"]
+    if data.get("schema_version") != 1 or sampling["passes"] != 1:
+        raise ValueError("Unsupported published measurement format")
+    if sampling["outliers_removed"] != 0:
+        raise ValueError("Published measurements must retain all samples")
+    summaries, seen = [], set()
+    for measurement in data["measurements"]:
+        configuration, name = measurement["configuration"], measurement["operation"]
+        if configuration not in data["configurations"] or (configuration, name) in seen:
+            raise ValueError("Unknown configuration or duplicate measurement")
+        seen.add((configuration, name))
+        iterations = measurement["iterations"]
+        items = measurement["work_items_per_iteration"]
+        elapsed = measurement["elapsed_ns"]
+        if (len(elapsed) != sampling["samples_per_case"] or
+                any(type(value) is not int or value <= 0 for value in [iterations, items, *elapsed])):
+            raise ValueError("Invalid sample count, elapsed time or timing denominator")
+        summary = stats.summarize([[value / (iterations * items) for value in elapsed]],
+                                  resamples=resamples)
+        summaries.append({"configuration": configuration, "name": name, **summary})
+    state = {"machine": {"processors": [data["cpu"]]},
+             "plan": {"profile": {"samples": sampling["samples_per_case"], "passes": sampling["passes"]}},
+             "builds": {"rustc": data["rustc"], "jobs": data["configurations"]},
+             "reference_revision": data["reference_revision"]}
+    return state, summaries
 
 
 def selection(configuration, built):
@@ -25,21 +58,30 @@ def render(state, summaries, *, include_reference=True):
     if cpu.get("NumberOfCores") and cpu.get("NumberOfLogicalProcessors"):
         hardware += f" ({cpu['NumberOfCores']} cores, {cpu['NumberOfLogicalProcessors']} threads)"
     hardware += "."
-    memory = machine.get("memory_bytes")
-    if isinstance(memory, (int, float)):
-        hardware += f" RAM: {memory / (1024 ** 3):.0f} GiB."
     compiler = state["builds"]["rustc"].splitlines()
     llvm = next((line for line in compiler if line.startswith("LLVM version:")), "")
     compiler_version = compiler[0].split()[1]
     compiler_text = "Rust " + compiler_version + ("; LLVM " + llvm.split(":", 1)[1].strip() if llvm else "")
     lines = ["## Native benchmark results", "", hardware, "",
-             f"OS: {machine.get('os_caption', machine.get('platform', 'unreported'))}.", "",
              f"Compiler: {compiler_text}. Optimization level 3, Thin LTO, one codegen unit.", ""]
     profile = state["plan"]["profile"]
-    caption = f"Median time per operation from {profile['samples'] * profile['passes']} samples per configuration."
+    caption = (f"Median time per operation from {profile['samples'] * profile['passes']} samples "
+               f"per configuration ({profile['passes']} pass{'es' if profile['passes'] != 1 else ''}).")
     if include_reference:
-        caption += " Faster than leanVM = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower."
+        caption += " Measured speedup = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower."
     lines += [caption, ""]
+    if include_reference:
+        lines += ["Verification starts from encoded signatures; signing and key generation include serialization. "
+                  "Small differences need confirmation across repeat runs.", "",
+                  "The Keccak column selects lean-sphincs' Alloy backend. Verification also uses paired "
+                  "SSE2 FORS hashing in SSE2 and SSE4.2 builds. leanVM uses its own CPU-selected scalar "
+                  "and SIMD paths. Compiler flags apply to both implementations within each row. "
+                  "See the [measurement method and raw data]"
+                  "(benchmarks/SUITE.md#published-measurements).", ""]
+        revision = state.get("reference_revision")
+        if revision:
+            lines += [f"leanVM: [native Rust leanSPHINCS implementation]"
+                      f"(https://github.com/leanEthereum/leanVM/tree/{revision}/crates/lean_sphincs).", ""]
     selected = {name: selection(name, item) for name, item in state["builds"]["jobs"].items()}
     values = {}
     for row in summaries:
@@ -61,10 +103,10 @@ def render(state, summaries, *, include_reference=True):
         if not matching:
             continue
         lines += [f"### {heading}", ""]
-        header = f"| Compiler target | Hash backend | lean-sphincs ({unit}) |"
+        header = f"| Compiler target | lean-sphincs Keccak | lean-sphincs ({unit}) |"
         separator = "| --- | --- | ---: |"
         if include_reference:
-            header += f" leanVM ({unit}) | Faster than leanVM |"
+            header += f" leanVM ({unit}) | Measured speedup |"
             separator += " ---: | ---: |"
         lines += [header, separator]
         for target, backend in matching:

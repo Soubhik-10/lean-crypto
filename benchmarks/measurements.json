@@ -1,0 +1,1359 @@
+{
+  "schema_version": 1,
+  "method": "Native APIs: verification from encoded signatures, signing and key generation including serialization; same target and compiler flags for both implementations in each configuration.",
+  "source_revision": "06a37685bf2f0596fc592e02d666e52472222cde",
+  "source_files_sha256": {
+    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
+    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
+    "benchmarks/evm2/Cargo.lock": "2296ca2732484209fb120adaeef9a4c53d69929069963450b6aa83d259710922",
+    "benchmarks/evm2/Cargo.toml": "4a3f3882f031cc2e4825b3553a8760a578c7bf7b7ee7ba983502921ea0720e77",
+    "benchmarks/evm2/README.md": "83d11469d4670ba85b3acddec99ff689b799cb4497093ea5c92fce57b7e1462c",
+    "benchmarks/evm2/codspeed.rs": "ad70cf075c48f60b5217435998cdba7140a666fd6ee560171e77444f3aebe636",
+    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
+    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
+    "benchmarks/evm2/matrix.rs": "0d83cc50f8f73ed37114e1c06d70e2b876eb251f92df4eec91f270dc4cdf477f",
+    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
+    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
+    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
+    "benchmarks/evm2/verify.rs": "f5ce7dcd40c03edfd4a407c33ebd66771aafb25e91c370dc94c95da312455091",
+    "benchmarks/run.py": "872f5fba05e15ceafc4be730dc271a59a95d9abaef48ab2b700ab0e0c3af5459",
+    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
+    "benchmarks/suite/config.json": "f9e67df8b9170cfe5f2d76e27f2e8595da6b2fb86ebe5497107e4b879f73b595",
+    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
+    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
+    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
+    "benchmarks/suite/publication.py": "6fe06a1ee4009d75e6f954d10d0dfb8c47d18a24c6be12d9037de2ad68b0dee7",
+    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
+    "benchmarks/suite/test_setup.py": "f52e79f7a2608a613659f0a6ee99dd411d5a71d8c1ccf7f3e2a461f87f6d88b4",
+    "src/fors.rs": "1c07ea86ff0221d87cd0176a0e6cc55d09dde8eb4ec5c8212cce0bb11cf1d009",
+    "src/hash.rs": "0b80273e8003276d803d656ce1be6e1a9695faeb527717d7e9d3f6d261c51e55",
+    "src/hash/pair.rs": "04fbf2437d1a54dca21dab6593f5418c0301f84eab3519a9d2634c105ee673ea",
+    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
+    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
+    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
+    "src/signing.rs": "562b9efe19d35f381eca60678c811f487b72b8f7fe9e409d7c46fa90cf4b2dc7",
+    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
+    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
+    "src/wots.rs": "5b7a99e8b1303694ba596f65fd1582ca59d29a630862c6bd16ce7a17f37ddeab",
+    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
+    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
+    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
+    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
+    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
+  },
+  "reference_revision": "f7ba4999ae523b94c8d0969b32762c3effea4cbd",
+  "specification_revision": "03547dd83f298a63e6dcceff0a0b75f6142490aa",
+  "corpus_sha256": "d85d231f8f7b2d7a328c3b86095b4b52e250329243683023d5ad8385e35c738c",
+  "cpu": {
+    "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
+    "NumberOfCores": 16,
+    "NumberOfLogicalProcessors": 32
+  },
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
+  "sampling": {
+    "passes": 1,
+    "samples_per_case": 40,
+    "positive_fixtures": 3,
+    "outliers_removed": 0,
+    "selection": "Complete dedicated main-operation configurations; isolated k256 recovery configurations; AVX2 tiny-keccak configurations remeasured with no-vectorize-slp. No best-sample selection.",
+    "warmup_ms": 100,
+    "shuffle_seed": 20261115
+  },
+  "configurations": {
+    "baseline-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "baseline-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "cba094e149774f8deedf300f4db16c3c8719620c63188ad320b4bf643d7ebcc7",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "baseline-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "baseline-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "26eac45ac6e82278a70ed1aa92a025d61493f854fdc78c713d4eabb83f18599d",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "baseline-tiny-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "baseline-tiny-libsecp256k1",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "fd6cbf345ec2dfa7bbcce7a5641a2f4de421ce0e21887c96e2746ff0918a5f2e",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "native-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "native-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "bc9cc26625224099d6c09dda87906e2f300da9e08f1d9a7adf608d15460d70bb",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "native-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "native-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "e9a369be18dbc9c4d09db485ecea965f4059c02a46c31812abbd0322a5c659ed",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "native-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "native-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "b1ccc13f141602ef874a95e78e2f8ee878525cafb5d42844a244c4ed8e25b5cf",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v2-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v2-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "2a48d28ddfc40b6a80efb163c141fc40b1c890e2bdedd647cd1120d3f116f95c",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v2-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v2-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "f12d436acdb18f769098121272d6686c650f29bf1ae7b702053dadeaaae2eda0",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v2-tiny-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v2-tiny-libsecp256k1",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "6cfdd867a90be254e56fa287394481de94f548298dccaa16f60139ba5cb24089",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v3-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v3-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "8ba0b9228238b41949c5c30a048cfa590a4b1ceeff5202ea50788c13acc4060a",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    },
+    "v3-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v3-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "155be208c90cd1d2c4915ade6b43286ec3adede4929bf10f54fb5229d945688b",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    },
+    "v4-assembly-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1",
+          "asm-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v4-assembly-libsecp256k1",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "7b087e2e65f9e2e539fc7cb83b22415b50e450060926f0eebeb13f3cfcd12825",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v4-portable-libsecp256k1": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "features": [
+          "secp256k1"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v4-portable-libsecp256k1",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "0e11a62d0102891cdfddbe354fe2c1eccc63b4dae3fd03cfef803609015d6f70",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v4-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v4-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "0b505998b98364a72bb2ca5fcb5ee25e3ff2a67880cdd26995d4414db84a64c6",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "baseline-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "baseline-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "2c557063a07458860a69288448c9dc12567a0c632507fe474bd6c0b7e75c452a",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "baseline-portable-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "baseline-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "054c752dfe72325e7b7a8ebeb22a3861af21c42230a26483dfb27c5237bba7ea",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "baseline-tiny-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "tiny-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "baseline-tiny-k256",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64",
+          "id": "baseline",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "binary_sha256": "e7fc20b8c4113ea58c8d1e3df1b15d2acf643bae684ed143b7cd00e83534958d",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "native-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "native-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "8997a1a21a10aad057b1048ec272f476a0240a80368d79209c895a58bd2dc2d5",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "native-portable-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "native-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "ed6b881e389aee7258352bf77390c1e2ed5a84aff0fe0a0c6ffe56af5201490a",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "native-tiny-k256-no-slp": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "tiny-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "native-tiny-k256-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "061496c842b50420bbdc153c4a07bf2639d9d7544d87e03c0f275182bbd7aaf7",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v2-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v2-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "abd28a4ebb55981b25b3bca411560f2f499475da621a2274ffb8465b1ddd455d",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v2-portable-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v2-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "533ef92ca8950290e7a026b53e305016c96fc533720820902839bbb50b8fa096",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v2-tiny-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "tiny-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v2-tiny-k256",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "6a2d8fdda6f6ff42bc8b108d0ffa470c948b73512e9e6913f697d30588c833c2",
+      "ours_fors_verification": "paired SSE2 x2",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "scalar"
+    },
+    "v3-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v3-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "c99a14be3630c64863292d1946de0357351287979334bf04d61421f1534b0231",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    },
+    "v3-portable-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v3-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "binary_sha256": "31ae8918b7aa71057befc6f98878fc5dfb247bc41c1735e62ea1ee524228d009",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    },
+    "v4-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v4-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "b4a2a6ed4ab35524372c464c774fcd652fa875697fd2f7922ec22ae740cbcf2b",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v4-portable-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v4-portable-k256",
+        "keccak": "portable",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "8ed44406d84cb0997891d0259cd7c6c147bd7b026ad700685b1dd1af944e0d3b",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v4-tiny-k256-no-slp": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "tiny-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v4-tiny-k256-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v4",
+          "id": "v4",
+          "requires": [
+            "avx",
+            "avx2",
+            "avx512bw",
+            "avx512cd",
+            "avx512dq",
+            "avx512f",
+            "avx512vl",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "b9d4bc593df347725853887b2db954c97b915db34cdd76cfba7b103a6056e8b1",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "AVX-512",
+      "leanvm_batch": "AVX-512 x8"
+    },
+    "v3-tiny-k256-no-slp": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "tiny-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v3-tiny-k256-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "6970f96d7704176f80d380dce2408d64212d3281967fd9ac2ed2eff44bb5a085",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    },
+    "v3-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 8,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "macro"
+        ],
+        "id": "v3-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "x86-64-v3",
+          "id": "v3",
+          "requires": [
+            "avx",
+            "avx2",
+            "bmi1",
+            "bmi2",
+            "cmpxchg16b",
+            "f16c",
+            "fma",
+            "lahf_sahf",
+            "lzcnt",
+            "movbe",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "045c3105b688283232493235f5e34d3631c6a6c251ccfaacd05e4995e6a96bb4",
+      "ours_fors_verification": "selected Alloy backend",
+      "leanvm_single_state": "scalar",
+      "leanvm_batch": "AVX2 x4"
+    }
+  },
+  "measurements": [
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [46433900, 49357100, 46649900, 47010800, 52062900, 46789800, 49395900, 49622200, 46516800, 46636200, 48177600, 67095000, 47427500, 52845300, 48497400, 50035100, 48338900, 50147100, 46878700, 47674300, 47739300, 49275000, 51364900, 50507100, 50200100, 48512400, 54607100, 46714400, 47324400, 46403800, 46550400, 47714600, 53483400, 48296800, 57320600, 49952600, 47340600, 55109700, 48353200, 56769400]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [36471900, 38523700, 36595000, 37963700, 39589000, 37236600, 36677200, 42150500, 36691400, 36825800, 37944600, 37214500, 37015500, 37679800, 37082500, 36960100, 46672000, 39643900, 36511500, 38353400, 46035700, 36730400, 36654000, 37864900, 37702600, 37070700, 37246400, 38270200, 37168700, 36475000, 36590800, 36552000, 36707300, 45089800, 39930900, 40863100, 41378100, 45225800, 37098000, 37935300]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [36561500, 36728900, 36463000, 37623300, 38392800, 37450400, 36643700, 36839700, 37158100, 36454900, 39893600, 36846600, 39253500, 36901800, 39751500, 38405700, 38297400, 38654200, 37498100, 38030300, 38000000, 59318500, 36994300, 36450000, 37562000, 37255900, 36981700, 36852800, 36552000, 36418100, 36598000, 36738700, 37398700, 41556500, 42077400, 37753800, 41772300, 43723700, 42055700, 37449900]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [104498400, 111207000, 119548700, 109387800, 112043700, 116779400, 107015800, 131338900, 120276600, 116911700, 112656700, 117745900, 110128800, 111110500, 118402700, 108664500, 120507400, 119211200, 109309200, 118802200, 118262800, 106647000, 117297300, 120422800, 113569200, 111740000, 125629600, 113563100, 118043300, 116031900, 107448000, 115277600, 123737200, 135862600, 131371900, 122822000, 120931200, 121147400, 124722400, 129117800]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [136788700, 147376000, 163842300, 146315900, 177363200, 164709700, 143737700, 150583100, 149623100, 137643100, 145782800, 163519400, 171460700, 148950900, 175391000, 156212300, 149720900, 151698400, 137649900, 143864800, 155049800, 140107200, 143905300, 151079200, 140461000, 155158600, 149857500, 139982100, 163184400, 151184300, 139833200, 144174200, 191908300, 164421800, 165464100, 166489800, 169838800, 155137000, 156819500, 161973200]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [55146400, 59946900, 55667400, 59440900, 63540200, 56498300, 80030700, 55559000, 57635800, 55396000, 67515300, 57689300, 78427200, 57098200, 73319100, 55161800, 60254700, 83607500, 58434000, 56521700, 57540600, 57350000, 56632300, 57714400, 56554900, 58547400, 55687300, 57471700, 57261500, 55419300, 55170100, 59201700, 57410300, 59652100, 60049600, 59431300, 59618300, 66785900, 58109600, 64560500]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [74488400, 77481200, 76040900, 86678100, 104301400, 74812800, 75131200, 77178400, 91928900, 75366500, 78035300, 77485200, 74564500, 77386500, 76882900, 77941700, 78327300, 77224000, 76413800, 76329400, 74907300, 77069900, 74875100, 76567500, 102606900, 75679500, 79755100, 76159000, 74915600, 75861600, 75581300, 75174300, 77043800, 85131000, 82491900, 76857300, 76666500, 83916100, 77344200, 93078600]},
+    {"configuration": "baseline-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39401800, 39668900, 41523800, 39886100, 42640000, 40119500, 39496100, 39592000, 44620800, 39359700, 39824100, 41446200, 39648200, 39415700, 47609500, 39435600, 41411700, 39648800, 40379200, 40917700, 40524600, 47287400, 41337500, 39868000, 40553600, 42034100, 39603600, 42627600, 39939000, 39666600, 39551400, 39544800, 40257600, 42823100, 45621800, 40547400, 44247100, 42779800, 41715400, 42323400]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [51892700, 51948100, 52407100, 53861100, 53141300, 53565700, 55458600, 53386700, 51917100, 51670000, 57142400, 53979600, 52731600, 55586900, 52455500, 75892100, 64470300, 52684000, 52428300, 51913200, 53791900, 53200000, 51833800, 51959500, 52813800, 52857300, 52151500, 53227000, 53059000, 51877900, 51678600, 52243300, 51777000, 51695400, 56337400, 51839900, 83229300, 53592000, 54979600, 51700300]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [36367600, 37069000, 38171400, 37470600, 39144900, 45969300, 36871800, 36443700, 36739400, 38123300, 37003100, 36457500, 36628200, 36498500, 47531900, 37122400, 36795000, 37652900, 37172500, 37198900, 37213800, 40047200, 37743300, 38151300, 38188600, 36486500, 36386500, 36927200, 36501700, 36636000, 43108600, 37986100, 37007400, 37196000, 39775700, 36830600, 37880600, 45322200, 36707600, 36676300]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [36765900, 37551500, 38049000, 37632300, 36889800, 36886700, 36661100, 36696600, 36997300, 36630400, 45883800, 36945400, 37980400, 38148600, 38403800, 45169700, 41685200, 37426700, 37538700, 38018400, 37679900, 39040000, 36740800, 37166600, 36934400, 36808800, 36667300, 46052900, 36954400, 36781700, 38057900, 36662500, 37394700, 44918300, 37860100, 36639600, 36772100, 36635200, 38971600, 39134200]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [128752600, 131816300, 153532700, 142415400, 132576900, 145426700, 128971500, 139721300, 143345200, 134914000, 161430800, 141941600, 129878500, 134322300, 199310700, 129893400, 134165200, 156000600, 131007400, 134425300, 144746800, 138529100, 144418300, 169796400, 133426700, 134957300, 141771300, 135614900, 138468600, 141470600, 129210600, 131378200, 140937100, 132706000, 137410400, 152271500, 135638900, 132866000, 143699700, 141938700]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [138024600, 142474300, 178001500, 149412700, 162165300, 154657200, 137712000, 141072300, 152411000, 139019900, 144902500, 160707100, 140542100, 142189000, 188884300, 141004800, 174154300, 180807000, 149809900, 146286200, 180925700, 140628800, 142878800, 155134900, 139545800, 144236300, 150531600, 147195500, 176474200, 152548700, 139120700, 144486400, 151759700, 137273200, 141075700, 161090500, 151201400, 141042400, 153177700, 142819500]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [70217800, 70080000, 71909000, 73010500, 74298000, 72392900, 72037700, 71176400, 71737900, 70007900, 70340300, 70929600, 99830600, 73830300, 76825200, 80711400, 70605700, 72463800, 73477900, 70068000, 74363700, 74460700, 73327200, 72036500, 71781400, 71601500, 70513000, 99854700, 71828000, 75228600, 86280300, 75117400, 70000100, 69731600, 71410100, 69930100, 71793800, 71627700, 73292400, 71202200]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [74667500, 75041500, 97474000, 78951000, 76698700, 77131000, 76423800, 74930700, 75860400, 75172900, 78571700, 76088400, 74600300, 83767200, 79441700, 75134600, 78720900, 77451900, 75635800, 77355500, 81911300, 75348300, 80506600, 77426800, 84105400, 74639900, 79122400, 77129800, 74761900, 75582700, 103091000, 75055900, 75413800, 74536300, 83211600, 74870500, 76045800, 74432300, 75633200, 75078800]},
+    {"configuration": "baseline-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39643400, 39669100, 40130100, 40213000, 39784400, 40087700, 40636800, 39818300, 39694500, 39547300, 40811700, 39552000, 39546400, 40364400, 42438000, 41702600, 39947500, 40911200, 40035600, 40024500, 41483600, 40205700, 40382000, 40128300, 40033500, 39947400, 39647900, 40764100, 40496800, 40411400, 39539100, 39485200, 39523100, 41002300, 40690200, 40072000, 39911200, 40653700, 40744500, 40183300]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [52522100, 52545800, 52501200, 52447400, 52619800, 52566100, 52570400, 52623100, 52533700, 52641000, 52604600, 52762800, 52533000, 52520900, 52554500, 52451100, 52641000, 52547700, 52571200, 52923700, 52600500, 52775700, 52840200, 52634100, 52628400, 52561700, 52602500, 52709900, 52653600, 52879600, 52510400, 52683600, 52660300, 52667300, 52569100, 52917500, 52638100, 52565300, 52958400, 52932100]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [37603100, 37765500, 37785700, 37773800, 37725600, 37578100, 37800100, 37598100, 37757500, 37532600, 37517500, 37583900, 37506500, 37757900, 37792300, 37823700, 37518700, 37498400, 37548100, 37589800, 37809800, 37782800, 37623500, 37495100, 37503300, 37545300, 37512800, 37795200, 37489400, 37576900, 37588600, 37986900, 37807800, 38086100, 37576300, 37494000, 37792700, 37538400, 38019900, 37675000]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [36643500, 36653700, 36641400, 36791000, 36623600, 36704000, 36728700, 36736900, 36690400, 36700900, 36592200, 36649200, 36754500, 36640900, 36672100, 36659600, 36774100, 36695800, 36787800, 36983100, 36664300, 36806800, 37594500, 36683300, 36599800, 36651000, 37239300, 36543200, 36657500, 36744800, 36698000, 36687200, 36761200, 36701400, 36758000, 36644300, 36743300, 36554200, 36670000, 36816700]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [128757000, 132003900, 141486800, 128732500, 132928700, 141723900, 128880500, 132405700, 141710600, 129088200, 132966600, 142019300, 129159200, 132140300, 141800500, 129367100, 132790600, 141727300, 129747100, 132446900, 146527400, 129833600, 133331700, 142080400, 129403500, 132053900, 141768800, 129220400, 132448200, 141579900, 128915300, 132170500, 141610800, 129046600, 132109000, 142013300, 129518600, 132303500, 143030300, 129784900]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [137162100, 140398100, 149715400, 137012700, 139554300, 149325200, 136750300, 140228300, 149384100, 136888600, 140431900, 149758700, 136722600, 139891300, 149206500, 136707500, 140006200, 149409400, 137073100, 140576400, 150174300, 137083700, 140478200, 149516400, 136988900, 139861600, 149135500, 136337100, 139917900, 149566700, 136803400, 140035500, 149317900, 136767400, 140296300, 148760200, 136843400, 139134000, 150026100, 137440600]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [70254500, 70025600, 70019900, 70190400, 71027900, 70476800, 70091700, 70303500, 70147000, 70127000, 70245200, 70720200, 70174700, 70375200, 70045000, 70256200, 70081700, 70128000, 70137100, 71041700, 70508700, 70569500, 70313600, 70624200, 70572000, 70054400, 70959500, 70384200, 70402400, 70124900, 70279600, 70253200, 70197100, 70300700, 70522700, 70642900, 70370900, 70401100, 70401600, 70496300]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [74975100, 75017700, 75013000, 75160900, 74372800, 75023200, 75009700, 75015800, 74964100, 75350600, 75211100, 75233100, 75017600, 75034300, 74945500, 75012400, 75027300, 74950400, 75314300, 75234700, 74962300, 75273900, 75281500, 75271900, 74953500, 75063200, 75206800, 74524100, 74988500, 75041400, 75084000, 75297800, 75015000, 75192800, 75416800, 74277700, 75458400, 74422000, 75095900, 75828100]},
+    {"configuration": "baseline-tiny-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39342900, 39346500, 39271700, 39341400, 39437900, 39396500, 39381200, 39404900, 39454700, 39314200, 39567600, 39711300, 39370700, 39386500, 39378600, 39625400, 39336500, 39451800, 39422000, 39474900, 39527300, 39450300, 39385500, 39415000, 39399000, 39401700, 39748300, 39543300, 39455500, 39475100, 39426600, 39438300, 39506800, 39450900, 39471700, 39473200, 39642400, 39443300, 39766500, 39773800]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [44499000, 44641300, 44565400, 44579000, 44575600, 44524900, 44669100, 44527100, 44535400, 44501800, 44470400, 44768700, 44623900, 44605700, 44544400, 44555200, 44501900, 44618300, 44576900, 44719700, 44544600, 44623500, 44562200, 44503800, 44597000, 44656500, 44603400, 44535700, 44786000, 44559900, 44621500, 44565700, 44492700, 44679200, 44731900, 44506900, 44513100, 44594800, 44569700, 44678200]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30421400, 30280600, 30415100, 30437100, 30203800, 30464200, 30328300, 30596800, 30278000, 30193100, 30297900, 30190100, 30294000, 30277100, 30331200, 30309000, 30323600, 30367400, 30467700, 30247300, 31198200, 30191700, 30190000, 30320100, 30210700, 30186100, 30172800, 30421400, 30210800, 30208300, 30293700, 30207500, 30214700, 30244300, 30323800, 30466400, 30326500, 30312000, 30311000, 30437900]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30097400, 30389700, 30200800, 30179500, 30222400, 30094900, 30286400, 30123400, 30185600, 30233900, 30598600, 30218600, 30101500, 30184100, 30111500, 30090600, 30228300, 30072400, 30382200, 30554700, 30973700, 30222800, 30080000, 30334000, 30356700, 30289800, 30094600, 30086800, 30070300, 30249100, 30132000, 30189100, 30108100, 30266800, 30289600, 30220800, 30101500, 30626400, 30164600, 30084600]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [84420500, 86252000, 91923400, 84309500, 86574100, 91830300, 84421400, 86273300, 91858600, 84926700, 86747000, 92003200, 84301600, 86570000, 91945400, 84578900, 86311300, 91853600, 84972500, 86320100, 92254800, 85356300, 86411200, 91902000, 84621800, 86422300, 92132500, 84384700, 86404700, 91862900, 84587500, 86202100, 91808600, 84422000, 86260700, 93763300, 84743600, 86357900, 91864100, 84369400]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [113431600, 115962600, 123731500, 113233500, 116786000, 123465700, 113335900, 115662700, 123475000, 112900600, 115568500, 124000000, 113359100, 116173700, 123528700, 113233400, 115790200, 123955700, 113287500, 116312500, 126792900, 113168100, 115703900, 123361700, 112994400, 116300200, 123363300, 113492100, 116071800, 123319300, 114349000, 115764900, 123308400, 113475100, 115989700, 123909200, 113286400, 115687100, 124075800, 113470700]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [46133000, 46166500, 46251500, 46130800, 46218000, 46202900, 46190400, 46206100, 46183500, 46223000, 46238400, 46258900, 46215000, 46170100, 46172100, 46205000, 46240100, 46268300, 46575400, 46214900, 46176700, 46350400, 46281700, 46221300, 46611300, 46302700, 46150900, 46148100, 46353200, 46361900, 46216900, 46211200, 46618100, 46313500, 46224900, 46179700, 46365500, 46446300, 46296800, 46212700]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [61541200, 61889600, 61228100, 61129800, 61282200, 61415700, 61247300, 61428800, 61462600, 61341400, 61195800, 60998200, 61094000, 62746300, 60989600, 61228400, 61128700, 61219400, 61376100, 61120600, 61340500, 61266700, 61617500, 61184000, 61256000, 61339900, 61964300, 61291600, 61096200, 61054400, 61049500, 61538300, 62330100, 61372300, 61857200, 61427800, 61383800, 61228300, 61438100, 61198000]},
+    {"configuration": "native-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39152500, 39112700, 39093200, 39138600, 39098900, 39275500, 39166000, 39135700, 39075900, 39085500, 39111000, 39120500, 39066900, 39183500, 39111100, 39162200, 39170300, 39115100, 39122700, 39111800, 39195900, 39380100, 39115900, 39140800, 39171900, 39173500, 39186200, 39157800, 39160500, 39181300, 39173900, 39146700, 39131600, 39168700, 39173500, 39506100, 39133000, 39124300, 39149200, 39218600]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [57974200, 57778900, 58119200, 57800500, 57902300, 57982300, 57841300, 58220300, 57671900, 58010100, 57955700, 57709800, 57687400, 57675100, 58049000, 57804800, 58065000, 57960700, 57739100, 57852700, 57988300, 57937500, 57944600, 57961500, 58225300, 57995900, 58038000, 58047500, 57910500, 58085100, 57794900, 58052200, 58086900, 58087000, 57928100, 58237800, 58041200, 57882900, 57967400, 57749100]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30415200, 30805300, 30813300, 30789000, 30677900, 30848700, 30751100, 30751900, 30785900, 30167700, 30779600, 30184000, 30718200, 30194600, 30765300, 30205500, 30740600, 30251600, 30851100, 30164400, 30171000, 30173400, 30314500, 30174000, 30181500, 30161200, 30133300, 30395800, 30182100, 30176200, 31009500, 30453600, 30365800, 30413600, 30790400, 30443500, 30781500, 30791700, 30697200, 30496200]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30113400, 30098700, 30616800, 30590100, 30622800, 30043100, 30024400, 30080100, 30611700, 30576000, 30315300, 30567000, 30541900, 30660400, 30989700, 30137800, 30617200, 30361000, 30653400, 30653200, 30149700, 30653400, 30211300, 30294700, 30284800, 30666400, 30033900, 30063800, 30113900, 30683100, 30288700, 30637400, 30100800, 30614500, 30401000, 30646800, 30444600, 30678200, 30258100, 30085400]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [108703900, 111657700, 119109600, 108915900, 111287100, 118975900, 108677500, 111460700, 118746400, 109114000, 111504400, 118770700, 108667200, 111431100, 119337100, 108896900, 111219200, 119084400, 108659600, 111297900, 119019000, 108658900, 111380300, 119056300, 108650300, 111466600, 118874100, 108746400, 111190000, 119187800, 108997500, 111359700, 119391600, 108870500, 111265800, 119903900, 108872300, 111416900, 119017300, 109040400]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [113277800, 115097500, 123816300, 112820700, 115094500, 122602400, 113307300, 115548800, 123320800, 112406300, 115222800, 123832100, 113224800, 115664800, 123067700, 112591600, 115752100, 123564100, 114800200, 116249500, 123515800, 112618100, 115571000, 123337300, 112066700, 115004300, 123445900, 112935600, 114956800, 123356500, 114557200, 115667200, 123520800, 112466900, 115752400, 123377600, 112536600, 114862300, 123524400, 113251000]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [59795800, 59915400, 60228700, 59886700, 59709500, 59955500, 59838100, 59818300, 59874400, 59559300, 59647400, 59844300, 59630800, 59912900, 60007100, 59739600, 59651900, 59688400, 59662000, 59940000, 59617000, 59649300, 59593000, 59687900, 59602200, 59667700, 59845300, 59843100, 59727400, 59933900, 59925700, 59687500, 59955200, 59886800, 60114400, 59903200, 59826000, 59704300, 59537400, 59830000]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [62400500, 61974800, 62276000, 61881100, 61787500, 62661800, 61468000, 61963700, 62257900, 61292600, 62021900, 61176700, 61870600, 61999600, 62000100, 61211500, 61609900, 62743700, 62450300, 61214700, 61568200, 62429000, 62751900, 62312200, 61987400, 62188600, 61964500, 62361700, 62051000, 61738000, 61475600, 61700300, 61503500, 62707900, 62797500, 61988700, 61983700, 61933400, 61379300, 62700200]},
+    {"configuration": "native-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39317200, 39294700, 39228800, 39243900, 39250700, 39226200, 39357300, 39194300, 39184400, 39207500, 39139200, 39180800, 39165700, 39303100, 39338600, 39498900, 39170600, 39210700, 39282900, 39236800, 39337100, 39178700, 39187700, 39216700, 39377300, 39345600, 39654200, 39351400, 39335400, 39364400, 39400100, 39396200, 39378300, 39407000, 39241500, 39330800, 39145700, 39227100, 39201200, 39209800]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [55947700, 55758500, 55921000, 55691400, 55619000, 55868100, 56122500, 55891500, 55920400, 55907600, 55864200, 55795100, 55705800, 55624600, 55987900, 55723800, 55855500, 55945100, 56046100, 55655200, 56040200, 55941700, 55940500, 56033100, 56019500, 55975100, 55920800, 55787600, 55673900, 55827900, 55733800, 55882400, 56164400, 55978400, 55697800, 55964200, 55930500, 55954200, 56027300, 55773500]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30511700, 30845200, 30879300, 30825000, 30359000, 30816500, 30851900, 30856400, 30814600, 30422700, 30836600, 30332500, 30841300, 30552200, 30815300, 30322500, 30799900, 30323100, 30912300, 30323000, 30310200, 30307000, 30291300, 30323500, 30333200, 30326600, 30316800, 30518200, 30319400, 30328600, 30849600, 30325600, 30405900, 30396700, 30866200, 30368500, 30876600, 30819900, 30821700, 30593700]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [59997400, 59979900, 60837900, 60735700, 60789400, 60964600, 59994300, 59974500, 60984900, 60705200, 60180000, 60691900, 60007700, 60845600, 60300800, 60343600, 60739000, 60014900, 62151600, 60743600, 59997900, 60816900, 59971700, 60392100, 60179000, 60699800, 59955100, 60028300, 60052000, 60722200, 60104000, 60698800, 60442900, 60716100, 60002800, 60743700, 60296400, 60741700, 60105900, 60023200]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [108120500, 110882000, 118475700, 108374000, 110876800, 118330300, 108259500, 111038200, 118299500, 108356500, 111339700, 118226700, 108318000, 110881800, 118334800, 108336400, 111049000, 118896700, 108515600, 110881200, 118445900, 108287300, 110887500, 118359800, 108263100, 111030500, 118511500, 108375400, 110959100, 118434000, 108346100, 110938700, 118456300, 108342200, 110848700, 118372900, 108321000, 112764200, 118631900, 108626700]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [113667200, 115713900, 124510000, 113077000, 115714700, 123854800, 113563900, 116341000, 124384000, 115798600, 115764000, 124964900, 113365200, 116411900, 124185700, 112893800, 116474800, 127829500, 115289900, 116475000, 124928500, 113185200, 116569700, 124894400, 112898200, 115409300, 124657100, 113377200, 115883800, 124624800, 115614900, 116333600, 125330800, 113093500, 116656200, 124352900, 112691900, 115453200, 124440500, 113299100]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [58127900, 58461200, 57899400, 58245400, 57993100, 58258500, 58279300, 58127100, 58151900, 58039500, 58077800, 57912700, 58020300, 58779600, 58166300, 58078800, 57936700, 57938200, 58387700, 58333300, 58027800, 58002700, 57989800, 57999400, 58043300, 57997800, 58089100, 58248300, 58027700, 57878600, 58299100, 58052500, 58221500, 58212100, 58234100, 58208500, 58055300, 58006200, 58012400, 58174400]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [61990400, 61661500, 61375000, 62409500, 61396200, 61508300, 61418600, 61894600, 61487600, 62402900, 62030700, 61305000, 61308600, 61278400, 61355600, 61314600, 61280300, 63126900, 62965800, 61254400, 61782300, 62009800, 62002000, 61307800, 62062300, 62145300, 61419400, 62340900, 61399000, 61417000, 61271900, 61518500, 61654500, 62086200, 62011200, 61470800, 61467500, 62149000, 61586500, 62140700]},
+    {"configuration": "native-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39230900, 39152800, 39133000, 39121500, 39112400, 38976600, 39321700, 39077200, 39047400, 39022500, 39007900, 39091600, 39027000, 39544300, 39230600, 39264300, 39039300, 39255300, 39548400, 39142500, 39245200, 39065100, 39116100, 39161700, 39292900, 39307900, 39300600, 39182900, 39230400, 39269400, 39202000, 39228900, 39315200, 39230500, 39062100, 39250600, 39162000, 38986400, 39126500, 39695200]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [46093700, 46082000, 45957200, 46037300, 46017700, 46272600, 46051300, 45958100, 46006500, 46022600, 46024700, 46102600, 45992200, 46133100, 46028100, 46028400, 46005900, 46010800, 45965700, 46097900, 46058000, 46309100, 46001600, 46285100, 46006800, 45980300, 46031500, 46012600, 46109800, 46004900, 46070100, 46076000, 46480000, 47868600, 46303600, 46085500, 46369600, 46096500, 46120600, 46148200]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30545000, 30713400, 30710300, 30826000, 30559900, 30777900, 30704500, 30658200, 30793800, 30583700, 30913500, 30531100, 30769800, 30638700, 30735500, 30584000, 30726200, 30594700, 31034500, 30568400, 30566500, 30615100, 30630200, 30580900, 30517300, 30502300, 30605500, 30562000, 30564000, 30683200, 30819200, 30647500, 30610200, 30608400, 30858800, 30467000, 30791800, 30784800, 30774300, 30576400]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30522200, 30577400, 30711300, 30758100, 30681800, 30565100, 30663700, 30551200, 30755600, 30731300, 30578000, 30735600, 30707700, 30921700, 30654500, 30586400, 30668300, 30630100, 30729300, 30770500, 30594400, 30740700, 30580100, 30602800, 30608000, 30745000, 30600200, 30538400, 30574200, 31058500, 30608600, 30913500, 30592900, 30860200, 31456300, 30718100, 30598100, 30682100, 30868600, 30528600]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [100874300, 103441700, 110939800, 101911000, 103893400, 111068600, 101267600, 103451600, 110743900, 101332000, 103619900, 111727900, 101330100, 104291900, 111302200, 101540100, 103644900, 111163200, 101267300, 103397100, 111159600, 101252500, 103995500, 111207900, 101229100, 103779800, 111170800, 101372000, 103688700, 111016900, 101699700, 104320900, 111277100, 101676000, 104122700, 111427700, 101349800, 103596400, 111388900, 101265700]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [228793800, 233834200, 248641500, 228872100, 233493600, 248146700, 228757700, 233769700, 248719600, 228582900, 233440700, 248214000, 229059700, 234285600, 248465300, 228850400, 233479200, 248768200, 228379600, 234087400, 248603600, 229042200, 233440800, 248626400, 228393500, 233301800, 248667900, 228818500, 233343700, 251785000, 228964100, 234037000, 248626200, 231717300, 233683700, 248415500, 228920700, 237750400, 249191500, 228903000]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [54578600, 55301400, 54473600, 55061800, 54667800, 54622600, 54579700, 54930900, 54796700, 54904200, 54852600, 54645800, 54788300, 55800200, 54584400, 54914500, 54579300, 55058800, 55011800, 54779400, 54969100, 54804400, 54653500, 54865100, 54754800, 54659900, 54729400, 54557000, 54795800, 54893800, 54759200, 55003900, 55583100, 55019300, 54721700, 54742000, 54979400, 54869000, 55073300, 54719600]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [124896800, 124885800, 125047400, 124947900, 125000300, 124650900, 125129100, 125306600, 125033500, 124920700, 124928100, 125122700, 124963000, 124953700, 125329500, 124880900, 124866500, 125378600, 124775500, 124874200, 124949300, 125028700, 124950700, 124766100, 125091900, 125341700, 124931600, 125278100, 124845300, 125099800, 125481800, 125333000, 127410300, 126232300, 125191000, 125108500, 125037800, 127957700, 125006800, 125157600]},
+    {"configuration": "v2-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39320800, 39530200, 39222100, 39200800, 39201900, 39202600, 39357600, 39220300, 39200100, 39263500, 39208500, 39231000, 39248300, 39515300, 39405100, 39427400, 39240700, 39181900, 39212700, 39351300, 39356900, 39192100, 39260200, 39251100, 39448800, 39378500, 39388000, 39408200, 39404900, 39356000, 39413100, 39620100, 39652000, 40082500, 39325900, 39455800, 39250100, 39225400, 39243900, 39267600]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [38046800, 37991800, 37954200, 37998300, 37991100, 37939000, 38006000, 37998000, 37993900, 38025700, 38018800, 38003500, 38001400, 37986300, 38009500, 37969600, 38020200, 38094600, 38022500, 37967700, 38109000, 37976100, 38077300, 37982300, 37979600, 38052100, 38019500, 38048800, 38244400, 38091000, 37997700, 38019300, 38000700, 38036100, 37967800, 38350400, 37989600, 38088800, 37978200, 37968300]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30764800, 30552900, 30489000, 30446500, 30592800, 30529200, 30687300, 30426900, 30512000, 30511400, 30468900, 30468100, 30513600, 30451700, 30473300, 30438800, 30854800, 30467200, 30484500, 30502600, 30485000, 30450400, 30439700, 30476700, 30455200, 30525000, 30544400, 30627900, 30435300, 30494400, 30438500, 30472300, 30456400, 30432300, 30498100, 30463200, 30499300, 30565000, 30477800, 30475300]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30210600, 30275300, 30345700, 30380000, 30242100, 30233900, 30321100, 30206700, 30283800, 30357800, 30335400, 30276700, 30322100, 30200100, 30400500, 30266100, 30330900, 30284400, 30339800, 30291700, 30196500, 30204100, 30216800, 30273600, 30222700, 30208300, 30305000, 30360500, 30293200, 30243700, 30321700, 30248500, 30222600, 30214800, 30233500, 30269300, 30280100, 30310100, 30298200, 30205600]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [220125900, 225286900, 239855100, 219907300, 224227500, 240041800, 219314500, 224924500, 240116500, 220757000, 225250600, 239732100, 219356900, 225003400, 240244400, 220775900, 225549800, 239974200, 219950200, 225032900, 240358000, 219683000, 224818300, 240921400, 220643700, 225188400, 240465900, 219256400, 225133500, 239927800, 220848000, 224300700, 240104800, 219192200, 224274600, 242416400, 219885700, 225037700, 239484100, 219060300]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [228277400, 233420300, 247872900, 228101400, 232795800, 248277200, 227635300, 232748100, 248017900, 228041400, 232788200, 247955300, 228061600, 232617000, 247503100, 227355000, 232435600, 247851000, 227737000, 233010500, 247994200, 227360300, 232494700, 247358000, 227426500, 232598900, 247957300, 227713800, 233158300, 247932100, 227840400, 232813500, 247321200, 227500600, 232502200, 247633200, 227705100, 232648600, 247683500, 227344100]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [120311400, 120515100, 120407400, 124078100, 120567500, 120523600, 121155400, 119855300, 120295600, 120606100, 120383300, 120543100, 120171300, 120863400, 119793600, 119941100, 119973700, 120151400, 120975300, 120319000, 120277400, 120375700, 120293900, 120740900, 120825600, 120080200, 120607600, 120586400, 120348500, 120328100, 120393600, 120315900, 120064000, 120835900, 120507900, 120086500, 120517000, 120969900, 120603500, 120389100]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [124160500, 124118100, 124849100, 124118900, 124420200, 124172000, 124215100, 123961200, 124065300, 124569500, 124311200, 124109000, 124156300, 124017400, 124226900, 123997400, 124063000, 124394600, 124220500, 124218700, 124123400, 124056400, 124313200, 124215200, 124041900, 124027300, 124081700, 124241700, 124243300, 124167900, 125195700, 124110100, 124078600, 124216900, 124429000, 124151800, 124310200, 124161100, 124189000, 124245200]},
+    {"configuration": "v2-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39447800, 39302300, 39334200, 39658900, 39390100, 39441200, 39376200, 39347800, 39366400, 39408000, 39397100, 39416300, 39356100, 39403300, 39385500, 39321900, 39551100, 39334700, 39446100, 39461700, 39351900, 39354700, 39375300, 39345600, 39358600, 39410800, 39431200, 39439900, 39415700, 39413600, 39328000, 39418800, 39397600, 39325700, 39376100, 39357100, 39360700, 39545700, 39421500, 39595400]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [38898100, 40675900, 40990600, 40745200, 44145200, 38884500, 48743700, 39796900, 38893700, 39783400, 39647700, 38797300, 38941900, 41710200, 38918600, 41870200, 38783800, 39053500, 38807800, 39932800, 38894700, 38746100, 39898100, 38811400, 39417200, 39535300, 38756900, 38931300, 40375500, 38727300, 38956000, 38762400, 40658000, 38811600, 42509800, 43636400, 38766800, 38869300, 38712300, 38769400]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30577900, 32587200, 31493200, 32139400, 32854000, 31394600, 30622600, 30534900, 30565900, 30622300, 37681900, 30598300, 30584100, 30759400, 30528600, 30518400, 30723700, 30600800, 35657500, 30562900, 31380800, 30565200, 30524400, 30589000, 30526400, 30566000, 30516500, 30636200, 31635000, 30533600, 30515100, 30621200, 30504000, 30527300, 30910300, 30924400, 35606200, 31335000, 31166200, 43046800]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 128, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30456500, 30836200, 31606400, 30852900, 34110000, 30612200, 30597600, 30475400, 30793700, 30609900, 30466900, 30815700, 31550400, 30489100, 31029800, 30505300, 30536900, 30757000, 30600800, 30791000, 30461800, 30799000, 30466000, 30488300, 30518400, 30468100, 31787000, 36703900, 30466100, 30444000, 30833500, 30459700, 30436300, 30403600, 30833700, 30631000, 50215500, 30445600, 32195900, 30606200]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [221761900, 250055900, 268464800, 227625100, 248946700, 247384900, 268282600, 229157100, 243067600, 253527400, 228091700, 245779000, 222377100, 228126500, 254506800, 221875100, 259659500, 242227300, 222216400, 226892400, 242435400, 222873700, 226918400, 244501800, 242120700, 262272000, 242070300, 222331100, 234990400, 249127300, 221576700, 226929900, 273728600, 224988800, 235851400, 242746700, 222423100, 226754000, 242043000, 221858200]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [229394000, 241263600, 281716500, 232790200, 266328200, 311351500, 231738200, 234269800, 250967400, 230380400, 254938000, 260390200, 228873900, 234153900, 248661400, 229570100, 235558300, 249682800, 275060800, 233603800, 273759100, 229775100, 265780900, 249095500, 228944900, 233669200, 250660400, 227993800, 234155900, 277031200, 229782800, 234465100, 249981200, 229415800, 234059900, 274248900, 237906200, 234216300, 251773000, 230499500]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [121170700, 127947900, 143313100, 124302700, 131989400, 137601000, 170810500, 122154100, 122075100, 122704100, 122386600, 121183100, 151172700, 138462700, 122121300, 125178100, 121257300, 122769400, 126572500, 122778400, 122480500, 121115400, 124384400, 126877600, 121180200, 121051600, 121520700, 121272100, 122834400, 123881400, 121383900, 121508500, 121066600, 121139200, 121210800, 122621000, 122682700, 121785000, 121503800, 121438200]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [125230600, 136110200, 129825100, 129661800, 132709600, 132302300, 125108100, 125597000, 126127100, 125982900, 129737800, 155170000, 125329800, 149768200, 127186900, 125389700, 125187700, 127428000, 125498000, 126194100, 133888400, 125070300, 134261200, 130656500, 125267800, 151208500, 133776300, 125021500, 140709700, 128553300, 125485600, 125341900, 125144200, 125164000, 149293600, 124723700, 134509000, 124809500, 126550200, 125219800]},
+    {"configuration": "v2-tiny-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39996800, 42519900, 51141100, 40853600, 43043600, 40114200, 46554500, 39597600, 39668100, 39545000, 39635000, 39573600, 39518600, 39441400, 39479200, 39560100, 39887200, 39439700, 39479600, 40008900, 39823900, 40679700, 39701900, 39412900, 39570300, 39499900, 39455500, 39666700, 39440900, 39458300, 42407600, 39423400, 40594900, 39936500, 39443700, 39428100, 42656900, 40380700, 39464600, 48545900]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [50973600, 50860500, 50932900, 50556900, 50571700, 51024500, 50567100, 50939200, 50915200, 50906900, 50967000, 50619100, 50542700, 50591300, 50935400, 50557600, 51087300, 51129200, 51283400, 50743400, 51687500, 51124100, 51055600, 51121200, 51058100, 51068200, 51070800, 51060200, 50748900, 51099300, 50618700, 51157900, 51058500, 51100700, 50810000, 51107000, 51057100, 50609700, 51089900, 50765100]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30657700, 30880600, 30858900, 30871200, 30694500, 31137600, 30834000, 30874500, 30803000, 30698100, 30859100, 30702600, 30873700, 30698800, 30818300, 30674700, 30852700, 30695500, 30860800, 30703200, 30791800, 30707600, 30722600, 30708600, 30733500, 30772800, 30736300, 30661500, 30726800, 30743500, 30869000, 30677200, 30703200, 30787900, 30931100, 30766100, 30893800, 30932000, 30852300, 30638300]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30569600, 30581200, 30701600, 30733600, 31194400, 30595600, 30567900, 30594400, 30710600, 30711900, 30478400, 30754500, 30571700, 30710300, 30577200, 30585200, 30560100, 30565300, 30783000, 30722400, 30627500, 30750900, 30553500, 30533000, 30533000, 30770200, 30606000, 30564700, 30639000, 30765400, 30567800, 30749500, 30582300, 30655800, 30690500, 30742300, 30643500, 30747600, 30622400, 30579000]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [94812600, 97496500, 104426000, 95304800, 97387400, 104150200, 95555100, 97539500, 103921600, 95305000, 97817400, 104073800, 95605000, 97756000, 104092000, 95294800, 97298600, 104638700, 95390200, 97300200, 104515700, 95043800, 97257700, 104531000, 95120000, 97794400, 104129700, 95486000, 97622100, 104518200, 95276500, 97701200, 104581500, 95427300, 97555600, 104733700, 95918100, 97723500, 104992800, 95492300]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [116275300, 118812100, 126394900, 115888400, 118960900, 126324800, 116127500, 118781100, 126643000, 115997900, 118133500, 126043500, 116279600, 118358800, 126061600, 115783000, 118453800, 126235700, 115971200, 118614200, 126519900, 115490400, 118679500, 126152800, 115882900, 118593800, 126130900, 115873200, 119182000, 126328500, 115741600, 118511200, 126020800, 115895100, 118662700, 126300800, 116183300, 118557200, 126172100, 115957100]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [51995700, 52023300, 51687400, 52050500, 51742600, 52252300, 52352300, 52084400, 52046500, 51689300, 51798600, 51614100, 51692800, 52026400, 51985200, 51702900, 51638300, 51673300, 51677000, 52429800, 51887900, 51701400, 51710100, 51726200, 51735000, 51691700, 52158200, 52133000, 51830200, 51699500, 52134900, 51695200, 52093200, 52905500, 52173100, 52158200, 51690700, 51692400, 51774900, 52131800]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [63849600, 63664100, 63800100, 63872500, 63687900, 63724400, 63754200, 63820400, 63578500, 63640500, 63913600, 63733100, 63829600, 63576400, 64074700, 63737800, 63782800, 63911200, 63694300, 63661500, 63947900, 63862100, 63920400, 63824800, 64079600, 63808900, 63941100, 64030500, 63735800, 63741400, 63710600, 63640000, 63756600, 64362500, 64153800, 63774200, 63633200, 63880500, 63696300, 64165700]},
+    {"configuration": "v3-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39076400, 39211000, 38926500, 39199100, 39191100, 39475500, 39127700, 39191200, 39174700, 39159000, 39224500, 39186800, 39200800, 39186100, 39104800, 39141700, 39210400, 39258400, 39411700, 39291200, 39153200, 39275000, 39240500, 39279600, 39118800, 39107800, 39111100, 39144300, 39154700, 39131400, 39449900, 39106000, 39102400, 39085400, 39306300, 39108200, 39404200, 39214700, 39279600, 39239100]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [59376600, 59435800, 59405300, 59131100, 59227300, 59584900, 59388900, 59382200, 60234400, 59443000, 59472500, 59471000, 59744600, 59350200, 59515600, 59580900, 59499400, 59514500, 59407100, 59341500, 59493000, 59988800, 59485300, 59419600, 59674700, 59612600, 59565400, 59592600, 59425300, 59631100, 59411300, 59486100, 59617000, 59654500, 59459900, 59463400, 59606800, 59693600, 59442200, 59438500]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30887800, 31093700, 30939900, 30947900, 31023000, 31066300, 30942300, 31082500, 31010700, 31061000, 30962500, 31558700, 31028600, 31125300, 31149200, 31173300, 31035200, 31006200, 31113000, 31173000, 31147400, 30985900, 31108400, 31013300, 30949400, 31153800, 31120600, 31069200, 31235800, 31081100, 31011600, 31024900, 31051800, 31297900, 31026500, 31098100, 30994500, 31038700, 31002500, 30958400]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30841000, 30968900, 30832100, 30843000, 30849400, 30881400, 30851100, 30995700, 30960200, 30988900, 30862800, 31009100, 31027600, 31023300, 31067000, 31004600, 30885800, 30907800, 30881800, 30861900, 31016700, 30847900, 30933900, 30853000, 30831800, 30985000, 31009600, 31070000, 30994500, 30929700, 30928900, 30876800, 30949100, 31126000, 30877400, 30939000, 30939000, 30906000, 30976500, 30924300]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [112895000, 115813500, 123564200, 113232100, 115468900, 123589200, 113271600, 115803200, 123670900, 113471100, 115965600, 123790700, 113189100, 115567100, 123992800, 112898100, 115818000, 123747400, 113288500, 115557900, 123436200, 112988800, 115788100, 124008000, 113399400, 115561700, 124091400, 113231500, 115663100, 123514800, 113309800, 115584000, 123461600, 113383700, 115383000, 123563700, 113078500, 115892800, 123530600, 112973100]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [114803100, 117409300, 125039500, 114701200, 117526800, 124975100, 114662200, 117626700, 125805600, 114991300, 117276000, 125417500, 114885700, 117409600, 125423000, 114962200, 117296800, 125002200, 114784600, 117404900, 124816300, 114602000, 117354600, 125081000, 114766300, 117527600, 125251600, 115194800, 117632000, 125229400, 114805900, 117658200, 125037100, 114611400, 117326400, 125208700, 115602300, 117509000, 125283300, 114724500]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [61224800, 61260700, 61157400, 61594400, 61135500, 61370500, 61301000, 61421800, 61876300, 61452300, 61329400, 61567300, 61226500, 61804700, 61438400, 61315200, 61572800, 61253700, 61331400, 61366200, 61255100, 61303300, 61161500, 61299300, 61340100, 61371200, 61463600, 61651600, 61518000, 61596400, 61340000, 61280900, 61313400, 61332300, 61156600, 61363600, 61456700, 61305600, 61420000, 61492400]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [62914500, 63065600, 62918600, 62944000, 62979300, 62850900, 62998200, 63411400, 63194300, 63215200, 62999700, 63761900, 63020100, 63217500, 63193500, 63217700, 63127500, 63120800, 62991200, 63069100, 62903700, 63063600, 63043500, 63118700, 63052400, 63107600, 63262100, 63233900, 63533500, 63113000, 63272900, 62932000, 62937200, 63318900, 62964500, 63024900, 62988400, 62969700, 63073200, 63055200]},
+    {"configuration": "v3-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39205400, 39420200, 39184800, 39339000, 39301800, 39261100, 39237000, 39399700, 39444200, 39413700, 39353400, 39652700, 40192300, 39327800, 39301000, 39635600, 39387000, 39500900, 39373800, 39443800, 39207100, 39343700, 39373400, 39421100, 39346800, 39505500, 40026200, 39334000, 39404300, 39402900, 39362500, 39292900, 39252200, 39264200, 39332700, 39301700, 39406900, 39353000, 39423300, 39411100]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [45709200, 45836900, 46193100, 46456800, 45720100, 45906300, 46669800, 46144800, 45723300, 46680000, 45604600, 45879800, 45718800, 45712700, 45747200, 47773500, 46091700, 45692400, 46328800, 48246300, 48113400, 46220200, 45643100, 45627300, 45665100, 45673100, 46049000, 48059800, 48686300, 45765000, 46191200, 45646100, 45640700, 45657400, 46143200, 45636600, 46124800, 46550500, 45699700, 46960000]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [31161900, 31224700, 31108700, 31600000, 31688700, 31081300, 31461000, 31018700, 31070500, 31021100, 31055500, 30909200, 31118500, 31335400, 31127000, 30926400, 31037800, 30921000, 31332300, 31461600, 31431300, 32243500, 31223800, 31392400, 30927700, 31259800, 30922800, 31429200, 30932400, 30991400, 31036900, 31896200, 30933900, 30958700, 31024600, 31455300, 31247500, 31641500, 31490600, 31365900]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [31767600, 31777200, 31888300, 31871200, 31893900, 32200900, 31754700, 31722600, 31863000, 31882900, 31939700, 31980500, 32546600, 31867200, 32248800, 31796000, 32086500, 31966900, 32175500, 32233800, 31940800, 32159700, 31756900, 32017200, 32016800, 31814500, 31743900, 31737100, 31715200, 31848300, 31722300, 31851600, 31716400, 31877300, 31701000, 31845400, 31795300, 31843900, 32421200, 31860300]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [86164000, 88259700, 93849600, 88527000, 88318700, 93888600, 86406200, 91239300, 93707500, 86737400, 89938800, 93871100, 86147800, 88722800, 94017300, 86512800, 88253300, 97013700, 86057000, 92495200, 94376100, 86533200, 88219500, 94231000, 87743900, 89107100, 94679600, 93283200, 88920700, 95445200, 86167500, 88681700, 101933400, 87019600, 88327600, 95451700, 91782300, 87950500, 93592000, 86886300]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [114518800, 117047600, 124729200, 114614700, 117826500, 125251600, 117641800, 117938000, 125407000, 114741500, 118619500, 124909300, 115233200, 116862900, 126041100, 115771500, 117631000, 124354700, 114045300, 119205500, 126980400, 114126600, 116747100, 129282900, 113850900, 116463000, 124658700, 114222500, 117621200, 125077000, 114330600, 116749100, 125832800, 114669900, 116803000, 126050500, 114263300, 117655700, 124292200, 116176000]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [46993100, 47154400, 47123900, 47010800, 47239200, 47268500, 52044600, 47301700, 47122900, 48231100, 47337100, 47247200, 47501300, 47003900, 47041000, 47155500, 47107900, 47094800, 48727100, 47029400, 47295500, 47603000, 47075800, 47192300, 47327900, 47092900, 47394800, 47931200, 47417100, 47076800, 47062400, 47828200, 47045300, 47150200, 46985900, 47018900, 49918900, 47238700, 47055300, 47007500]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [62210200, 62795300, 62437200, 62761300, 62147800, 62744700, 62314300, 62934300, 62785400, 62356800, 62748500, 61990200, 62040000, 63320700, 62119000, 62055900, 62038800, 62618100, 63031700, 62019000, 64036800, 62286600, 62186900, 63667700, 62695400, 64057300, 63100900, 62860400, 62138500, 62002300, 62022600, 62310600, 62337000, 62136200, 63111100, 62293800, 62252400, 62210100, 63329300, 62539600]},
+    {"configuration": "v4-assembly-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39332800, 39325500, 39315900, 39334500, 40725000, 40841100, 39461500, 39584500, 39418700, 39634300, 39397100, 39642800, 39369000, 40317000, 55363400, 39764100, 39432500, 39406500, 39638900, 43775400, 43174400, 39412300, 40194000, 41042500, 39403400, 39435100, 39413400, 41201800, 39442500, 39598100, 46231700, 39512600, 39964200, 46773300, 42769800, 39383400, 39381100, 39354300, 39348200, 40286700]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/verify_wire/mixed", "iterations": 512, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [59763400, 62694900, 68215800, 64985300, 63600700, 65138400, 75340100, 66766000, 65792600, 64363500, 64434200, 69081800, 67240500, 66937000, 62080700, 61970700, 63338000, 62566000, 60130900, 70935100, 60399200, 60130200, 61752700, 60063000, 59858900, 63106600, 60121300, 66217200, 59955100, 60003200, 59704400, 61288900, 59979100, 68329700, 62514200, 64399900, 63110000, 61613900, 63177300, 61100500]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30721700, 31225400, 31184500, 31106800, 31638000, 31482900, 31847500, 31823000, 31473800, 31469700, 31492200, 31261600, 32107500, 31033200, 31220900, 31161600, 30882000, 31448600, 31187600, 32076100, 30547600, 30469800, 30085300, 30264900, 30263900, 30620900, 30054200, 30656200, 30799200, 30536500, 30576700, 30307200, 31469900, 30235400, 30654500, 30912300, 30561400, 30601200, 30656300, 30693900]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [31951400, 32589200, 33314000, 32623200, 32597100, 32448900, 33000900, 33043300, 33079300, 33124200, 32653100, 33288600, 33054600, 32095400, 32369300, 31933700, 32444100, 32809300, 31805700, 31900900, 31479700, 31971400, 31332400, 31548500, 31733000, 31869000, 31306600, 31266600, 31291800, 32247600, 32593100, 31802500, 32008700, 31793500, 31253200, 31971400, 31444300, 32085800, 31607000, 32910900]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [111818600, 125022100, 134059100, 117890400, 130318200, 135792800, 129637600, 121164700, 145264700, 133786200, 136614800, 144877100, 135165100, 134263500, 129554800, 125802600, 119068900, 126903100, 112400700, 124271300, 122761700, 115425100, 120523200, 122619400, 112471000, 116570200, 122843700, 113363500, 114675100, 144610300, 112661200, 114681100, 134410800, 111984900, 118237200, 122392800, 138252700, 120627400, 150728400, 114176800]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [117602100, 121790500, 128389200, 119226500, 121921100, 131085500, 120784100, 121291800, 131288500, 120643600, 122300600, 132662300, 120455800, 122877000, 127317300, 120363200, 119239800, 132079100, 114973200, 117883200, 126115500, 115757600, 118307000, 125662700, 118780200, 119812800, 125747100, 116503400, 122237400, 126122700, 115617500, 118545300, 128400900, 115061600, 119001300, 127243700, 115226500, 117669600, 126460400, 118543600]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [61306000, 64722000, 66341900, 73949400, 68751700, 71267100, 71285200, 72125500, 66152600, 66070200, 80378500, 71151700, 72096500, 64379200, 72159600, 63592700, 63585400, 62177900, 66628800, 61651000, 67677500, 61375600, 61260500, 65520800, 61793700, 61745900, 61663200, 61669700, 61589500, 72367000, 70419100, 62971500, 62158000, 61294800, 61474900, 61393000, 61382900, 71986100, 71713400, 63471700]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [63746700, 65597800, 64844300, 65150100, 65070100, 64687500, 65701700, 64355700, 64968900, 64884100, 64485000, 64938100, 65809600, 65436900, 63622900, 63038100, 64496000, 64866800, 62655300, 62984300, 63729200, 62975800, 63023500, 63044700, 63033800, 62905300, 62492400, 63393600, 62927200, 62377100, 63319100, 62527900, 62429600, 63068900, 63443600, 62733900, 62554100, 63230400, 63050600, 63285700]},
+    {"configuration": "v4-portable-libsecp256k1", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39733800, 40969300, 43935800, 43706400, 41607100, 42952800, 46535300, 44232800, 43381600, 43855500, 47259800, 42480200, 43137800, 41375600, 41362400, 41163300, 42229400, 40407400, 39559300, 42745100, 52360800, 46090600, 41522400, 39513100, 47309900, 39780900, 39533700, 39727900, 39536100, 47861200, 39633900, 39731400, 39670700, 39898300, 40725000, 40427700, 39319500, 39771500, 39490800, 42065700]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [31214300, 31321300, 31527800, 31500700, 33118300, 32251500, 31661100, 34850000, 32140000, 31526300, 31817000, 32036500, 32410000, 31448800, 31456200, 33769100, 31518600, 31466800, 31632400, 39829200, 31634000, 34057600, 31424500, 31729300, 31414500, 32112300, 31470500, 32696100, 31294600, 33717300, 32668400, 31486900, 31698100, 31598400, 32544000, 31842700, 31408100, 31879800, 32549900, 31362500]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [31029000, 31366100, 31290600, 31344200, 32508100, 31563100, 31599300, 31382400, 31586300, 30882400, 31489600, 30877900, 31376600, 31157000, 31595300, 30960600, 31848800, 31479200, 31781500, 30858700, 31201000, 31351600, 30856600, 30851500, 30832100, 32042700, 30857700, 31663000, 30870100, 30868200, 31291400, 31304000, 31605800, 31117200, 31330700, 31336800, 31330200, 31892100, 32027800, 31105700]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30633000, 30498000, 30930100, 30963200, 31247900, 30491100, 30458600, 30434100, 31091000, 30962300, 30708600, 31400000, 31052100, 31219000, 31238300, 30604500, 30943200, 31103400, 30881500, 31124800, 30465100, 30915800, 30414200, 30625800, 30642100, 31334100, 30424000, 31869400, 30423700, 33941600, 30428200, 30927300, 31091200, 30902100, 30798600, 30864800, 30701900, 31337200, 31296100, 30514300]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [116769700, 120011900, 129650100, 118526800, 122163700, 129520200, 119687000, 121246400, 150593800, 146020000, 122387600, 131643700, 124130400, 131450700, 128435000, 119774600, 161275800, 128631000, 143167500, 137242900, 143793600, 122801200, 132147500, 139524600, 118048500, 123287300, 136411000, 141118300, 120373300, 140382300, 117343300, 148035800, 130163800, 117473900, 121120100, 128930800, 120509500, 130118400, 130145600, 123289700]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [115705200, 117895000, 126337900, 115355000, 121675500, 126213500, 116406000, 119651700, 126838900, 114564700, 117344300, 128064100, 116300800, 118650800, 129513700, 115152800, 118454100, 127510500, 116937400, 118596900, 131125700, 114634900, 118143600, 126424600, 114488500, 118484300, 127755800, 115128500, 119219200, 125977500, 116014600, 118019700, 127345600, 115260700, 119234800, 126661300, 115386700, 117483800, 126925200, 116648300]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [62363500, 62521200, 62703600, 63388900, 62799500, 72101200, 62880000, 63304900, 66061700, 63357700, 75758500, 63289200, 65346000, 65745000, 63457200, 62838000, 67327500, 62523900, 62487400, 62878000, 63329200, 62516300, 62402100, 76020300, 64878300, 64094400, 62591400, 62668400, 62705600, 64509300, 68642100, 62857700, 63367300, 63690000, 63006300, 91243000, 75414300, 66588800, 90995600, 62771000]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [62850500, 62606300, 62346300, 63081300, 63226400, 62777300, 62693700, 63159300, 63451500, 63013100, 63028000, 62992300, 63454600, 63223000, 64151800, 63066500, 62626100, 63002100, 63603300, 62880600, 62955500, 63987400, 63046100, 62928400, 64356300, 63914700, 63599200, 63157400, 62425400, 62274400, 62366900, 63719400, 62576800, 64609900, 63802000, 62579500, 62472900, 63138200, 63515400, 65925800]},
+    {"configuration": "v4-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39308400, 39474300, 39329000, 39552100, 40246700, 40572500, 42541600, 39312100, 40343700, 39365200, 39827300, 40301900, 39926500, 39856500, 39901600, 46379000, 39647000, 39719100, 40895000, 39691200, 43220700, 39373800, 39960100, 39344000, 40005800, 40404300, 40344500, 39540500, 42011000, 39503100, 39437400, 46155900, 39794200, 40638400, 39360100, 39794800, 39578200, 39961800, 45809100, 40791100]},
+    {"configuration": "baseline-assembly-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12984500, 12918200, 12943100, 12924800, 12923100, 12925000, 12927300, 12931700, 12930600, 12916000, 12926600, 12985000, 12950100, 12947900, 12938800, 12940500, 12912700, 12943900, 12941300, 12970300, 12948600, 12944800, 13029000, 13002100, 12994200, 12944400, 12938700, 12931100, 12952200, 12947000, 12975800, 13008000, 12966700, 12939500, 12987100, 12935600, 12942600, 12947000, 12965400, 12957900]},
+    {"configuration": "baseline-portable-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12942900, 12976500, 13078000, 13156600, 12953100, 12953600, 12953300, 12953300, 13015400, 13023200, 12963300, 12988600, 12957700, 12968400, 12962600, 12959400, 12993900, 12977800, 12961500, 12985400, 13028100, 13081400, 13023300, 13024100, 13041100, 13019000, 12992800, 13081800, 13005200, 13087700, 13078200, 13695600, 13286300, 13167900, 13173300, 13103900, 13108700, 13112200, 13212000, 13172700]},
+    {"configuration": "baseline-tiny-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12893000, 12900400, 12896800, 12942700, 12921600, 12926300, 12900000, 12882200, 12905700, 12921700, 12901600, 12944800, 12938700, 12934900, 12977700, 12945200, 12940500, 12931900, 12908100, 12905300, 12907500, 12908600, 12927200, 12936600, 12945200, 12927700, 12949600, 12908500, 12915400, 12882500, 12908800, 13241300, 12930100, 12912800, 12902200, 12977600, 12935800, 12924400, 12915700, 12900100]},
+    {"configuration": "native-assembly-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12874800, 12884400, 12874100, 12859000, 12907100, 12936200, 12946200, 12925700, 12914900, 12954800, 12931900, 12901400, 12891000, 12909900, 12911500, 12895900, 12931300, 12934400, 12926300, 12950500, 12941000, 12916500, 12944600, 12924100, 12888200, 12904000, 12938000, 12919900, 12912400, 12945000, 12901500, 12906600, 12893100, 12923900, 12869300, 12898600, 12914300, 12883900, 12913500, 12934800]},
+    {"configuration": "native-portable-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12917700, 12896200, 12905200, 12929000, 12906800, 12916100, 12901500, 12933300, 12879100, 12917900, 12910400, 12891900, 12916400, 12912000, 12925100, 12964600, 12941000, 13110200, 12893600, 12908600, 12897700, 12917700, 12922400, 12918600, 12918600, 12932100, 12936500, 12930300, 12907900, 12917800, 12934300, 12880500, 12923300, 12941900, 12945900, 12921300, 12920300, 12923200, 12920000, 12911800]},
+    {"configuration": "native-tiny-k256-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [13058100, 13047700, 13033300, 13060500, 13059700, 13073800, 13051100, 13048200, 13058400, 13035600, 13079700, 13052500, 13082100, 13055700, 13053100, 13049900, 13060300, 13064700, 13063200, 13056900, 13069100, 13062400, 13052900, 13051000, 13060100, 13063300, 13056600, 13070300, 13057600, 13049800, 13097300, 13053300, 13070400, 13046700, 13050900, 13028100, 13041000, 13063500, 13055400, 13038100]},
+    {"configuration": "v2-assembly-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12770900, 12748200, 12741800, 12778000, 12758700, 12774500, 13090400, 12820400, 12804600, 12830500, 12799800, 12766100, 12772900, 12760800, 12770600, 12782600, 12798300, 12781000, 12780500, 12836600, 12774200, 12756400, 12790100, 12765200, 12766100, 13072700, 12813300, 12831800, 12777500, 12814200, 12787800, 12772700, 12771800, 12778200, 12780900, 12772600, 12787100, 12828600, 12859100, 12893300]},
+    {"configuration": "v2-portable-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12900200, 12763000, 12758800, 12770300, 12750500, 12791800, 12779900, 12770400, 12764800, 12759800, 12766400, 12776900, 12763800, 12783800, 12766000, 12762400, 12765400, 12756000, 12781900, 12782300, 12768200, 12788000, 12767800, 12763700, 12770800, 12774000, 12769200, 12803900, 12830400, 12858100, 12886700, 12893500, 12849000, 12762200, 12784900, 12821800, 12786000, 12784900, 12770700, 12777000]},
+    {"configuration": "v2-tiny-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12815400, 12765500, 12755000, 12787200, 12777600, 12751000, 12776900, 12757700, 12757300, 12802500, 12929900, 12824800, 12841000, 12780000, 12781700, 12764100, 12783300, 12770300, 12780600, 12793100, 12798600, 12795500, 12803800, 12768800, 12766000, 12788400, 12777800, 12770900, 12762200, 12768000, 12798100, 12828800, 12799500, 12785100, 12757600, 12770300, 12796500, 12763400, 12792000, 12764200]},
+    {"configuration": "v3-assembly-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12780900, 12731800, 12767000, 12766200, 12770000, 12751700, 12751200, 12761000, 12751800, 12732000, 12779600, 12786500, 12780700, 12758000, 12725200, 12741700, 12750400, 12742600, 12737300, 12743600, 12741200, 12766900, 12753900, 12783000, 12731600, 12745700, 12750000, 12739800, 12741000, 12741200, 12786700, 12753400, 12741300, 12740100, 12757300, 12764400, 12742000, 12773700, 12758900, 12751700]},
+    {"configuration": "v3-portable-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12808000, 12884900, 12758000, 12775400, 12800800, 12799800, 12801500, 12794700, 13323900, 12819200, 12846400, 12798200, 12776600, 12780100, 12780500, 12794200, 12808800, 12774200, 12787900, 12825500, 12793200, 12788200, 12774000, 12776600, 12788800, 12818400, 12815100, 12779300, 12787200, 12770700, 12833000, 12789500, 12844700, 12828900, 12781300, 12819200, 12785500, 12784400, 12813900, 12802900]},
+    {"configuration": "v4-assembly-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12807400, 12808500, 12864500, 12811100, 12809900, 12809300, 12799900, 12808700, 12792700, 12812500, 12831800, 12799000, 12800200, 12796200, 12811200, 12829200, 12810500, 12800600, 12823700, 12789500, 12784400, 12805800, 12815700, 12798900, 12805900, 12870700, 12795400, 12805400, 12816900, 12825900, 12831900, 12824500, 12825000, 12815700, 12847400, 12842100, 12836800, 12833200, 12839700, 12818000]},
+    {"configuration": "v4-portable-k256", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [12883600, 12866100, 12876700, 12875300, 12995800, 12941700, 12936300, 12873900, 12894800, 12948700, 12913500, 12885200, 12932700, 12860100, 12867600, 12895200, 12880500, 12846500, 12857100, 12876100, 12870400, 12852900, 12873000, 12888400, 12893000, 12943000, 12946900, 12942900, 12871300, 12942800, 12899500, 12865700, 12915300, 12906300, 12914200, 12860800, 12882800, 12871400, 12991100, 12956900]},
+    {"configuration": "v4-tiny-k256-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 10, "elapsed_ns": [13126600, 13124500, 13147000, 13141300, 13148200, 13136600, 13157600, 13153400, 13124900, 13151000, 13135100, 13170200, 13168600, 13139100, 13119900, 13166500, 13139700, 13148200, 13127600, 13136000, 13136500, 13151100, 13154800, 13159200, 13133400, 13142800, 13141600, 13143500, 13138100, 13140800, 13132400, 13166700, 13158100, 13124600, 13119200, 13189900, 13210600, 13274900, 13277900, 13198800]},
+    {"configuration": "v3-tiny-k256-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [52967100, 53027200, 53021500, 52985400, 52967400, 53019300, 53015300, 53023000, 53033200, 52960300, 53001500, 53034100, 52952700, 53291900, 52947500, 52970400, 52991600, 52937100, 53145100, 52996400, 52983000, 53028800, 53023500, 52988000, 52983200, 52975600, 53003200, 52995200, 53041200, 53025500, 52977100, 52999500, 53055100, 53020800, 52966500, 52981800, 52960800, 53324900, 53035700, 53036100]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30459100, 30395900, 30410600, 30259100, 30259500, 30474300, 30313700, 30299100, 30316100, 30316600, 30266900, 30294700, 30271100, 30215500, 30324700, 30198000, 30304100, 30290500, 30287700, 30264400, 30274700, 30292100, 30276800, 30283000, 30309100, 30266400, 30335200, 30280000, 30299200, 30283600, 30182400, 30429100, 30291200, 30282200, 30495500, 30276000, 30282100, 30245900, 30270700, 30265100]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_wire/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30981100, 30978400, 30884200, 30935700, 30921700, 30904800, 30877100, 30917900, 30879300, 30889100, 30908900, 30875700, 30843200, 30888000, 30860200, 30914800, 30835600, 30878300, 30888700, 30849900, 30925800, 30938300, 30920000, 30886500, 30914200, 30906600, 30893100, 30780700, 30901900, 30852600, 30853100, 30904600, 31154700, 30896700, 30843300, 30847800, 31165200, 30797900, 30844700, 30721300]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/verify_parsed/mixed", "iterations": 256, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [30762300, 30801500, 30705500, 30682100, 30807300, 30712500, 30741400, 30915400, 30719000, 30680800, 30623100, 30710800, 30682900, 30678700, 30691600, 31026200, 30679400, 30687900, 30655500, 30703300, 30717300, 30694800, 30714900, 30622300, 30593700, 30669400, 30722300, 30703500, 30717600, 30659900, 30701000, 30858700, 30723400, 30705300, 30691200, 30719300, 30716300, 30643600, 30898000, 30699500]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [113337900, 116213900, 124808900, 113502800, 116743100, 124496100, 113321000, 116127400, 124732900, 113195300, 116062100, 123966000, 113233400, 116197500, 124334400, 113144900, 116088500, 124074000, 113016100, 116222500, 124265300, 112928200, 115718800, 124490500, 113260200, 116067300, 124100100, 113036100, 115830000, 124165800, 113049800, 115879200, 124254400, 113352600, 115890800, 124154700, 113018400, 115886500, 123998300, 113112100]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/sign/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [115928600, 118845000, 126551100, 115721900, 118622800, 126449500, 115436100, 118250400, 126225700, 115376100, 118056500, 126299500, 115295500, 119032000, 126245800, 115230100, 117990100, 126230500, 115562700, 118023400, 126243100, 115243800, 118145900, 126574900, 115244500, 118032600, 126276700, 115311700, 118258200, 126231900, 115288600, 123190100, 126236300, 115289400, 117913600, 126223000, 115337500, 117946200, 126247700, 115354600]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/native/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [61803700, 61856600, 62061200, 61783400, 61854600, 61940100, 61785700, 61859100, 61682700, 61792500, 61578300, 61474600, 61658600, 61546100, 61732800, 61593500, 61523800, 61475200, 61825900, 61654800, 61887200, 61807700, 61748000, 61540800, 61740000, 61484300, 61553800, 61525600, 61802400, 61460300, 61563600, 61612400, 61568800, 61648900, 61626100, 61480700, 61547200, 61634100, 61493800, 61941300]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/reference/key_gen/mixed", "iterations": 1, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [63242500, 63483000, 63258300, 63130800, 63448300, 63211300, 63342300, 63520200, 63189400, 63177800, 63490800, 63204800, 63223700, 63287100, 63220500, 63228000, 63301900, 63269500, 63164900, 63213200, 63275600, 63246600, 63424400, 63283600, 63315000, 63207500, 63485500, 63180400, 63228300, 63233600, 63212200, 63183700, 63184700, 63276000, 63171100, 63250500, 63094300, 63158700, 63108200, 63118700]},
+    {"configuration": "v3-tiny-libsecp256k1-no-slp", "operation": "macro/evm2/ecrecover", "iterations": 1024, "work_items_per_iteration": 1, "batch_target_ms": 30, "elapsed_ns": [39664500, 39752300, 39493200, 39741600, 39716900, 40089600, 39621700, 39704700, 39695000, 39723400, 39721400, 39710400, 39689800, 39575600, 39587000, 39592600, 39692000, 39710000, 39683300, 39666500, 39857900, 39656500, 39640100, 39618100, 39512800, 39559500, 39550500, 39574300, 39544800, 39562900, 39587200, 39609000, 39592800, 39491000, 39652000, 39569800, 39652600, 39715400, 39635900, 39601400]}
+  ]
+}

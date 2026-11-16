@@ -294,33 +294,35 @@ Our benchmark uses three hashing choices:
 
 The production crate directly exposes `asm-keccak`; the isolated benchmark manifest also exposes the tiny-keccak comparison configuration.
 
+These labels describe our crate's Alloy hashing choice. Our SSE2 and SSE4.2 verification builds also use the paired FORS path described above. leanVM has its own hashing code: on this x86-64 machine its single-state path is scalar or AVX-512, while its batch path selects scalar, four-way AVX2 or eight-way AVX-512 according to the compiler target. Changing our Alloy backend does not switch leanVM to that backend.
+
 SSE2, SSE4.2, AVX2 and AVX-512 name CPU instruction capabilities. They describe what the compiler may use. “Native” tells the compiler to tune for the machine doing the build. These are compilation settings, rather than different signature formats.
 
-Newer instructions do not automatically produce faster code. Compiler decisions, data shuffling and the workload all matter. The published tiny-keccak AVX-512 and native rows are slower than the comparison implementation. The benchmark builder automatically disables LLVM SLP vectorization for affected tiny-keccak AVX-512 and native builds. The published rows remain the original measurements until the prepared matrix is rerun.
+Newer instructions do not automatically produce faster code. Compiler decisions, data shuffling and the workload all matter. The benchmark builder disables LLVM SLP vectorization for affected tiny-keccak AVX2, AVX-512 and native builds. This setting applies to both implementations in the binary and keeps their explicit SIMD code enabled. The current published rows include this compiler fix.
 
-Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](https://github.com/Soubhik-10/lean-sphincs/blob/5af37e11ba0fb8f6bc54c6318568c7c34438fee5/README.md).
+Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](../README.md#native-benchmark-results).
 
 # What the performance numbers actually show
 
-The published signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Each result is a median from 30 samples.
+The published signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Each result is a median from 40 batch samples in one pass, rotating three fixed specification fixtures. This checks performance on those inputs; it does not establish the distribution of signing times over arbitrary keys and messages.
 
 These examples use the native CPU target and our assembly hashing configuration. The leanVM column uses its own hashing implementation with the same compiler target.
 
 | Operation | Our crate | Pinned leanVM implementation | Comparison |
 | --- | ---: | ---: | ---: |
-| Verification | 86.8 microseconds | 120.1 microseconds | About 1.38 times the speed |
-| Signing | 86.0 milliseconds | 117.6 milliseconds | About 1.37 times the speed |
-| Key generation | 46.1 milliseconds | 61.0 milliseconds | About 1.32 times the speed |
+| Verification | 87.06 microseconds | 118.37 microseconds | About 1.36 times the speed |
+| Signing | 86.34 milliseconds | 115.88 milliseconds | About 1.34 times the speed |
+| Key generation | 46.22 milliseconds | 61.29 milliseconds | About 1.33 times the speed |
 
-A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 86.8 microseconds is 0.0868 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
+A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 87.06 microseconds is 0.08706 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
 
-“1.38 times the speed” is computed as the comparison time divided by our time. For verification, 120.1 divided by 86.8 is about 1.38. The elapsed-time reduction is about 28 percent; that is a different way of expressing the comparison.
+“1.36 times the speed” is computed as the comparison time divided by our time. For verification, 118.37 divided by 87.06 is about 1.36, or a 36 percent speed increase. The elapsed-time reduction is about 26 percent; that is a different way of expressing the comparison. Published percentages are calculated from the unrounded measurements.
 
 The timing calls the Rust leanSPHINCS implementation from leanVM directly. It does not include generating a VM execution proof, aggregation or network communication.
 
-Our crate is faster in these configurations, but it is not faster in every row. For example, the published AVX-512 tiny-keccak verification result is 245.0 microseconds for our crate versus 121.8 microseconds for the comparison. A broad claim that our crate is always faster would be wrong.
+The measured advantage depends on the configuration. For example, the AVX-512 tiny-keccak verification medians are 123.75 microseconds for our crate and 122.40 microseconds for leanVM. That small difference needs confirmation across repeat runs. Results from one pass do not justify claiming that either implementation always wins.
 
-The sample size and single-machine setup also limit how widely the results can be generalized. [Complete published benchmark tables](https://github.com/Soubhik-10/lean-sphincs/blob/5af37e11ba0fb8f6bc54c6318568c7c34438fee5/README.md).
+The sample size and single-machine setup also limit how widely the results can be generalized. [Complete published benchmark tables](../README.md#native-benchmark-results), [raw measurements and method](../benchmarks/SUITE.md#published-measurements).
 
 # Why verification uses 515 permutations
 

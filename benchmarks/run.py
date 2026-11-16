@@ -380,6 +380,18 @@ def report_session(args):
     print(f"Created {session / 'README-benchmarks.md'}; README.md was not modified")
 
 
+def report_measurements(args):
+    if not 100 <= args.bootstrap <= 100000:
+        raise ValueError("Bootstrap resamples must be between 100 and 100000")
+    state, summaries = publication.load_measurements(Path(args.measurements), resamples=args.bootstrap)
+    output = RESULTS / "published"
+    output.mkdir(parents=True, exist_ok=True)
+    host.write_json(output / "summary.json", summaries)
+    draft = publication.render(state, summaries, include_reference=args.include_reference)
+    (output / "README-benchmarks.md").write_text(draft, encoding="utf-8")
+    print(f"Created {output / 'README-benchmarks.md'} from recorded samples; no benchmarks ran")
+
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -398,6 +410,7 @@ def main():
     parser.add_argument("--cooldown-seconds", type=int, choices=range(0, 3601))
     parser.add_argument("--per-fixture", action="store_true")
     parser.add_argument("--session")
+    parser.add_argument("--measurements", help="Reproduce a report from published batch times; report only")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--notes", default="", help="Record boost, cooling, power and ambient conditions")
     parser.add_argument("--bootstrap", type=int, default=2000)
@@ -405,10 +418,15 @@ def main():
     parser.add_argument("--no-reference", action="store_false", dest="include_reference")
     args = parser.parse_args()
     if args.action == "report":
-        if not args.session:
-            parser.error("report requires --session")
-        report_session(args)
+        if bool(args.session) == bool(args.measurements):
+            parser.error("report requires either --session or --measurements")
+        if args.measurements:
+            report_measurements(args)
+        else:
+            report_session(args)
         return
+    if args.measurements:
+        parser.error("--measurements is only available for report")
     config = json.loads(CONFIG.read_text())
     capabilities = host.probe(config["toolchain"])
     plan = selected_plan(args, config, capabilities)

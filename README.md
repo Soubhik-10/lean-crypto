@@ -90,17 +90,21 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --featur
 
 ## Native benchmark results
 
-CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
+CPU: AMD Ryzen 9 8940HX with Radeon Graphics (16 cores, 32 threads).
 
 Compiler: Rust 1.97.1; LLVM 22.1.6. Optimization level 3, Thin LTO, one codegen unit.
 
-Median time per operation. Faster than leanVM = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower.
+Median time per operation from 40 samples per configuration (1 pass). Measured speedup = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower.
 
-leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum/leanVM/tree/f7ba4999ae523b94c8d0969b32762c3effea4cbd/crates/lean_sphincs), using its own hashing backend.
+Verification starts from encoded signatures; signing and key generation include serialization. Small differences need confirmation across repeat runs.
+
+The Keccak column selects lean-sphincs' Alloy backend. Verification also uses paired SSE2 FORS hashing in SSE2 and SSE4.2 builds. leanVM uses its own CPU-selected scalar and SIMD paths. Compiler flags apply to both implementations within each row. See the [measurement method and raw data](benchmarks/SUITE.md#published-measurements).
+
+leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum/leanVM/tree/f7ba4999ae523b94c8d0969b32762c3effea4cbd/crates/lean_sphincs).
 
 ### Verification
 
-| Compiler target | Hash backend | lean-sphincs (µs) | leanVM (µs) | Faster than leanVM |
+| Compiler target | lean-sphincs Keccak | lean-sphincs (µs) | leanVM (µs) | Measured speedup |
 | --- | --- | ---: | ---: | ---: |
 | SSE2 | RustCrypto | 103.07 | 145.11 | +40.8% |
 | SSE2 | tiny-keccak | 102.76 | 146.88 | +42.9% |
@@ -120,7 +124,7 @@ leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum
 
 ### Signing
 
-| Compiler target | Hash backend | lean-sphincs (ms) | leanVM (ms) | Faster than leanVM |
+| Compiler target | lean-sphincs Keccak | lean-sphincs (ms) | leanVM (ms) | Measured speedup |
 | --- | --- | ---: | ---: | ---: |
 | SSE2 | RustCrypto | 137.94 | 146.74 | +6.4% |
 | SSE2 | tiny-keccak | 132.35 | 140.02 | +5.8% |
@@ -140,7 +144,7 @@ leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum
 
 ### Key generation
 
-| Compiler target | Hash backend | lean-sphincs (ms) | leanVM (ms) | Faster than leanVM |
+| Compiler target | lean-sphincs Keccak | lean-sphincs (ms) | leanVM (ms) | Measured speedup |
 | --- | --- | ---: | ---: | ---: |
 | SSE2 | RustCrypto | 71.87 | 76.07 | +5.8% |
 | SSE2 | tiny-keccak | 70.30 | 75.03 | +6.7% |
@@ -151,8 +155,8 @@ leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum
 | AVX2 | RustCrypto | 61.34 | 63.06 | +2.8% |
 | AVX2 | tiny-keccak | 61.65 | 63.23 | +2.6% |
 | AVX2 | asm-keccak | 51.81 | 63.79 | +23.1% |
-| AVX-512 | RustCrypto | 64.55 | 63.36 | -1.8% |
-| AVX-512 | tiny-keccak | 63.34 | 63.06 | -0.4% |
+| AVX-512 | RustCrypto | 64.55 | 63.36 | -1.9% |
+| AVX-512 | tiny-keccak | 63.34 | 63.06 | -0.5% |
 | AVX-512 | asm-keccak | 47.15 | 62.35 | +32.2% |
 | native | RustCrypto | 59.82 | 61.99 | +3.6% |
 | native | tiny-keccak | 58.08 | 61.55 | +6.0% |
