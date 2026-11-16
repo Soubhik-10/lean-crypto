@@ -1,2 +1,16 @@
 /target/
 /benchmarks/evm2/target/
+
+/benchmarks/build/
+/benchmarks/results/
+/benchmarks/__pycache__/
+/benchmarks/suite/__pycache__/
+
+/testing/target/
+/testing/results/
+/fuzz/target/
+/fuzz/corpus/
+/fuzz/artifacts/
+/fuzz/coverage/
+
+/fuzz/logs/

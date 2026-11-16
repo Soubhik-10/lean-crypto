@@ -1,0 +1,136 @@
+name: Differential tests and fuzzing
+
+on:
+  pull_request:
+    paths: ['src/**', 'tests/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
+  push:
+    branches: [main]
+    paths: ['src/**', 'tests/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
+  schedule:
+    - cron: '29 2 * * *'
+  workflow_dispatch:
+    inputs:
+      cases:
+        description: Random key/message pairs per configuration
+        default: '10000'
+        type: string
+      fuzz_seconds:
+        description: Seconds per fuzz target
+        default: '600'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  differential:
+    name: Differential (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: sse2-rustcrypto, os: ubuntu-24.04, flags: '-C target-cpu=x86-64', features: '' }
+          - { name: native-rustcrypto, os: ubuntu-24.04, flags: '-C target-cpu=native', features: '' }
+          - { name: sse2-asm, os: ubuntu-24.04, flags: '-C target-cpu=x86-64', features: asm-keccak }
+          - { name: native-asm, os: ubuntu-24.04, flags: '-C target-cpu=native', features: asm-keccak }
+          - { name: sse2-tiny, os: ubuntu-24.04, flags: '-C target-cpu=x86-64', features: tiny-keccak }
+          - { name: native-tiny, os: ubuntu-24.04, flags: '-C target-cpu=native -C no-vectorize-slp', features: tiny-keccak }
+          - { name: arm64-rustcrypto, os: ubuntu-24.04-arm, flags: '-C target-cpu=native', features: '' }
+          - { name: arm64-asm, os: ubuntu-24.04-arm, flags: '-C target-cpu=native', features: asm-keccak }
+    env:
+      RUSTFLAGS: ${{ matrix.flags }}
+      FEATURES: ${{ matrix.features }}
+      REQUESTED_CASES: ${{ inputs.cases }}
+      EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - name: Validate harness and compare implementations
+        run: |
+          feature_args=()
+          if [[ -n "$FEATURES" ]]; then feature_args=(--features "$FEATURES"); fi
+          cargo +1.97.1 clippy --locked --manifest-path testing/Cargo.toml --all-targets "${feature_args[@]}" -- -D warnings
+          cargo +1.97.1 test --release --locked --manifest-path testing/Cargo.toml "${feature_args[@]}"
+          cases=256
+          if [[ "$EVENT_NAME" == schedule ]]; then cases=10000; fi
+          if [[ -n "$REQUESTED_CASES" ]]; then cases="$REQUESTED_CASES"; fi
+          seed=$(python3 -c 'import hashlib,os; print(hashlib.sha256((os.environ["GITHUB_RUN_ID"]+"/"+os.environ["GITHUB_RUN_ATTEMPT"]).encode()).hexdigest())')
+          cargo +1.97.1 run --release --locked --manifest-path testing/Cargo.toml "${feature_args[@]}" --bin differential -- --cases "$cases" --jobs 4 --seed "$seed" --out testing/results/ci
+      - name: Save summaries and counterexamples
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: differential-${{ matrix.name }}
+          path: testing/results/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  fuzz:
+    name: Fuzz (${{ matrix.mode.name }}, ${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [verify_wire, mutate_valid, sign_differential]
+        mode:
+          - { name: sse2-rustcrypto, flags: '-C target-cpu=x86-64', features: '' }
+          - { name: native-asm, flags: '-C target-cpu=native', features: asm-keccak }
+          - { name: native-tiny, flags: '-C target-cpu=native -C no-vectorize-slp', features: tiny-keccak }
+    env:
+      RUSTFLAGS: ${{ matrix.mode.flags }}
+      FEATURES: ${{ matrix.mode.features }}
+      FUZZ_TARGET: ${{ matrix.target }}
+      REQUESTED_SECONDS: ${{ inputs.fuzz_seconds }}
+      EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install fuzzing tools
+        run: |
+          rustup toolchain install nightly-2026-10-20 --profile minimal
+          cargo +nightly-2026-10-20 install cargo-fuzz --version 0.13.2 --locked
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: fuzz/corpus/${{ matrix.target }}
+          key: fuzz-corpus-1-${{ matrix.mode.name }}-${{ matrix.target }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: fuzz-corpus-1-${{ matrix.mode.name }}-${{ matrix.target }}-
+      - name: Seed valid and malformed inputs
+        run: python3 scripts/seed_fuzz.py
+      - name: Run instrumented differential fuzzer
+        run: |
+          feature_args=()
+          if [[ -n "$FEATURES" ]]; then feature_args=(--features "$FEATURES"); fi
+          seconds=90
+          if [[ "$EVENT_NAME" == schedule ]]; then seconds=600; fi
+          if [[ -n "$REQUESTED_SECONDS" ]]; then seconds="$REQUESTED_SECONDS"; fi
+          [[ "$seconds" =~ ^[0-9]+$ ]] && (( seconds >= 1 && seconds <= 1800 ))
+          max_len=7805
+          if [[ "$FUZZ_TARGET" == mutate_valid ]]; then max_len=257; fi
+          if [[ "$FUZZ_TARGET" == sign_differential ]]; then max_len=64; fi
+          cargo +nightly-2026-10-20 metadata --locked --format-version 1 --manifest-path fuzz/Cargo.toml "${feature_args[@]}" > /dev/null
+          mkdir -p fuzz/logs
+          cargo +nightly-2026-10-20 fuzz run "$FUZZ_TARGET" "fuzz/corpus/$FUZZ_TARGET" "${feature_args[@]}" -- -max_total_time="$seconds" -max_len="$max_len" -timeout=120 -rss_limit_mb=4096 -print_final_stats=1 2>&1 | tee "fuzz/logs/$FUZZ_TARGET.log"
+          git diff --exit-code -- fuzz/Cargo.lock
+      - name: Save crashes and execution statistics
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: fuzz-${{ matrix.mode.name }}-${{ matrix.target }}
+          path: |
+            fuzz/artifacts/
+            fuzz/logs/
+          if-no-files-found: ignore
+          retention-days: 30

@@ -1,0 +1,41 @@
+[package]
+name = "lean-sphincs-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+lean-sphincs-testing = { path = "../testing" }
+
+[features]
+default = []
+asm-keccak = ["lean-sphincs-testing/asm-keccak"]
+tiny-keccak = ["lean-sphincs-testing/tiny-keccak"]
+
+[[bin]]
+name = "verify_wire"
+path = "fuzz_targets/verify_wire.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "mutate_valid"
+path = "fuzz_targets/mutate_valid.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "sign_differential"
+path = "fuzz_targets/sign_differential.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]
