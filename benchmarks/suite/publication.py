@@ -36,7 +36,10 @@ def render(state, summaries, *, include_reference=True):
              f"OS: {machine.get('os_caption', machine.get('platform', 'unreported'))}.", "",
              f"Compiler: {compiler_text}. Optimization level 3, Thin LTO, one codegen unit.", ""]
     profile = state["plan"]["profile"]
-    lines += [f"Median time per operation from {profile['samples'] * profile['passes']} samples per configuration.", ""]
+    caption = f"Median time per operation from {profile['samples'] * profile['passes']} samples per configuration."
+    if include_reference:
+        caption += " Faster than leanVM = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower."
+    lines += [caption, ""]
     selected = {name: selection(name, item) for name, item in state["builds"]["jobs"].items()}
     values = {}
     for row in summaries:
@@ -61,14 +64,17 @@ def render(state, summaries, *, include_reference=True):
         header = f"| Compiler target | Hash backend | lean-sphincs ({unit}) |"
         separator = "| --- | --- | ---: |"
         if include_reference:
-            header += f" leanVM ({unit}) |"
-            separator += " ---: |"
+            header += f" leanVM ({unit}) | Faster than leanVM |"
+            separator += " ---: | ---: |"
         lines += [header, separator]
         for target, backend in matching:
             own = cell(target, backend, "libsecp256k1", f"macro/native/{operation}/mixed", divisor)
             row = f"| {TARGETS[target]} | {BACKENDS[backend]} | {own} |"
             if include_reference:
-                row += " " + cell(target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed", divisor) + " |"
+                reference = values.get((target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed"))
+                native = values[(target, backend, "libsecp256k1", f"macro/native/{operation}/mixed")]
+                faster = "—" if reference is None else f"{(reference / native - 1) * 100:+.1f}%"
+                row += " " + cell(target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed", divisor) + f" | {faster} |"
             lines.append(row)
         lines.append("")
 

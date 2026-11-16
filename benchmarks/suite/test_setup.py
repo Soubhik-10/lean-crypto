@@ -174,7 +174,7 @@ class ReportTests(unittest.TestCase):
                                     ("macro/reference/verify_wire/mixed", 300000),
                                     ("macro/evm2/ecrecover", 100000)]]
         draft = publication.render(state, rows)
-        self.assertIn("| native | tiny-keccak | 200.00 | 300.00 |", draft)
+        self.assertIn("| native | tiny-keccak | 200.00 | 300.00 | +50.0% |", draft)
         self.assertIn("#### evm2 libsecp256k1", draft)
         for value in ["PRIVATE_POWER_POLICY", "PRIVATE_BIOS", "PRIVATE_LOCAL_NOTES", "no-slp", "Alternative Rust"]:
             self.assertNotIn(value, draft)
