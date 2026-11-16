@@ -1,5 +1,9 @@
 # SIMD confirmation results
 
+Historical experiment: the local SIMD column is a separate implementation using
+leanVM primitives, not unmodified upstream leanVM. The current stock-library
+comparison is in [RAW_RESULTS.md](RAW_RESULTS.md).
+
 CPU: AMD Ryzen 9 8940HX with Radeon Graphics (16 cores, 32 threads).
 
 Compiler: Rust 1.97.1; LLVM 22.1.6. Optimization level 3, Thin LTO, one codegen unit.

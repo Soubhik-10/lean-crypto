@@ -1,4 +1,5 @@
 //! Publication harness. Discovery never generates keys or starts measurements.
+#[cfg(feature = "experimental-simd")]
 mod batched;
 #[path = "suite/fixtures.rs"]
 mod fixtures;
@@ -39,6 +40,7 @@ struct Build {
     fors_batch_lanes: usize,
     wots_batch_lanes: usize,
     reference_batch_lanes: usize,
+    experimental_adapter: bool,
 }
 
 fn build() -> Build {
@@ -78,6 +80,7 @@ fn build() -> Build {
             1
         },
         reference_batch_lanes: reference_keccak::LANES,
+        experimental_adapter: cfg!(feature = "experimental-simd"),
     }
 }
 
@@ -158,12 +161,14 @@ impl Options {
             return Err("invalid sampling or corpus bounds".into());
         }
         if result.groups.is_empty()
-            || result
-                .groups
-                .iter()
-                .any(|g| !["macro", "batched", "reject", "hash", "ecrecover"].contains(&g.as_str()))
+            || result.groups.iter().any(|g| {
+                !["direct", "macro", "batched", "reject", "hash", "ecrecover"].contains(&g.as_str())
+            })
         {
-            return Err("groups must be macro,batched,reject,hash or ecrecover".into());
+            return Err("groups must be direct,macro,batched,reject,hash or ecrecover".into());
+        }
+        if result.includes("batched") && !cfg!(feature = "experimental-simd") {
+            return Err("batched requires the experimental-simd benchmark feature".into());
         }
         Ok(result)
     }
@@ -188,6 +193,57 @@ fn native_sign(seed: &B256, message: &B256) -> lean_sphincs::Signature {
 fn cases<'a>(fixtures: &'a Fixtures, options: &Options) -> Vec<Case<'a>> {
     let mut cases = Vec::new();
     let first = &fixtures.inputs[0];
+    if options.includes("direct") {
+        add(
+            &mut cases,
+            "direct/lean-sphincs/verify".into(),
+            1,
+            move |i| {
+                let input = &fixtures.inputs[i % fixtures.inputs.len()];
+                black_box(lean_sphincs::verify(
+                    black_box(&input.key),
+                    black_box(&input.message),
+                    black_box(input.signature.as_slice()),
+                ));
+            },
+        );
+        add(&mut cases, "direct/leanVM/verify".into(), 1, move |i| {
+            let input = &fixtures.inputs[i % fixtures.inputs.len()];
+            black_box(reference_sphincs::verify(
+                black_box(&input.parsed_key),
+                black_box(&input.message.0),
+                black_box(&input.parsed_signature),
+            ));
+        });
+        add(&mut cases, "direct/lean-sphincs/sign".into(), 1, move |i| {
+            let input = &fixtures.inputs[i % fixtures.inputs.len()];
+            let _ = black_box(lean_sphincs::sign(
+                black_box(&input.seed),
+                black_box(&input.message),
+            ));
+        });
+        add(&mut cases, "direct/leanVM/sign".into(), 1, move |i| {
+            let input = &fixtures.inputs[i % fixtures.inputs.len()];
+            black_box(reference_sphincs::sign(
+                black_box(&input.seed.0),
+                black_box(&input.message.0),
+            ));
+        });
+        add(
+            &mut cases,
+            "direct/lean-sphincs/key_gen".into(),
+            1,
+            move |i| {
+                let input = &fixtures.inputs[i % fixtures.inputs.len()];
+                black_box(lean_sphincs::key_gen(black_box(&input.seed)));
+            },
+        );
+        add(&mut cases, "direct/leanVM/key_gen".into(), 1, move |i| {
+            let input = &fixtures.inputs[i % fixtures.inputs.len()];
+            black_box(reference_sphincs::key_gen(black_box(&input.seed.0)));
+        });
+    }
+    #[cfg(feature = "experimental-simd")]
     if options.includes("batched") {
         add(
             &mut cases,
@@ -449,7 +505,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             serde_json::to_string_pretty(&serde_json::json!({
                 "schema_version": 1, "build": build(), "hash_sizes": HASH_SIZES,
                 "macro_cases": if options.per_fixture { 29 } else { 8 },
-                "batched_cases": 3,
+                "batched_cases": if cfg!(feature = "experimental-simd") { 3 } else { 0 },
+                "direct_cases": 6,
                 "reject_cases": 16, "hash_cases": 42, "ecrecover_cases": 1
             }))?
         );
@@ -469,6 +526,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     let fixtures = Fixtures::new(options.extra_cases);
+    #[cfg(feature = "experimental-simd")]
     if options.includes("batched") {
         for input in &fixtures.inputs {
             assert_eq!(

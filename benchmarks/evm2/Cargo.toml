@@ -24,6 +24,7 @@ default = ["secp256k1"]
 secp256k1 = ["evm2/secp256k1"]
 asm-keccak = ["lean-sphincs/asm-keccak", "evm2/asm-keccak"]
 tiny-keccak = ["alloy-primitives/tiny-keccak", "dep:tiny-keccak"]
+experimental-simd = []
 
 [[bench]]
 name = "verify"

@@ -104,6 +104,8 @@ def render_batched(lines, state, summaries, *, include_reference):
 
 
 def render(state, summaries, *, include_reference=True):
+    if any(row["name"].startswith("direct/") for row in summaries):
+        return render_direct(state, summaries)
     machine = state["machine"]
     cpu = (machine.get("processors") or [{}])[0]
     model = cpu.get("Name", machine.get("model_name", "CPU not reported")).strip()
@@ -197,4 +199,33 @@ def render(state, summaries, *, include_reference=True):
                 cells = [cell(target, backend, recovery, "macro/evm2/ecrecover", 1_000) for backend in BACKENDS]
                 lines.append("| " + " | ".join([TARGETS[target], *cells]) + " |")
             lines.append("")
+    return "\n".join(lines)
+
+
+def render_direct(state, summaries):
+    """Native public API calls; keep their original input and return types."""
+    cpu = state["machine"]["processors"][0]
+    compiler = state["builds"]["rustc"].splitlines()
+    profile = state["plan"]["profile"]
+    lines = ["# Direct public API benchmark", "", f"CPU: {cpu['Name'].strip()}.", "",
+             "Compiler: " + compiler[0] + "; " + next((x for x in compiler if x.startswith("LLVM version:")), "") + ".", "",
+             "Unmodified library APIs, with each library's native inputs and return values. "
+             "leanVM verification receives a pre-parsed signature; lean-sphincs verification receives encoded bytes. "
+             "Input preparation is outside timing. No output serialization is added to signing or key generation.", "",
+             f"{profile['samples']} samples per pass, {profile['passes']} passes. All samples retained.", ""]
+    values = {(r["configuration"], r["name"]): r["median_ns"] for r in summaries}
+    for operation, heading, unit, divisor in [("verify", "Verification", "µs", 1000),
+                                              ("sign", "Signing", "ms", 1000000),
+                                              ("key_gen", "Key generation", "ms", 1000000)]:
+        lines += [f"## {heading}", "", f"| CPU target | lean-sphincs Keccak | LLVM SLP | lean-sphincs ({unit}) | leanVM, unmodified ({unit}) | lean-sphincs speedup |",
+                  "| --- | --- | --- | ---: | ---: | ---: |"]
+        for name, built in state["builds"]["jobs"].items():
+            own = values.get((name, f"direct/lean-sphincs/{operation}"))
+            reference = values.get((name, f"direct/leanVM/{operation}"))
+            if own is None or reference is None:
+                continue
+            target, backend, _ = selection(name, built)
+            slp = "disabled" if "no-vectorize-slp" in built.get("rustflags", []) else "enabled"
+            lines.append(f"| {TARGETS[target]} | {BACKENDS[backend]} | {slp} | {own/divisor:.2f} | {reference/divisor:.2f} | {(reference/own-1)*100:+.1f}% |")
+        lines.append("")
     return "\n".join(lines)
