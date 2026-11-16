@@ -48,8 +48,10 @@ def selected_plan(args, config, capabilities):
         profile["per_fixture"] = True
     if not (5 <= profile["samples"] <= 100000 and 10 <= profile["sample_ms"] <= 60000 and 1 <= profile["passes"] <= 100):
         raise ValueError("Need at least 5 samples, 10 ms/sample and one pass")
-    if any(group not in ("macro", "reject", "hash", "ecrecover") for group in profile["groups"]):
+    if any(group not in ("macro", "batched", "reject", "hash", "ecrecover") for group in profile["groups"]):
         raise ValueError("Unknown benchmark group")
+    if "batched" in profile["groups"] and profile["samples"] % (3 + profile["extra_cases"]):
+        raise ValueError("SIMD comparison samples must be a multiple of the corpus size for equal input weighting")
     wanted = set(args.targets.split(",")) if args.targets else {t["id"] for t in config["targets"]}
     unknown = wanted - {t["id"] for t in config["targets"]}
     if unknown:
@@ -87,6 +89,7 @@ def selected_plan(args, config, capabilities):
                 if keccak == "tiny":
                     features.append("tiny-keccak")
                 count = ((29 if profile["per_fixture"] else 8) if "macro" in groups else 0)
+                count += 3 if "batched" in groups else 0
                 count += 16 if "reject" in groups else 0
                 count += 42 if "hash" in groups else 0
                 count += 1 if "ecrecover" in groups and "macro" not in groups else 0
@@ -396,14 +399,14 @@ def report_measurements(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["plan", "build", "run", "report"])
-    parser.add_argument("--profile", choices=["rust", "quick", "publication", "comprehensive", "hashes"], default="rust")
+    parser.add_argument("--profile", choices=["rust", "quick", "comparison", "publication", "comprehensive", "hashes"], default="rust")
     parser.add_argument("--cpu", type=int, default=2)
     parser.add_argument("--targets", help="baseline,v2,v3,v4,native; default all supported")
     parser.add_argument("--hashing", help="portable,tiny,assembly; default all three")
     parser.add_argument("--recovery", help="libsecp256k1,k256; default both")
     parser.add_argument("--unmodified-tiny", action="store_true", help="Diagnostic only: retain the regressing LLVM SLP code generation for tiny-keccak")
     parser.add_argument("--disable-slp", action="store_true", help="Disable LLVM SLP vectorization for all crates, including Thin LTO")
-    parser.add_argument("--groups", help="macro,reject,hash,ecrecover; override the preset")
+    parser.add_argument("--groups", help="macro,batched,reject,hash,ecrecover; override the preset")
     parser.add_argument("--samples", type=int)
     parser.add_argument("--sample-ms", type=int)
     parser.add_argument("--passes", type=int)

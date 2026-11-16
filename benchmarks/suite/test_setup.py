@@ -125,6 +125,21 @@ class PlanTests(unittest.TestCase):
             runner.selected_plan(options, json.loads(runner.CONFIG.read_text()),
                                  {"architecture": "x86_64", "features": {"sse2": True}})
 
+    def test_simd_comparison_requires_complete_corpus_rotations(self):
+        import json
+        options = self.options()
+        options.profile = "comparison"
+        options.targets = "native"
+        options.recovery = "libsecp256k1"
+        config = json.loads(runner.CONFIG.read_text())
+        capabilities = {"architecture": "x86_64", "features": {"sse2": True}}
+        plan = runner.selected_plan(options, config, capabilities)
+        self.assertEqual(plan["profile"]["samples"] % (3 + plan["profile"]["extra_cases"]), 0)
+        self.assertTrue(all(job["case_count"] == 11 for job in plan["jobs"]))
+        options.samples = 10
+        with self.assertRaises(ValueError):
+            runner.selected_plan(options, config, capabilities)
+
 
 
 class MachineTests(unittest.TestCase):
@@ -197,6 +212,12 @@ class ReportTests(unittest.TestCase):
         draft = publication.render(state, rows)
         self.assertIn("| native | tiny-keccak | 200.00 | 300.00 | +50.0% |", draft)
         self.assertIn("#### evm2 libsecp256k1", draft)
+        self.assertIn("leanVM (unmodified, pinned revision)", draft)
+        batched_rows = rows + [{"configuration": rows[0]["configuration"],
+                                "name": "macro/batched/verify_wire/mixed", "median_ns": 100000}]
+        batched_draft = publication.render(state, batched_rows)
+        self.assertIn("leanVM + local SIMD batching adapter", batched_draft)
+        self.assertIn("| native | tiny-keccak | enabled | 200.00 | 300.00 | 100.00 | -50.0% |", batched_draft)
         for value in ["PRIVATE_POWER_POLICY", "PRIVATE_BIOS", "PRIVATE_LOCAL_NOTES", "no-slp", "Alternative Rust"]:
             self.assertNotIn(value, draft)
         with self.assertRaises(ValueError):

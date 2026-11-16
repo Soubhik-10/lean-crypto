@@ -1,4 +1,5 @@
 //! Publication harness. Discovery never generates keys or starts measurements.
+mod batched;
 #[path = "suite/fixtures.rs"]
 mod fixtures;
 mod reference;
@@ -62,7 +63,7 @@ fn build() -> Build {
             target_feature = "sse2",
             not(target_feature = "avx2")
         )),
-        reference_batch_lanes: reference_primitives::hash::LANES,
+        reference_batch_lanes: reference_keccak::LANES,
     }
 }
 
@@ -128,7 +129,7 @@ impl Options {
                 }
                 "--help" => {
                     println!(
-                        "matrix --describe | --run --samples N --sample-ms N --warmup-ms N --seed N --extra-cases N --groups macro,reject,hash --per-fixture --json FILE --corpus-json FILE --wait-for-start"
+                        "matrix --describe | --run --samples N --sample-ms N --warmup-ms N --seed N --extra-cases N --groups macro,batched,reject,hash --per-fixture --json FILE --corpus-json FILE --wait-for-start"
                     );
                     std::process::exit(0);
                 }
@@ -146,9 +147,9 @@ impl Options {
             || result
                 .groups
                 .iter()
-                .any(|g| !["macro", "reject", "hash", "ecrecover"].contains(&g.as_str()))
+                .any(|g| !["macro", "batched", "reject", "hash", "ecrecover"].contains(&g.as_str()))
         {
-            return Err("groups must be macro,reject,hash or ecrecover".into());
+            return Err("groups must be macro,batched,reject,hash or ecrecover".into());
         }
         Ok(result)
     }
@@ -173,6 +174,37 @@ fn native_sign(seed: &B256, message: &B256) -> lean_sphincs::Signature {
 fn cases<'a>(fixtures: &'a Fixtures, options: &Options) -> Vec<Case<'a>> {
     let mut cases = Vec::new();
     let first = &fixtures.inputs[0];
+    if options.includes("batched") {
+        add(
+            &mut cases,
+            "macro/batched/verify_wire/mixed".into(),
+            1,
+            move |i| {
+                let input = &fixtures.inputs[i % fixtures.inputs.len()];
+                black_box(batched::verify(
+                    black_box(&input.key),
+                    black_box(&input.message),
+                    black_box(input.signature.as_slice()),
+                ));
+            },
+        );
+        add(&mut cases, "macro/batched/sign/mixed".into(), 1, move |i| {
+            let input = &fixtures.inputs[i % fixtures.inputs.len()];
+            black_box(batched::sign(
+                black_box(&input.seed),
+                black_box(&input.message),
+            ));
+        });
+        add(
+            &mut cases,
+            "macro/batched/key_gen/mixed".into(),
+            1,
+            move |i| {
+                let input = &fixtures.inputs[i % fixtures.inputs.len()];
+                black_box(batched::key_gen(black_box(&input.seed)));
+            },
+        );
+    }
     if options.includes("macro") {
         let scopes: Vec<_> = std::iter::once(("mixed".to_owned(), None))
             .chain(
@@ -322,22 +354,19 @@ fn cases<'a>(fixtures: &'a Fixtures, options: &Options) -> Vec<Case<'a>> {
             let input: Vec<u8> = (0..size)
                 .map(|i| (i as u8).wrapping_mul(37).wrapping_add(11))
                 .collect();
-            assert_eq!(
-                keccak256_uncached(&input).0,
-                reference_primitives::hash::hash(&input)
-            );
+            assert_eq!(keccak256_uncached(&input).0, reference_keccak::hash(&input));
             let native = input.clone();
             add(&mut cases, format!("hash/native/{size}"), 1, move |_| {
                 black_box(keccak256_uncached(black_box(&native)));
             });
             let reference = input.clone();
             add(&mut cases, format!("hash/reference/{size}"), 1, move |_| {
-                black_box(reference_primitives::hash::hash(black_box(&reference)));
+                black_box(reference_keccak::hash(black_box(&reference)));
             });
-            let lanes = reference_primitives::hash::LANES;
+            let lanes = reference_keccak::LANES;
             let batch = input.repeat(lanes);
             let mut output = vec![0; lanes * 32];
-            reference_primitives::hash::hash_many(&batch, size, &mut output);
+            reference_keccak::hash_many(&batch, size, &mut output);
             for digest in output.chunks_exact(32) {
                 assert_eq!(digest, keccak256_uncached(&input).as_slice());
             }
@@ -347,11 +376,7 @@ fn cases<'a>(fixtures: &'a Fixtures, options: &Options) -> Vec<Case<'a>> {
                 format!("hash/reference_batch/{size}"),
                 lanes as u64,
                 move |_| {
-                    reference_primitives::hash::hash_many(
-                        black_box(&batch),
-                        size,
-                        black_box(&mut output),
-                    );
+                    reference_keccak::hash_many(black_box(&batch), size, black_box(&mut output));
                     black_box(&output);
                 },
             );
@@ -410,6 +435,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             serde_json::to_string_pretty(&serde_json::json!({
                 "schema_version": 1, "build": build(), "hash_sizes": HASH_SIZES,
                 "macro_cases": if options.per_fixture { 29 } else { 8 },
+                "batched_cases": 3,
                 "reject_cases": 16, "hash_cases": 42, "ecrecover_cases": 1
             }))?
         );
@@ -429,6 +455,27 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     let fixtures = Fixtures::new(options.extra_cases);
+    if options.includes("batched") {
+        for input in &fixtures.inputs {
+            assert_eq!(
+                batched::key_gen(&input.seed),
+                input.key,
+                "batched key: {}",
+                input.name
+            );
+            assert_eq!(
+                batched::sign(&input.seed, &input.message),
+                input.signature,
+                "batched signature: {}",
+                input.name
+            );
+            assert!(
+                batched::verify(&input.key, &input.message, input.signature.as_slice()),
+                "batched verify: {}",
+                input.name
+            );
+        }
+    }
     if let Some(path) = &options.corpus {
         let corpus: Vec<_> = fixtures.inputs.iter().map(|v| serde_json::json!({
             "name": v.name, "seed": format!("{:#x}", v.seed), "message": format!("{:#x}", v.message),

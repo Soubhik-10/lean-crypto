@@ -60,6 +60,7 @@ a larger corpus before attributing them to an optimization.
 | Preset | Scope | Samples per case per pass | Separate passes | Batch target |
 | --- | --- | ---: | ---: | ---: |
 | rust | All Rust operations, rejection and hash cases, both recovery providers | 40 | 1 | 10 ms |
+| comparison | Native APIs, unmodified dependency and local SIMD batching adapter; 11 positive inputs | 44 | 3 | 10 ms |
 | publication | Rotating-corpus signature operations and recovery | 500 | 3 | 200 ms |
 | comprehensive | Publication scope, individual positive vectors, malformed inputs and all hash cases | 500 | 3 | 200 ms |
 | hashes | Representative hash sizes and padding boundaries | 500 | 3 | 100 ms |
@@ -122,6 +123,47 @@ is normalized per input and must not be presented as standalone-call latency.
 The ecrecover case calls evm2's actual Crypto provider and includes signature
 parsing, recovery, serialization and address hashing. Dispatch and transaction
 data costs are excluded.
+
+## Experimental SIMD comparison
+
+The `batched` group measures the [local adapter](evm2/batched/mod.rs), separately
+from the unmodified leanVM API. It uses leanVM's public address, framing,
+parameter, decoding and hashing APIs. Its new scheduling code batches independent
+FORS openings, WOTS chains, encoding-counter candidates and Merkle parent hashes
+through leanVM's `hash_many`. This changes which independent hashes execute
+together, not the signature format. Counter search still selects the least
+admissible counter. Partial SIMD groups use the dependency's scalar remainder.
+
+Batching occurs inside one key-generation, signing or verification call. The
+results are single-operation latency, not throughput obtained by timing multiple
+signatures together. Key generation and signing recompute from the seed, and
+signing builds and reuses its top tree only within that call. The adapter is
+experimental benchmark code, not an upstream leanVM implementation or a new
+production backend in this crate.
+
+The adapter assembles encoded signatures directly, uses leanVM's public decoders
+for WOTS/hypertree fields and reads FORS authentication paths from the encoded
+input. These data-flow choices are part of the adapter; this is not a claim that
+turning on a Cargo feature gives unmodified leanVM these results.
+
+The `comparison` preset checks the three positive specification fixtures and
+eight additional deterministic key/message pairs against all implementations
+before timing. Standalone differential checks also cover generated inputs,
+mutations, incorrect keys/messages and malformed lengths under scalar, AVX2 and
+AVX-512 builds:
+
+    cargo test --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --test batched
+
+The sample count is a multiple of the corpus size. With the rotating input
+offset, every input receives equal weight over each complete pass even when
+implementations calibrate different batch iteration counts.
+
+For a best-configuration comparison, first run a short sweep, retaining every
+configuration's samples. Select candidates using complete operation medians,
+then measure those candidates in a separate three-pass run. Report the build
+configuration for each candidate. Tuning samples must not be mixed with the
+confirmation samples, and "best measured" must not be presented as a proven
+performance limit.
 
 ## Diagnosing CPU tuning in tiny-keccak
 

@@ -12,7 +12,8 @@ def load_measurements(path, *, resamples=2000):
     """Recompute summaries from the published batch times, without executing Rust."""
     data = json.loads(path.read_text(encoding="utf-8"))
     sampling = data["sampling"]
-    if data.get("schema_version") != 1 or sampling["passes"] != 1:
+    version = data.get("schema_version")
+    if version not in (1, 2) or (version == 1 and sampling["passes"] != 1):
         raise ValueError("Unsupported published measurement format")
     if sampling["outliers_removed"] != 0:
         raise ValueError("Published measurements must retain all samples")
@@ -22,14 +23,19 @@ def load_measurements(path, *, resamples=2000):
         if configuration not in data["configurations"] or (configuration, name) in seen:
             raise ValueError("Unknown configuration or duplicate measurement")
         seen.add((configuration, name))
-        iterations = measurement["iterations"]
-        items = measurement["work_items_per_iteration"]
-        elapsed = measurement["elapsed_ns"]
-        if (len(elapsed) != sampling["samples_per_case"] or
-                any(type(value) is not int or value <= 0 for value in [iterations, items, *elapsed])):
-            raise ValueError("Invalid sample count, elapsed time or timing denominator")
-        summary = stats.summarize([[value / (iterations * items) for value in elapsed]],
-                                  resamples=resamples)
+        recorded = [measurement] if version == 1 else measurement["passes"]
+        if len(recorded) != sampling["passes"]:
+            raise ValueError("Missing measurement pass")
+        passes = []
+        for batch in recorded:
+            iterations = batch["iterations"]
+            items = batch["work_items_per_iteration"]
+            elapsed = batch["elapsed_ns"]
+            if (len(elapsed) != sampling["samples_per_case"] or
+                    any(type(value) is not int or value <= 0 for value in [iterations, items, *elapsed])):
+                raise ValueError("Invalid sample count, elapsed time or timing denominator")
+            passes.append([value / (iterations * items) for value in elapsed])
+        summary = stats.summarize(passes, resamples=resamples)
         summaries.append({"configuration": configuration, "name": name, **summary})
     state = {"machine": {"processors": [data["cpu"]]},
              "plan": {"profile": {"samples": sampling["samples_per_case"], "passes": sampling["passes"]}},
@@ -50,6 +56,53 @@ def selection(configuration, built):
     return target, backend, recovery
 
 
+def render_batched(lines, state, summaries, *, include_reference):
+    """Keep compiler variants distinct instead of folding them into one cell."""
+    jobs = state["builds"]["jobs"]
+    values = {}
+    for row in summaries:
+        key = (row["configuration"], row["name"])
+        if key in values:
+            raise ValueError("Duplicate measurement")
+        values[key] = row["median_ns"]
+
+    def build_cells(configuration):
+        built = jobs[configuration]
+        target, backend, _ = selection(configuration, built)
+        flags = built.get("rustflags", built.get("configuration", {}).get("extra_rustflags", []))
+        slp = "disabled" if "no-vectorize-slp" in flags else "enabled"
+        return [TARGETS[target], BACKENDS[backend], slp]
+
+    def cell(configuration, name, divisor):
+        value = values.get((configuration, name))
+        return "—" if value is None else f"{value / divisor:.2f}"
+
+    for operation, heading, unit, divisor in [("verify_wire", "Verification", "µs", 1000),
+                                              ("sign", "Signing", "ms", 1000000),
+                                              ("key_gen", "Key generation", "ms", 1000000)]:
+        own_name = f"macro/native/{operation}/mixed"
+        matching = [configuration for configuration in jobs if (configuration, own_name) in values]
+        if not matching:
+            continue
+        header = ["Compiler target", "lean-sphincs Keccak", "LLVM SLP", f"lean-sphincs ({unit})"]
+        if include_reference:
+            header += [f"leanVM (unmodified, pinned revision) ({unit})",
+                       f"leanVM + local SIMD batching adapter ({unit})", "Measured speedup"]
+        lines += [f"### {heading}", "", "| " + " | ".join(header) + " |",
+                  "| --- | --- | --- | " + " | ".join(["---:"] * (len(header) - 3)) + " |"]
+        for configuration in matching:
+            cells = build_cells(configuration) + [cell(configuration, own_name, divisor)]
+            if include_reference:
+                batched_name = f"macro/batched/{operation}/mixed"
+                comparison = values.get((configuration, batched_name))
+                faster = "—" if comparison is None else f"{(comparison / values[(configuration, own_name)] - 1) * 100:+.1f}%"
+                cells += [cell(configuration, f"macro/reference/{operation}/mixed", divisor),
+                          cell(configuration, batched_name, divisor), faster]
+            lines.append("| " + " | ".join(cells) + " |")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def render(state, summaries, *, include_reference=True):
     machine = state["machine"]
     cpu = (machine.get("processors") or [{}])[0]
@@ -65,10 +118,12 @@ def render(state, summaries, *, include_reference=True):
     lines = ["## Native benchmark results", "", hardware, "",
              f"Compiler: {compiler_text}. Optimization level 3, Thin LTO, one codegen unit.", ""]
     profile = state["plan"]["profile"]
+    batched = any(row["name"].startswith("macro/batched/") for row in summaries)
     caption = (f"Median time per operation from {profile['samples'] * profile['passes']} samples "
                f"per configuration ({profile['passes']} pass{'es' if profile['passes'] != 1 else ''}).")
     if include_reference:
-        caption += " Measured speedup = `(leanVM / lean-sphincs - 1) × 100%`; negative values mean slower."
+        comparison = "leanVM batched adapter" if batched else "leanVM"
+        caption += f" Measured speedup = `({comparison} / lean-sphincs - 1) × 100%`; negative values mean slower."
     lines += [caption, ""]
     if include_reference:
         lines += ["Verification starts from encoded signatures; signing and key generation include serialization. "
@@ -82,6 +137,11 @@ def render(state, summaries, *, include_reference=True):
         if revision:
             lines += [f"leanVM: [native Rust leanSPHINCS implementation]"
                       f"(https://github.com/leanEthereum/leanVM/tree/{revision}/crates/lean_sphincs).", ""]
+        if batched:
+            lines += ["The batched column is a local experimental adapter over leanVM's public internals. "
+                      "It uses leanVM's SIMD hash API within one signature operation and is not stock leanVM.", ""]
+    if batched:
+        return render_batched(lines, state, summaries, include_reference=include_reference)
     selected = {name: selection(name, item) for name, item in state["builds"]["jobs"].items()}
     values = {}
     for row in summaries:
@@ -106,7 +166,7 @@ def render(state, summaries, *, include_reference=True):
         header = f"| Compiler target | lean-sphincs Keccak | lean-sphincs ({unit}) |"
         separator = "| --- | --- | ---: |"
         if include_reference:
-            header += f" leanVM ({unit}) | Measured speedup |"
+            header += f" leanVM (unmodified, pinned revision) ({unit}) | Measured speedup |"
             separator += " ---: | ---: |"
         lines += [header, separator]
         for target, backend in matching:
@@ -116,7 +176,8 @@ def render(state, summaries, *, include_reference=True):
                 reference = values.get((target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed"))
                 native = values[(target, backend, "libsecp256k1", f"macro/native/{operation}/mixed")]
                 faster = "—" if reference is None else f"{(reference / native - 1) * 100:+.1f}%"
-                row += " " + cell(target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed", divisor) + f" | {faster} |"
+                row += " " + cell(target, backend, "libsecp256k1", f"macro/reference/{operation}/mixed", divisor) + " |"
+                row += f" {faster} |"
             lines.append(row)
         lines.append("")
 

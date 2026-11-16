@@ -7,8 +7,8 @@ publish = false
 
 [dependencies]
 lean-sphincs = { path = "../.." }
-reference-primitives = { package = "primitives", git = "https://github.com/leanEthereum/leanVM", rev = "f7ba4999ae523b94c8d0969b32762c3effea4cbd" }
-reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "f7ba4999ae523b94c8d0969b32762c3effea4cbd" }
+reference-keccak = { package = "keccak256", git = "https://github.com/leanEthereum/leanVM", rev = "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a" }
+reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a" }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
 evm2 = { git = "https://github.com/alloy-rs/evm2", rev = "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1", default-features = false, features = ["std"] }
 secp256k1 = { version = "0.33.1", features = ["recovery"] }
@@ -29,6 +29,10 @@ tiny-keccak = ["alloy-primitives/tiny-keccak", "dep:tiny-keccak"]
 name = "verify"
 path = "verify.rs"
 harness = false
+
+[[test]]
+name = "batched"
+path = "batched_tests.rs"
 
 [[bench]]
 name = "codspeed"

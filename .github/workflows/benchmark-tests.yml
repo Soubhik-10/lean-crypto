@@ -1,0 +1,34 @@
+name: Benchmark adapter checks
+
+on:
+  pull_request:
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.py', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+  push:
+    branches: [main]
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.py', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adapter:
+    name: Adapter (${{ matrix.cpu }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        cpu: [x86-64, native]
+    env:
+      RUSTFLAGS: -C target-cpu=${{ matrix.cpu }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - name: Check adapters and report analysis
+        run: |
+          cargo +1.97.1 clippy --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --bench matrix --test batched --no-default-features -- -D warnings
+          cargo +1.97.1 test --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --test batched --no-default-features -- --test-threads=1
+          python3 -m unittest discover -s benchmarks/suite -p test_setup.py
