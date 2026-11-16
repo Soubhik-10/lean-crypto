@@ -26,15 +26,83 @@ Its scalar, vector and single-state accelerated paths are selected by compiler
 target features. The binary description records AVX2, AVX-512, paired FORS
 selection and actual batch width; labels are not inferred from the CPU name.
 
-## Comparison contract
+## Direct public API comparison
 
-The tables compare complete native APIs using identical leanSPHINCS parameters,
+The current README compares this crate with the unmodified native Rust
+`lean_sphincs` package from leanVM at
+[`4937c851eafb9e93bc7436eebe9e6dc8ae4c227a`](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs).
+The `direct` cases in [matrix.rs](evm2/matrix.rs) time these upstream functions:
+
+```rust
+reference_sphincs::key_gen(&seed.0);
+reference_sphincs::sign(&seed.0, &message.0);
+reference_sphincs::verify(&parsed_key, &message.0, &parsed_signature);
+```
+
+The corresponding calls are `lean_sphincs::key_gen`, `lean_sphincs::sign` and
+`lean_sphincs::verify`. Both library implementations are unchanged. The harness
+selects inputs and passes arguments/results through `black_box`.
+
+| Operation | lean-sphincs | Unmodified leanVM |
+| --- | --- | --- |
+| Verification | Borrows the encoded 7,740-byte signature and Alloy public key | Borrows its native public-key and signature objects, parsed before timing |
+| Signing | Returns its native `Result<Signature, SignError>` | Returns its native `LeanSphincsSignature`; no timed `to_bytes()` call |
+| Key generation | Returns its native `B256` public key | Returns its native `LeanSphincsPublicKey`; no timed `to_bytes()` call |
+
+The verification input representations therefore differ. These are native API
+timings, not a claim that both receive identical byte-format inputs. Seed/message
+pairs and scheme parameters are identical. Fixture generation, parsing for
+leanVM verification, and byte-for-byte correctness checks occur before timing.
+Signing and key generation recompute from the seed on every timed call; no
+previous result or persistent tree cache substitutes for either operation.
+
+leanVM uses its own hash implementation. All three measured builds enable its
+AVX-512 single-state permutation. The signature APIs do not call its separate
+batched hashing API. RustCrypto, tiny-keccak and asm-keccak select this crate's
+Alloy backend, not leanVM's. Both libraries share the compiler/target/LTO flags
+within each measured binary. `no-vectorize-slp` leaves explicit SIMD enabled.
+
+The `raw` preset measures six direct calls over the same 11-input corpus, with
+44 samples per pass and three passes. Sample offsets rotate across the corpus;
+44 is a multiple of 11, ensuring equal input weighting over each pass. Kernel
+order is shuffled each round. All samples are retained. Headline values use
+the lowest complete 132-sample median for each implementation and operation
+among three candidate builds, not the fastest individual sample or pass.
+
+The candidates are native RustCrypto and assembly builds with SLP disabled,
+plus an AVX-512 RustCrypto build with default SLP. They were selected using the
+earlier 25-configuration sweep. Full matched-build results retain every candidate;
+small differences between builds are not attributed to a hash-backend change
+inside leanVM. These observations do not establish a universal performance limit.
+
+Raw builds omit the `experimental-simd` benchmark feature. The builder checks
+that their compiled `experimental_adapter` marker is false, and every raw
+report contains only the six `direct/` cases. No local experimental signature implementation
+is compiled into or timed by these builds. No VM execution or proof generation
+is measured.
+
+Reproduce the candidates with:
+
+    python benchmarks/run.py build --profile raw --targets native --hashing portable,assembly --recovery libsecp256k1 --disable-slp
+    python benchmarks/run.py run --profile raw --targets native --hashing portable,assembly --recovery libsecp256k1 --disable-slp
+    python benchmarks/run.py build --profile raw --targets v4 --hashing portable --recovery libsecp256k1
+    python benchmarks/run.py run --profile raw --targets v4 --hashing portable --recovery libsecp256k1
+
+## Earlier wire-format comparison
+
+The earlier wire-format tables compare APIs using identical leanSPHINCS parameters,
 secret seeds, messages and expected wire encodings. Verification starts with a
 32-byte public key and a 7,740-byte signature. It includes leanVM's decoding into
 its internal representation and this crate's in-place reads. Signing includes
 signature serialization on both sides; key generation returns encoded public
 keys on both sides. The separately measured parsed-verification diagnostic is
 excluded from the main tables. No VM execution or proof generation is measured.
+
+The [format bridges](evm2/reference.rs) call the original upstream functions and
+add only decoding/serialization to match the encoded interface. They do not
+replace or optimize its cryptographic algorithms. Those earlier timings remain
+valid for that boundary; the current raw API timings use the different native
+boundary described above.
 
 Both implementations are compiled into the same binary with the same target,
 optimization and LTO settings. Any `no-vectorize-slp` setting applies to both.
@@ -59,6 +127,7 @@ a larger corpus before attributing them to an optimization.
 
 | Preset | Scope | Samples per case per pass | Separate passes | Batch target |
 | --- | --- | ---: | ---: | ---: |
+| raw | Direct unmodified public APIs; 11 positive inputs, experimental code excluded | 44 | 3 | 10 ms |
 | rust | All Rust operations, rejection and hash cases, both recovery providers | 40 | 1 | 10 ms |
 | comparison | Native APIs, unmodified dependency and local SIMD batching adapter; 11 positive inputs | 44 | 3 | 10 ms |
 | publication | Rotating-corpus signature operations and recovery | 500 | 3 | 200 ms |
@@ -269,22 +338,38 @@ machine or a CPU-time ratio do not establish consensus gas pricing.
 
 ## Published measurements
 
-The current signature comparison has two separate datasets:
+The current README uses [raw-api-measurements.json](raw-api-measurements.json):
+three candidate builds, six direct API calls, 44 samples per case per pass and
+three passes. It contains all 2,376 batch timings, their per-pass operation
+counts, exact compiler flags, binary/source hashes and the upstream revision.
+[RAW_RESULTS.md](RAW_RESULTS.md) shows every matched build. The headline selects
+the lowest complete median for each implementation and operation across these
+candidates. It does not select individual samples or the fastest pass.
+
+The [measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/60b8cea6fd898dc2d98020182f2639f21bcfcad0)
+matches every recorded source-file hash. Both signature libraries are unmodified;
+this snapshot adds only the direct-call harness and excludes the experimental
+implementation from its measured binaries. Recompute the tables without timing
+any code:
+
+    python benchmarks/run.py report --measurements benchmarks/raw-api-measurements.json
+
+The earlier local SIMD experiment has two separate datasets:
 
 - [simd-sweep.json](simd-sweep.json): all 25 CPU/backend/compiler configurations,
   11 samples per case and one pass. This selects candidates.
 - [simd-confirmation.json](simd-confirmation.json): both selected native-CPU builds,
   44 samples per case per pass and three passes, giving 132 samples per case.
-  This supplies the README's signature timings.
+  This supplies the archived local-prototype comparison, not the current README.
 
 Both use the same 11 key/message pairs: three specification fixtures and eight
-deterministic generated cases. The README selects the lowest complete confirmation
+deterministic generated cases. The archived experiment selects the lowest complete confirmation
 median for each implementation and operation; it does not select individual
 samples or the fastest pass. The selection and exact candidate binaries are
 recorded in the confirmation data. Small differences between the two builds are
 not claimed as statistically significant. Full matched-build tables show both.
 
-The [measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/75268418b47f99042c9176a0e8efaa080138a454)
+The [experimental source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/75268418b47f99042c9176a0e8efaa080138a454)
 was verified byte-for-byte against every recorded source-file hash. The captured
 base revision predates this snapshot because measurement occurred with
 uncommitted changes. `measurement_source_commit` identifies the complete measured

@@ -93,40 +93,33 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --featur
 CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
 
 Compiler: Rust 1.97.1; LLVM 22.1.6; MSVC target. Optimization level 3,
-Thin LTO, one codegen unit. Signature builds use `target-cpu=native` and
-`-C no-vectorize-slp`; explicit AVX-512 instructions remain enabled.
+Thin LTO, one codegen unit. Native CPU and AVX-512 builds were measured;
+the full tables record their exact compiler settings.
 
-**leanVM (unmodified, pinned revision)** calls the upstream native Rust
-[key-generation, signing and verification APIs](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs)
-at `4937c851eafb9e93bc7436eebe9e6dc8ae4c227a`. These builds use leanVM's
-AVX-512 single-state Keccak implementation.
+These are direct calls to each library's unmodified public APIs. **leanVM** means
+the native Rust [`lean_sphincs` crate at `4937c851`](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs).
+It uses its own Keccak implementation, including its AVX-512 single-state path
+in these builds. lean-sphincs uses `asm-keccak` for its best results below.
 
-**leanVM + local SIMD batching adapter** is an experimental
-[benchmark implementation](benchmarks/evm2/batched/mod.rs) built on that same
-revision's public internals and hashing APIs. It adds local tree/chain scheduling
-and wire handling, using eight-way SIMD hashing within one operation on one
-thread. It is not an upstream leanVM release or a production backend in this crate.
+Verification uses each library's native input: encoded signature bytes for
+lean-sphincs, and public-key/signature objects prepared before timing for leanVM.
+Signing and key generation return each library's native result, with no added
+serialization. Both recompute from the seed on every call. The experimental
+local SIMD prototype is excluded from these binaries and results.
 
-A separate 25-configuration sweep selected two builds for confirmation. Each
-operation was then measured over 44 samples per pass, three passes and 11 shared
-key/message pairs. The table reports the lowest complete confirmation median
-for each implementation and operation. Verification starts from encoded
-signatures; signing and key generation include serialization and recompute from
-the seed on every call. All timed samples are retained.
+Best complete medians across three candidate builds, with 44 samples per pass,
+three passes and 11 shared key/message pairs. Every timed sample is retained.
+Speedup is `(leanVM time / lean-sphincs time - 1) × 100%`, before rounding.
 
-lean-sphincs uses `asm-keccak` for its results below. Both leanVM columns use
-leanVM's own hashing code. Adapter speedup is
-`(lean-sphincs time / adapter time - 1) × 100%`, calculated before rounding.
+| Operation | lean-sphincs | leanVM (unmodified) | lean-sphincs speedup |
+| --- | ---: | ---: | ---: |
+| Verification (µs) | 89.09 | 119.29 | +33.9% |
+| Signing (ms) | 90.52 | 121.02 | +33.7% |
+| Key generation (ms) | 47.01 | 62.42 | +32.8% |
 
-| Operation | lean-sphincs | leanVM (unmodified, pinned revision) | leanVM + local SIMD batching adapter | Adapter speedup over lean-sphincs |
-| --- | ---: | ---: | ---: | ---: |
-| Verification (µs) | 88.33 | 119.12 | 38.71 | +128.2% |
-| Signing (ms) | 89.02 | 119.05 | 22.72 | +291.7% |
-| Key generation (ms) | 46.69 | 61.68 | 12.08 | +286.5% |
-
-[Matched confirmation tables](benchmarks/SIMD_RESULTS.md),
-[complete configuration sweep](benchmarks/SIMD_SWEEP.md), and
-[method, source snapshot and raw measurements](benchmarks/SUITE.md#published-measurements).
+[Full matched-build results](benchmarks/RAW_RESULTS.md),
+[raw measurements](benchmarks/raw-api-measurements.json), and
+[exact API calls and methodology](benchmarks/SUITE.md#direct-public-api-comparison).
 
 ### Ecrecover
 
