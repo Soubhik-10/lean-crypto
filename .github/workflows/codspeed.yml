@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   benchmarks:
-    name: Benchmarks (${{ matrix.backend }})
+    name: Benchmarks (${{ matrix.name }})
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -22,22 +22,42 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - backend: portable
+          - name: RustCrypto / SSE2
             features: ""
-          - backend: assembly
+            flags: '-C target-cpu=x86-64'
+            avx2: '0'
+          - name: asm-keccak / SSE2
             features: asm-keccak
+            flags: '-C target-cpu=x86-64'
+            avx2: '0'
+          - name: RustCrypto / AVX2
+            features: ""
+            flags: '-C target-cpu=x86-64-v3'
+            avx2: '1'
+          - name: asm-keccak / AVX2
+            features: asm-keccak
+            flags: '-C target-cpu=x86-64-v3'
+            avx2: '1'
     defaults:
       run:
         working-directory: benchmarks/evm2
     env:
       RUSTUP_TOOLCHAIN: 1.97.1
       FEATURES: ${{ matrix.features }}
+      RUSTFLAGS: ${{ matrix.flags }}
+      LEAN_SPHINCS_EXPECT_AVX2: ${{ matrix.avx2 }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
       - name: Install Rust toolchain
         run: rustup toolchain install 1.97.1 --profile minimal
+      - name: Check runner instruction support
+        run: |
+          if [[ "$LEAN_SPHINCS_EXPECT_AVX2" == 1 ]] && ! grep -qw avx2 /proc/cpuinfo; then
+            echo 'The AVX2 benchmark requires an AVX2-capable runner.' >&2
+            exit 1
+          fi
       - name: Validate signatures
         run: cargo test --manifest-path ../../Cargo.toml --release --locked --features "$FEATURES"
       - name: Install cargo-codspeed

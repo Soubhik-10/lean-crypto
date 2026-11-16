@@ -42,3 +42,17 @@ The security workflow configures 256 cases per push/PR and 10,000 per nightly
 job, covering the three hash backends, baseline/CPU-tuned x86-64, and ARM64.
 Manual workflow dispatch accepts a larger campaign size. Tests supplement
 independent security review; passing them does not establish an audit.
+
+## Hash cache regression
+
+The isolated cache test enables Alloy's process-global Keccak cache and checks
+that it is active with a public probe. It then verifies that key generation,
+signing and verification produce no cache accesses, preventing secret hash
+preimages from being retained when an application enables the cache.
+
+```sh
+cargo +1.97.1 test --release --locked --manifest-path testing/Cargo.toml --test cache_regression --features cache-regression
+```
+
+The security workflow runs this test on every relevant push and pull request.
+The cache features are confined to this test package.

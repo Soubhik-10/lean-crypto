@@ -31,6 +31,22 @@ defaults:
     shell: bash
 
 jobs:
+  cache_regression:
+    name: Secret hash cache regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      RUSTFLAGS: '-C target-cpu=x86-64'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - name: Check cache isolation
+        run: |
+          cargo +1.97.1 clippy --locked --manifest-path testing/Cargo.toml --test cache_regression --features cache-regression -- -D warnings
+          cargo +1.97.1 test --release --locked --manifest-path testing/Cargo.toml --test cache_regression --features cache-regression
+
   differential:
     name: Differential (${{ matrix.name }})
     runs-on: ${{ matrix.os }}

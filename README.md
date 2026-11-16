@@ -46,9 +46,11 @@ Older leanSPHINCS layouts using `root || public parameter` are incompatible.
 
 The implementation reads fixed-size signature fields in place. FORS roots and
 WOTS chain ends are streamed into Alloy hashers instead of collecting temporary
-arrays. Small addressed hashes reuse a contiguous stack buffer. On baseline
-x86-64, independent FORS openings use paired SSE2 Keccak hashing through safe
-SIMD types. AVX2 builds and other targets use the selected Alloy backend.
+arrays. Small addressed hashes reuse a contiguous stack buffer. On
+x86-64, verification batches independent FORS openings using two SSE2 lanes.
+AVX2 builds use four lanes for FORS and batch active WOTS+C chains within a
+small window. Both paths use safe SIMD types and stream results in signature
+order. Other targets use the selected Alloy backend.
 
 Signing builds each tree once. A roughly 32 KiB stack cache retains the public
 nodes of the top tree so its root and selected authentication path share the
@@ -79,7 +81,8 @@ all three operations. The [differential test runner](testing/README.md) and
 ## Continuous benchmarks
 
 CodSpeed tracks key generation, signing, verification, rejection, Keccak hashing
-and evm2 ecrecover with RustCrypto and `asm-keccak`. It runs on pushes to `main`,
+and evm2 ecrecover with RustCrypto and `asm-keccak`, with separate SSE2 and AVX2
+builds. It runs on pushes to `main`,
 pull requests and manual dispatch. Its CPU simulation results track regressions;
 the tables below report native wall-clock measurements.
 
@@ -89,6 +92,8 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --featur
 ```
 
 ## Native benchmark results
+
+These measurements use source snapshot `60b8cea`, before four-lane AVX2 verification.
 
 CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
 

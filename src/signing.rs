@@ -7,7 +7,7 @@ use crate::{
     tree::{TopTree, build_xmss},
     wots,
 };
-use alloy_primitives::{B128, B256, keccak256};
+use alloy_primitives::{B128, B256, keccak256_uncached};
 use core::fmt;
 
 const COUNTER_LIMIT: u64 = 1 << 32;
@@ -75,9 +75,10 @@ fn expand_key(seed: &B256) -> (B128, B256) {
     let mut input = [0; SEED_TAG.len() + 32 + 1];
     input[..SEED_TAG.len()].copy_from_slice(SEED_TAG);
     input[SEED_TAG.len()..SEED_TAG.len() + 32].copy_from_slice(seed.as_slice());
-    let pk_seed = truncate(keccak256(input));
+    // The hash input contains the seed and must bypass Alloy's global cache.
+    let pk_seed = truncate(keccak256_uncached(input));
     input[SEED_TAG.len() + 32] = 1;
-    (pk_seed, keccak256(input))
+    (pk_seed, keccak256_uncached(input))
 }
 
 fn randomizer(sk_prf: &B256, pk_seed: &B128, message: &B256) -> B128 {
@@ -87,7 +88,7 @@ fn randomizer(sk_prf: &B256, pk_seed: &B128, message: &B256) -> B128 {
     input[49] = SEED_TAG.len() as u8;
     input[50..50 + SEED_TAG.len()].copy_from_slice(SEED_TAG);
     input[50 + SEED_TAG.len()..].copy_from_slice(message.as_slice());
-    truncate(keccak256(input))
+    truncate(keccak256_uncached(input))
 }
 
 fn sign_with_limit(

@@ -285,6 +285,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         },
         keccak_backend: if cfg!(feature = "asm-keccak") {
             "Alloy asm-keccak"
+        } else if cfg!(feature = "tiny-keccak") {
+            "Alloy tiny-keccak"
         } else {
             "Alloy default (RustCrypto sha3)"
         },

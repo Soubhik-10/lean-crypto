@@ -60,7 +60,10 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed
 cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --features asm-keccak
 ```
 
-In CI, each backend has its own benchmark namespace (`portable` or `assembly`).
+CI measures RustCrypto and `asm-keccak` with both `target-cpu=x86-64` (SSE2)
+and `target-cpu=x86-64-v3` (AVX2). The SSE2 series retain the `portable` and
+`assembly` namespaces; AVX2 uses `portable_avx2` and `assembly_avx2`.
+The benchmark checks the compiler's AVX2 selection at build time.
 The workflow uses OIDC authentication and CodSpeed CPU simulation on Linux for
 consistent regression comparisons. The existing wall-clock target remains the
 source of local elapsed-time measurements and ecrecover-relative gas estimates.

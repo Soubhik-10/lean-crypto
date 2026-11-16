@@ -231,7 +231,7 @@ That cryptographic address labels the layer, tree, operation and node or chain p
 | `params.rs` | Fixed scheme parameters |
 | `signature.rs` | Reading fields directly from signature bytes |
 | `hash.rs` | Hash input layout, domain labels and message digest |
-| `hash/pair.rs` | Paired SIMD Keccak for the supported baseline x86-64 path |
+| `hash/batch.rs` | SIMD Keccak for the SSE2 and AVX2 verification paths |
 | `fors.rs` | FORS signing and recovery |
 | `wots.rs` | WOTS+C encoding, counters, chains and recovery |
 | `tree.rs` | Tree construction and authentication paths |
@@ -266,11 +266,12 @@ Reusing the buffer reduces repeated setup and copying. It does not reuse a previ
 
 ## Process independent FORS paths together
 
-Two different FORS trees can be checked independently. On x86-64 builds with SSE2 enabled and AVX2 disabled, our code processes two paths together with SIMD operations.
+FORS trees can be checked independently. On x86-64, verification follows two
+paths together on SSE2 and four on AVX2. SIMD lets one instruction advance
+several independent hash computations within the same thread.
 
-SIMD means one instruction can operate on several data lanes. The two paths still compute their own hashes; the CPU carries out parts of both computations together. This is instruction-level parallelism within a thread, rather than spawning a second operating-system thread.
-
-AVX2-enabled builds use the selected Alloy hashing backend instead of this paired path. [Paired FORS implementation](https://github.com/Soubhik-10/lean-sphincs/blob/5af37e11ba0fb8f6bc54c6318568c7c34438fee5/src/fors.rs).
+AVX2 also batches independent WOTS+C chain steps. It buffers a small window of
+chains and feeds the finished values to the hasher in signature order. [FORS implementation](../src/fors.rs) · [WOTS+C implementation](../src/wots.rs)
 
 ## Build signing trees once
 
@@ -294,7 +295,7 @@ Our benchmark uses three hashing choices:
 
 The production crate directly exposes `asm-keccak`; the isolated benchmark manifest also exposes the tiny-keccak comparison configuration.
 
-These labels describe our crate's Alloy hashing choice. Our SSE2 and SSE4.2 verification builds also use the paired FORS path described above. leanVM has its own hashing code: on this x86-64 machine its single-state path is scalar or AVX-512, while its batch path selects scalar, four-way AVX2 or eight-way AVX-512 according to the compiler target. Changing our Alloy backend does not switch leanVM to that backend.
+These labels describe our crate's Alloy hashing choice. The published SSE2 and SSE4.2 measurements used the paired FORS path. The published AVX2 and native measurements predate four-lane verification. leanVM has its own hashing code: on this x86-64 machine its single-state path is scalar or AVX-512, while its batch path selects scalar, four-way AVX2 or eight-way AVX-512 according to the compiler target. Changing our Alloy backend does not switch leanVM to that backend.
 
 SSE2, SSE4.2, AVX2 and AVX-512 name CPU instruction capabilities. They describe what the compiler may use. “Native” tells the compiler to tune for the machine doing the build. These are compilation settings, rather than different signature formats.
 
