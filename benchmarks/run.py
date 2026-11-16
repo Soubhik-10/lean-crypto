@@ -96,11 +96,11 @@ def selected_plan(args, config, capabilities):
                     "groups": groups, "case_count": count,
                 })
     for job in jobs:
-        # LLVM 22 SLP regresses the scalar tiny-keccak permutation with AVX-512.
+        # LLVM 22 SLP regresses tiny-keccak with AVX2 and AVX-512.
         affected_tiny = (
             job["keccak"] == "tiny"
-            and job["target"]["id"] in ("v4", "native")
-            and capabilities["features"].get("avx512f", False)
+            and job["target"]["id"] in ("v3", "v4", "native")
+            and capabilities["features"].get("avx2", False)
             and not getattr(args, "unmodified_tiny", False)
         )
         if affected_tiny or getattr(args, "disable_slp", False):

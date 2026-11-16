@@ -95,14 +95,14 @@ data costs are excluded.
 ## Diagnosing CPU tuning in tiny-keccak
 
 On the Ryzen 9 8940HX with Rust 1.97.1 / LLVM 22.1.6, automatic SLP
-vectorization turns tiny-keccak's single-state permutation into a slower mix of
-scalar and AVX-512 operations. The controlled permutation probe reproduced the
+vectorization introduces expensive lane shuffles in tiny-keccak, including
+AVX2 verification and AVX-512 single-state hashing. The controlled permutation probe reproduced the
 slowdown; disabling SLP removed it. Disabling loop vectorization, lowering only
 the dependency's optimization level, and disabling SLP only for that dependency
 did not fix the final Thin LTO binary.
 
-The runner automatically disables SLP in tiny-keccak AVX-512 and native builds
-when the host supports AVX-512. The setting covers all compiled crates and Thin LTO.
+The runner automatically disables SLP in tiny-keccak AVX2, AVX-512 and native
+builds when the host supports AVX2. The setting covers all compiled crates and Thin LTO.
 It preserves target CPU features and hand-written SIMD paths. It is a compiler
 setting for the final application build; dependency profile settings alone are
 insufficient. It can affect other generated code, so its flags and results are

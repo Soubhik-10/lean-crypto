@@ -93,8 +93,8 @@ class PlanTests(unittest.TestCase):
             feature: True for target in config["targets"] for feature in target["requires"]}}
         jobs = runner.selected_plan(options, config, capabilities)["jobs"]
         fixed = [job for job in jobs if "extra_rustflags" in job]
-        self.assertEqual(len(fixed), 4)
-        self.assertEqual({job["target"]["id"] for job in fixed}, {"v4", "native"})
+        self.assertEqual(len(fixed), 6)
+        self.assertEqual({job["target"]["id"] for job in fixed}, {"v3", "v4", "native"})
         self.assertTrue(all(job["keccak"] == "tiny" for job in fixed))
         self.assertTrue(all(job["id"].endswith("-no-slp") for job in fixed))
         options.unmodified_tiny = True
