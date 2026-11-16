@@ -8,6 +8,8 @@ The library supports key generation, deterministic signing and verification in
 `no_std` environments. Its API uses Alloy types and performs no heap allocation.
 The optional `asm-keccak` feature enables assembly-accelerated Keccak hashing.
 
+The [beginner guide](docs/guide.md) explains the scheme, implementation and benchmarks.
+
 ```rust
 use lean_sphincs::{B256, SignError, key_gen, sign, verify};
 
@@ -71,7 +73,8 @@ cargo doc --no-deps --all-features
 Tests cover all 35 pinned key-generation, signing and verification vectors,
 byte-for-byte deterministic signatures, round trips, counter-exhaustion errors,
 every-byte mutation checks, malformed encodings, and zero allocations across
-all three operations.
+all three operations. The [differential test runner](testing/README.md) and
+[coverage-guided fuzzers](fuzz/README.md) compare this crate with leanVM.
 
 ## Continuous benchmarks
 

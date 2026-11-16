@@ -7,6 +7,7 @@ publish = false
 
 [dependencies]
 lean-sphincs = { path = "../.." }
+reference-primitives = { package = "primitives", git = "https://github.com/leanEthereum/leanVM", rev = "f7ba4999ae523b94c8d0969b32762c3effea4cbd" }
 reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "f7ba4999ae523b94c8d0969b32762c3effea4cbd" }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
 evm2 = { git = "https://github.com/alloy-rs/evm2", rev = "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1", default-features = false, features = ["std"] }
@@ -16,10 +17,13 @@ serde_json = "1"
 
 divan = { package = "codspeed-divan-compat", git = "https://github.com/CodSpeedHQ/codspeed-rust", rev = "aa1bc87957a9c69f09c40fc2de1cf2355a96b7aa", version = "6.0.0" }
 
+tiny-keccak = { version = "=2.0.2", optional = true, features = ["keccak"] }
+
 [features]
 default = ["secp256k1"]
 secp256k1 = ["evm2/secp256k1"]
 asm-keccak = ["lean-sphincs/asm-keccak", "evm2/asm-keccak"]
+tiny-keccak = ["alloy-primitives/tiny-keccak", "dep:tiny-keccak"]
 
 [[bench]]
 name = "verify"
@@ -30,6 +34,17 @@ harness = false
 name = "codspeed"
 path = "codspeed.rs"
 harness = false
+
+[[bench]]
+name = "matrix"
+path = "matrix.rs"
+harness = false
+
+[[bench]]
+name = "keccak_codegen"
+path = "keccak_codegen.rs"
+harness = false
+required-features = ["tiny-keccak"]
 
 [profile.bench]
 lto = "thin"

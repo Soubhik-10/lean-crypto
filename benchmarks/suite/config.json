@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "toolchain": "1.97.1",
+  "profiles": {
+    "rust": {
+      "samples": 40,
+      "sample_ms": 10,
+      "warmup_ms": 100,
+      "passes": 1,
+      "extra_cases": 0,
+      "groups": [
+        "macro",
+        "reject",
+        "hash"
+      ],
+      "per_fixture": false,
+      "cooldown_seconds": 2
+    },
+    "publication": {
+      "samples": 500,
+      "sample_ms": 200,
+      "warmup_ms": 500,
+      "passes": 3,
+      "extra_cases": 8,
+      "groups": [
+        "macro"
+      ],
+      "per_fixture": false
+    },
+    "comprehensive": {
+      "samples": 500,
+      "sample_ms": 200,
+      "warmup_ms": 500,
+      "passes": 3,
+      "extra_cases": 8,
+      "groups": [
+        "macro",
+        "reject",
+        "hash"
+      ],
+      "per_fixture": true
+    },
+    "hashes": {
+      "samples": 500,
+      "sample_ms": 100,
+      "warmup_ms": 500,
+      "passes": 3,
+      "extra_cases": 0,
+      "groups": [
+        "hash"
+      ],
+      "per_fixture": false
+    },
+    "quick": {
+      "passes": 1,
+      "samples": 30,
+      "groups": [
+        "macro"
+      ],
+      "sample_ms": 10,
+      "extra_cases": 0,
+      "warmup_ms": 100,
+      "per_fixture": false
+    }
+  },
+  "targets": [
+    {
+      "id": "baseline",
+      "cpu": "x86-64",
+      "requires": [
+        "sse2"
+      ]
+    },
+    {
+      "id": "v2",
+      "cpu": "x86-64-v2",
+      "requires": [
+        "cmpxchg16b",
+        "lahf_sahf",
+        "popcnt",
+        "sse2",
+        "sse3",
+        "sse4.1",
+        "sse4.2",
+        "ssse3"
+      ]
+    },
+    {
+      "id": "v3",
+      "cpu": "x86-64-v3",
+      "requires": [
+        "avx",
+        "avx2",
+        "bmi1",
+        "bmi2",
+        "cmpxchg16b",
+        "f16c",
+        "fma",
+        "lahf_sahf",
+        "lzcnt",
+        "movbe",
+        "popcnt",
+        "sse2",
+        "sse3",
+        "sse4.1",
+        "sse4.2",
+        "ssse3"
+      ]
+    },
+    {
+      "id": "v4",
+      "cpu": "x86-64-v4",
+      "requires": [
+        "avx",
+        "avx2",
+        "avx512bw",
+        "avx512cd",
+        "avx512dq",
+        "avx512f",
+        "avx512vl",
+        "bmi1",
+        "bmi2",
+        "cmpxchg16b",
+        "f16c",
+        "fma",
+        "lahf_sahf",
+        "lzcnt",
+        "movbe",
+        "popcnt",
+        "sse2",
+        "sse3",
+        "sse4.1",
+        "sse4.2",
+        "ssse3"
+      ]
+    },
+    {
+      "id": "native",
+      "cpu": "native",
+      "requires": [
+        "sse2"
+      ]
+    }
+  ],
+  "keccak": [
+    "portable",
+    "tiny",
+    "assembly"
+  ],
+  "ecrecover": [
+    "libsecp256k1",
+    "k256"
+  ],
+  "seed": 20261115,
+  "cooldown_seconds": 10
+}

@@ -1,0 +1,1064 @@
+{
+  "schema_version": 1,
+  "description": "Ecrecover-only measurement summary; raw samples retained locally",
+  "started_utc": "2026-11-16T06:50:05.208853+00:00",
+  "finished_utc": "2026-11-16T06:59:00.725413+00:00",
+  "machine": {
+    "processors": [
+      {
+        "CurrentClockSpeed": 2401,
+        "L2CacheSize": 16384,
+        "L3CacheSize": 65536,
+        "Manufacturer": "AuthenticAMD",
+        "MaxClockSpeed": 2401,
+        "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "memory_bytes": 33514356736,
+    "os_caption": "Microsoft Windows 11 Home Single Language",
+    "os_build": "26200",
+    "bios_version": "G614PR.316",
+    "power_scheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "ac_line_status": 1
+  },
+  "boost": "disabled",
+  "samples_per_case": 200,
+  "passes": 1,
+  "target_batch_ms": 20,
+  "logical_cpu": 2,
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
+  "source_revision": "30169b7353534c5d592086772bcc99a1ba9ffe96",
+  "source_files": {
+    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
+    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
+    "benchmarks/evm2/Cargo.lock": "2296ca2732484209fb120adaeef9a4c53d69929069963450b6aa83d259710922",
+    "benchmarks/evm2/Cargo.toml": "4a3f3882f031cc2e4825b3553a8760a578c7bf7b7ee7ba983502921ea0720e77",
+    "benchmarks/evm2/README.md": "83d11469d4670ba85b3acddec99ff689b799cb4497093ea5c92fce57b7e1462c",
+    "benchmarks/evm2/codspeed.rs": "ad70cf075c48f60b5217435998cdba7140a666fd6ee560171e77444f3aebe636",
+    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
+    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
+    "benchmarks/evm2/matrix.rs": "0d83cc50f8f73ed37114e1c06d70e2b876eb251f92df4eec91f270dc4cdf477f",
+    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
+    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
+    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
+    "benchmarks/evm2/verify.rs": "f5ce7dcd40c03edfd4a407c33ebd66771aafb25e91c370dc94c95da312455091",
+    "benchmarks/run.py": "ebdb1de4252d7ab8486abb3547108f23ff74cd8fa7a9e48a200c80da8eb924de",
+    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
+    "benchmarks/suite/config.json": "a9a5b42296b591cbc66fa96744773a353d6c589dc5439996fff532082efac09f",
+    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
+    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
+    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
+    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
+    "benchmarks/suite/test_setup.py": "3540f94264f64e1667e0dfb228498b43f2eaf5a606a7d3172192728b4a1aa7a3",
+    "src/fors.rs": "1c07ea86ff0221d87cd0176a0e6cc55d09dde8eb4ec5c8212cce0bb11cf1d009",
+    "src/hash.rs": "0b80273e8003276d803d656ce1be6e1a9695faeb527717d7e9d3f6d261c51e55",
+    "src/hash/pair.rs": "04fbf2437d1a54dca21dab6593f5418c0301f84eab3519a9d2634c105ee673ea",
+    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
+    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
+    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
+    "src/signing.rs": "562b9efe19d35f381eca60678c811f487b72b8f7fe9e409d7c46fa90cf4b2dc7",
+    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
+    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
+    "src/wots.rs": "5b7a99e8b1303694ba596f65fd1582ca59d29a630862c6bd16ce7a17f37ddeab",
+    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
+    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
+    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
+    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
+    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
+  },
+  "frequency_note": "OS counters reported nominal frequency; effective clocks were not measured.",
+  "results": [
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-assembly-k256",
+      "max_ns": 3320229.296875,
+      "mean_ns": 184661.119140625,
+      "median_ci95_ns": [
+        126657.7197265625,
+        142572.4609375
+      ],
+      "median_ns": 133517.7734375,
+      "min_ns": 109825.78125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 110197.24609375,
+      "p95_ns": 182797.5390625,
+      "p99_ns": 1911443.1835937398,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        133517.7734375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 335476.42828772054,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": [
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-assembly-libsecp256k1",
+      "max_ns": 110299.609375,
+      "mean_ns": 86118.765625,
+      "median_ci95_ns": [
+        84449.0234375,
+        84846.484375
+      ],
+      "median_ns": 84592.1875,
+      "min_ns": 83551.171875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83989.296875,
+      "p95_ns": 95852.65624999999,
+      "p99_ns": 101193.54296875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        84592.1875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 4064.5044264193657,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": [
+        "secp256k1",
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-portable-k256",
+      "max_ns": 113895.703125,
+      "mean_ns": 110621.771484375,
+      "median_ci95_ns": [
+        110487.109375,
+        110570.703125
+      ],
+      "median_ns": 110542.578125,
+      "min_ns": 110330.078125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 110373.88671875,
+      "p95_ns": 110980.80078125,
+      "p99_ns": 112488.8515625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        110542.578125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 406.5798560251475,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": []
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-portable-libsecp256k1",
+      "max_ns": 116521.875,
+      "mean_ns": 92157.15234375,
+      "median_ci95_ns": [
+        89217.7001953125,
+        92224.4140625
+      ],
+      "median_ns": 90678.515625,
+      "min_ns": 83651.5625,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 84438.06640625,
+      "p95_ns": 104804.47265624999,
+      "p99_ns": 114911.0390625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        90678.515625
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 6916.562771150275,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": [
+        "secp256k1"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-tiny-k256",
+      "max_ns": 112226.953125,
+      "mean_ns": 110197.126953125,
+      "median_ci95_ns": [
+        110090.234375,
+        110152.744140625
+      ],
+      "median_ns": 110119.53125,
+      "min_ns": 109886.71875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 109954.55078125,
+      "p95_ns": 110749.66796875,
+      "p99_ns": 111930.7890625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        110119.53125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 328.58988014263724,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": [
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "baseline-tiny-libsecp256k1",
+      "max_ns": 86139.84375,
+      "mean_ns": 83805.38671875,
+      "median_ci95_ns": [
+        83700.0,
+        83742.7734375
+      ],
+      "median_ns": 83719.3359375,
+      "min_ns": 83576.171875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83617.55859375,
+      "p95_ns": 84111.796875,
+      "p99_ns": 85631.34765625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        83719.3359375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 319.7851952168623,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64"
+      ],
+      "features": [
+        "secp256k1",
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-assembly-k256",
+      "max_ns": 175625.390625,
+      "mean_ns": 125152.236328125,
+      "median_ci95_ns": [
+        117766.6015625,
+        125324.609375
+      ],
+      "median_ns": 121226.7578125,
+      "min_ns": 110782.421875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 111025.37109375,
+      "p95_ns": 155632.07031249997,
+      "p99_ns": 174284.41015625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        121226.7578125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 14193.306811685234,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": [
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-assembly-libsecp256k1",
+      "max_ns": 115308.59375,
+      "mean_ns": 91839.7109375,
+      "median_ci95_ns": [
+        85366.015625,
+        93238.8671875
+      ],
+      "median_ns": 89570.8984375,
+      "min_ns": 83372.65625,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83432.4609375,
+      "p95_ns": 107330.05859375,
+      "p99_ns": 111491.85937499999,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        89570.8984375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8039.669528911041,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": [
+        "secp256k1",
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-portable-k256",
+      "max_ns": 112835.9375,
+      "mean_ns": 110800.951171875,
+      "median_ci95_ns": [
+        110707.03125,
+        110754.4921875
+      ],
+      "median_ns": 110732.03125,
+      "min_ns": 110498.828125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 110569.0234375,
+      "p95_ns": 111174.90234375,
+      "p99_ns": 112720.796875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        110732.03125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 345.5391619710861,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": []
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-portable-libsecp256k1",
+      "max_ns": 121704.296875,
+      "mean_ns": 93457.263671875,
+      "median_ci95_ns": [
+        88962.109375,
+        95373.828125
+      ],
+      "median_ns": 91514.0625,
+      "min_ns": 83560.546875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83658.59375,
+      "p95_ns": 108944.86328124996,
+      "p99_ns": 116934.23046874997,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        91514.0625
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8442.472941874226,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": [
+        "secp256k1"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-tiny-k256",
+      "max_ns": 113558.984375,
+      "mean_ns": 111556.43359375,
+      "median_ci95_ns": [
+        111444.921875,
+        111528.7109375
+      ],
+      "median_ns": 111473.6328125,
+      "min_ns": 111196.484375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 111316.2109375,
+      "p95_ns": 112068.3984375,
+      "p99_ns": 113082.37109375,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        111473.6328125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 318.7490760458315,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": [
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "native-tiny-libsecp256k1",
+      "max_ns": 122294.140625,
+      "mean_ns": 94793.4453125,
+      "median_ci95_ns": [
+        91485.546875,
+        95470.8984375
+      ],
+      "median_ns": 93049.8046875,
+      "min_ns": 84659.375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 85290.5859375,
+      "p95_ns": 110478.02734374997,
+      "p99_ns": 120542.59374999999,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        93049.8046875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8147.839078979281,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "features": [
+        "secp256k1",
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-assembly-k256",
+      "max_ns": 187726.953125,
+      "mean_ns": 130424.361328125,
+      "median_ci95_ns": [
+        123379.6875,
+        130615.625
+      ],
+      "median_ns": 126945.8984375,
+      "min_ns": 108998.828125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 112159.0234375,
+      "p95_ns": 158972.20703124997,
+      "p99_ns": 175693.87109374994,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        126945.8984375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 15238.653381193368,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": [
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-assembly-libsecp256k1",
+      "max_ns": 86647.265625,
+      "mean_ns": 84374.458984375,
+      "median_ci95_ns": [
+        84269.53125,
+        84348.8720703125
+      ],
+      "median_ns": 84309.1796875,
+      "min_ns": 83659.765625,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 84039.70703125,
+      "p95_ns": 84869.5703125,
+      "p99_ns": 86349.1015625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        84309.1796875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 368.10318822246563,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": [
+        "secp256k1",
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-portable-k256",
+      "max_ns": 111207.8125,
+      "mean_ns": 109175.228515625,
+      "median_ci95_ns": [
+        109075.1953125,
+        109133.5986328125
+      ],
+      "median_ns": 109099.609375,
+      "min_ns": 108867.578125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 108937.8515625,
+      "p95_ns": 109671.46484375,
+      "p99_ns": 111157.23046875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        109099.609375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 339.21952657978295,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": []
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-portable-libsecp256k1",
+      "max_ns": 86871.875,
+      "mean_ns": 84273.634765625,
+      "median_ci95_ns": [
+        84083.0078125,
+        84173.2421875
+      ],
+      "median_ns": 84111.328125,
+      "min_ns": 83932.421875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 84001.953125,
+      "p95_ns": 85067.4609375,
+      "p99_ns": 86163.53125,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        84111.328125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 418.59574165275353,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": [
+        "secp256k1"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-tiny-k256",
+      "max_ns": 190207.8125,
+      "mean_ns": 123683.80078125,
+      "median_ci95_ns": [
+        116618.6669921875,
+        121618.1201171875
+      ],
+      "median_ns": 119304.6875,
+      "min_ns": 109300.78125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 110641.25,
+      "p95_ns": 152444.96093749997,
+      "p99_ns": 179931.72656249994,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        119304.6875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 14959.197103170589,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": [
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v2-tiny-libsecp256k1",
+      "max_ns": 86855.46875,
+      "mean_ns": 84172.654296875,
+      "median_ci95_ns": [
+        84067.96875,
+        84098.4375
+      ],
+      "median_ns": 84081.640625,
+      "min_ns": 83967.578125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 84006.93359375,
+      "p95_ns": 84530.09765625,
+      "p99_ns": 86093.6484375,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        84081.640625
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 332.528659292972,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "features": [
+        "secp256k1",
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-assembly-k256",
+      "max_ns": 173687.5,
+      "mean_ns": 126858.28515625,
+      "median_ci95_ns": [
+        120460.0537109375,
+        127331.4453125
+      ],
+      "median_ns": 124186.1328125,
+      "min_ns": 108908.59375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 109153.69140625,
+      "p95_ns": 151319.84374999994,
+      "p99_ns": 164587.00781249997,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        124186.1328125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 13956.268935289256,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": [
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-assembly-libsecp256k1",
+      "max_ns": 86321.484375,
+      "mean_ns": 83771.8515625,
+      "median_ci95_ns": [
+        83656.0546875,
+        83720.8984375
+      ],
+      "median_ns": 83677.9296875,
+      "min_ns": 83522.265625,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83560.5078125,
+      "p95_ns": 84175.64453125,
+      "p99_ns": 85670.3359375,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        83677.9296875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 369.7774331814953,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": [
+        "secp256k1",
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-portable-k256",
+      "max_ns": 111893.359375,
+      "mean_ns": 109012.232421875,
+      "median_ci95_ns": [
+        108886.5185546875,
+        108948.046875
+      ],
+      "median_ns": 108917.96875,
+      "min_ns": 108695.3125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 108762.32421875,
+      "p95_ns": 109543.828125,
+      "p99_ns": 110982.7578125,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        108917.96875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 393.0203656364205,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": []
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-portable-libsecp256k1",
+      "max_ns": 114979.6875,
+      "mean_ns": 94664.31640625,
+      "median_ci95_ns": [
+        89530.8544921875,
+        98223.046875
+      ],
+      "median_ns": 94689.84375,
+      "min_ns": 83585.9375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83686.3671875,
+      "p95_ns": 108326.15234374997,
+      "p99_ns": 112535.74999999999,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        94689.84375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8371.49929750965,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": [
+        "secp256k1"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-tiny-k256",
+      "max_ns": 179030.078125,
+      "mean_ns": 123614.763671875,
+      "median_ci95_ns": [
+        116827.34375,
+        122820.703125
+      ],
+      "median_ns": 119891.9921875,
+      "min_ns": 108969.921875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 109156.875,
+      "p95_ns": 155098.046875,
+      "p99_ns": 177742.19921875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        119891.9921875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 14595.379951351517,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": [
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v3-tiny-libsecp256k1",
+      "max_ns": 85888.28125,
+      "mean_ns": 83842.083984375,
+      "median_ci95_ns": [
+        83737.890625,
+        83765.0390625
+      ],
+      "median_ns": 83753.515625,
+      "min_ns": 83645.703125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83667.48046875,
+      "p95_ns": 84148.359375,
+      "p99_ns": 85605.23828125,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        83753.515625
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 305.3731094350887,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v3"
+      ],
+      "features": [
+        "secp256k1",
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-assembly-k256",
+      "max_ns": 178110.9375,
+      "mean_ns": 122130.126953125,
+      "median_ci95_ns": [
+        115716.015625,
+        121727.734375
+      ],
+      "median_ns": 118436.1328125,
+      "min_ns": 109080.078125,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 109360.4296875,
+      "p95_ns": 142913.61328124997,
+      "p99_ns": 177353.3984375,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        118436.1328125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 13040.234802035517,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": [
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-assembly-libsecp256k1",
+      "max_ns": 114303.90625,
+      "mean_ns": 92745.142578125,
+      "median_ci95_ns": [
+        87724.0234375,
+        94563.28125
+      ],
+      "median_ns": 90383.203125,
+      "min_ns": 83502.34375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83578.45703125,
+      "p95_ns": 109433.74999999999,
+      "p99_ns": 113363.66015625,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        90383.203125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8194.034594978244,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": [
+        "secp256k1",
+        "asm-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-portable-k256",
+      "max_ns": 182005.078125,
+      "mean_ns": 127974.25390625,
+      "median_ci95_ns": [
+        121358.984375,
+        130264.2138671875
+      ],
+      "median_ns": 124513.8671875,
+      "min_ns": 113241.40625,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 113429.921875,
+      "p95_ns": 150591.50390625,
+      "p99_ns": 175468.39062499994,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        124513.8671875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 12853.943235080224,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": []
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-portable-libsecp256k1",
+      "max_ns": 120135.546875,
+      "mean_ns": 93270.830078125,
+      "median_ci95_ns": [
+        89047.8173828125,
+        93687.5
+      ],
+      "median_ns": 90712.109375,
+      "min_ns": 83517.1875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 83672.9296875,
+      "p95_ns": 113339.80468749999,
+      "p99_ns": 120078.8671875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        90712.109375
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 8743.235876643346,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": [
+        "secp256k1"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-tiny-k256",
+      "max_ns": 177737.890625,
+      "mean_ns": 126499.712890625,
+      "median_ci95_ns": [
+        120457.8125,
+        126368.994140625
+      ],
+      "median_ns": 122733.0078125,
+      "min_ns": 110318.359375,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 112349.55078125,
+      "p95_ns": 153151.21093749997,
+      "p99_ns": 170369.671875,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        122733.0078125
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 13051.11008881233,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": [
+        "tiny-keccak"
+      ]
+    },
+    {
+      "bootstrap_block_samples": 10,
+      "bootstrap_resamples": 2000,
+      "configuration": "v4-tiny-libsecp256k1",
+      "max_ns": 86933.203125,
+      "mean_ns": 84317.84375,
+      "median_ci95_ns": [
+        84195.1171875,
+        84224.21875
+      ],
+      "median_ns": 84212.3046875,
+      "min_ns": 84082.421875,
+      "name": "macro/evm2/ecrecover",
+      "outliers_removed": 0,
+      "p05_ns": 84129.27734375,
+      "p95_ns": 84806.640625,
+      "p99_ns": 86308.3828125,
+      "pass_median_spread_percent": 0.0,
+      "pass_medians_ns": [
+        84212.3046875
+      ],
+      "passes": 1,
+      "samples": 200,
+      "stdev_ns": 405.3140562737215,
+      "unit": "batch-average ns per operation; batch hashes normalized per input",
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "features": [
+        "secp256k1",
+        "tiny-keccak"
+      ]
+    }
+  ]
+}
