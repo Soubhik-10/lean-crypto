@@ -1,12 +1,33 @@
 mod reference;
 
-#[cfg(not(feature = "asm-keccak"))]
+// Keep existing SSE2 series stable and track AVX2 separately.
+#[cfg(all(not(feature = "asm-keccak"), not(target_feature = "avx2")))]
 #[path = "codspeed_cases.rs"]
 mod portable;
 
-#[cfg(feature = "asm-keccak")]
+#[cfg(all(feature = "asm-keccak", not(target_feature = "avx2")))]
 #[path = "codspeed_cases.rs"]
 mod assembly;
+
+#[cfg(all(not(feature = "asm-keccak"), target_feature = "avx2"))]
+#[path = "codspeed_cases.rs"]
+mod portable_avx2;
+
+#[cfg(all(feature = "asm-keccak", target_feature = "avx2"))]
+#[path = "codspeed_cases.rs"]
+mod assembly_avx2;
+
+// Fail the CI build if compiler flags stop selecting the intended code path.
+const _: () = {
+    if let Some(expected) = option_env!("LEAN_SPHINCS_EXPECT_AVX2") {
+        let bytes = expected.as_bytes();
+        assert!(bytes.len() == 1 && (bytes[0] == b'0' || bytes[0] == b'1'));
+        assert!(
+            cfg!(target_feature = "avx2") == (bytes[0] == b'1'),
+            "benchmark target does not match the CI AVX2 configuration",
+        );
+    }
+};
 
 use alloy_primitives::B256;
 use evm2::precompiles;

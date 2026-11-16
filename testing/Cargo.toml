@@ -18,10 +18,16 @@ serde_json = "1"
 default = []
 asm-keccak = ["lean-sphincs/asm-keccak"]
 tiny-keccak = ["alloy-primitives/tiny-keccak"]
+cache-regression = ["alloy-primitives/keccak-cache-global", "alloy-primitives/keccak-cache-stats"]
 
 [[bin]]
 name = "differential"
 path = "src/bin/differential.rs"
+
+[[test]]
+name = "cache_regression"
+path = "tests/cache_regression.rs"
+required-features = ["cache-regression"]
 
 [profile.release]
 lto = "thin"

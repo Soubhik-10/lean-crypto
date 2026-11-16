@@ -81,7 +81,8 @@ all three operations. The [differential test runner](testing/README.md) and
 ## Continuous benchmarks
 
 CodSpeed tracks key generation, signing, verification, rejection, Keccak hashing
-and evm2 ecrecover with RustCrypto and `asm-keccak`. It runs on pushes to `main`,
+and evm2 ecrecover with RustCrypto and `asm-keccak`, with separate SSE2 and AVX2
+builds. It runs on pushes to `main`,
 pull requests and manual dispatch. Its CPU simulation results track regressions;
 the tables below report native wall-clock measurements.
 
@@ -91,6 +92,8 @@ cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench codspeed --featur
 ```
 
 ## Native benchmark results
+
+These measurements use source snapshot `60b8cea`, before four-lane AVX2 verification.
 
 CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
 
