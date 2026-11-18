@@ -307,27 +307,25 @@ Enabling assembly also does not change the signature scheme or reduce its requir
 
 # What the performance numbers actually show
 
-The headline signature measurements use an AMD Ryzen 9 8940HX with Rust 1.97.1 and LLVM 22.1.6. Four signature candidates, selected from eleven freshly measured signature builds, are measured using 44 samples per pass over three passes and 11 shared key/message pairs. The headline table uses the lowest complete median for each operation and implementation. The detailed matrix separately covers five CPU targets and three hashing backends, with 44 samples per case. All matched builds and samples remain available.
+The native signature results use an AMD Ryzen 9 8940HX, Rust 1.97.1 and LLVM 22.1.6. The full matrix measures five compiler targets and three Alloy hashing choices. A separate confirmation measures the selected leading builds and prepared compiler controls with 44 samples per pass, three passes and 11 shared key/message pairs. Headline values select the lowest complete 132-sample median for each implementation and operation; every matched row and sample is retained.
 
-There are two unmodified libraries in this comparison. Our crate uses assembly hashing for its best results. The leanVM column calls its upstream Rust `lean_sphincs` public APIs directly, at the revision linked in the README. Those APIs use leanVM's own AVX-512 single-state hasher in these builds. They do not use its separate batched hashing API. No local experimental implementation is compiled into the measured binaries.
+The leanVM column calls the unmodified upstream Rust `lean_sphincs` public APIs at the revision linked in the README. Our hashing feature does not select leanVM's backend. Its own CPU-selected hasher runs without a local adapter or a replacement algorithm. The compiled experimental adapter marker is false in every measured binary.
 
 | Operation | Our crate | leanVM (unmodified) |
 | --- | ---: | ---: |
-| Verification | 36.64 microseconds | 119.05 microseconds |
-| Signing | 89.32 milliseconds | 119.40 milliseconds |
-| Key generation | 46.51 milliseconds | 62.03 milliseconds |
+| Verification | 35.88 µs | 119.91 µs |
+| Signing | 87.93 ms | 119.64 ms |
+| Key generation | 46.36 ms | 61.87 ms |
 
-A microsecond is one millionth of a second. A millisecond is one thousandth. For scale, 36.64 microseconds is 0.03664 milliseconds, so these signing and verification numbers differ by roughly three orders of magnitude.
+A microsecond (µs) is one millionth of a second; a millisecond (ms) is one thousandth. Our measured verification rate is about 3.34 times leanVM's: 119.91 divided by 35.88. That is about 234.2% faster, or about 70.1% less elapsed time. These describe the same measurements using different formulas. Published percentages use unrounded values.
 
-Our measured verification speed is about 3.25 times the unmodified dependency's: 119.05 divided by 36.64 is about 3.25. That is about a 225 percent speed increase, or about a 69 percent reduction in elapsed time. These are different ways to describe the same comparison. Published percentages are calculated from the unrounded measurements.
+Verification borrows encoded signature bytes in our crate and pre-parsed native objects in leanVM. Signing and key generation return native results without extra serialization, and recompute from the seed on every call. Input preparation and correctness checks happen before timing. These are native API timings, not identical wire-format integration costs.
 
-Each API uses its native input and output. Our verification borrows encoded signature bytes; leanVM verification borrows a native signature object parsed before timing. Signing and key generation return their native result types, with no extra serialization added. Both recompute from the seed during timing. This measures native API costs, rather than matching wire-format integration costs. The timing excludes VM execution proofs, aggregation and network communication.
+The README separately reports leanVM's stable and experimental provers, using its unmodified CLI. Proving builds a compact proof of signature verification; it is a different operation from verifying a signature directly. Those tables measure two upstream revisions, 1 and 16 workers, and leaf and recursive aggregation. Our crate has no aggregate prover. For recursion, only the parent aggregation step is timed; producing the child proofs is excluded.
 
-Earlier wire-format measurements included leanVM's input decoding and result serialization so both implementations had the same byte-format boundary. They measured the unmodified cryptographic implementation with format conversion around it. The separate local SIMD experiment contained new scheduling and wire-handling logic, so its results describe that local prototype and are not upstream leanVM performance. Neither experiment changes the scope of the direct API results above.
+Earlier wire-format results and the local batching experiment remain historical. They use different boundaries and are not pooled into the current raw API comparison. These results describe this CPU and measured inputs, not a universal performance limit or a security audit. Small timing differences do not establish statistical significance.
 
-Our crate is faster in this measured comparison. These results do not establish a universal winner or the maximum possible performance of either codebase. Small differences between builds using the same leanVM hashing code should not be interpreted as proof of a hash-backend advantage.
-
-The sample size and single-machine setup also limit how widely the results can be generalized. [Complete published benchmark tables](../README.md#native-benchmark-results), [raw measurements and method](../benchmarks/SUITE.md#published-measurements).
+[Full tables](../README.md#native-benchmark-results), [exact setup and features](../benchmarks/BENCHMARK_SETUP.md), and [every proving measurement](../benchmarks/proving-measurements.json).
 
 # Why verification uses 515 permutations
 

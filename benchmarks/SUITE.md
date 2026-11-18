@@ -28,10 +28,14 @@ selection and actual batch widths for FORS, WOTS+C and leanVM.
 
 ## Direct public API comparison
 
-The current README compares this crate with the unmodified native Rust
-`lean_sphincs` package from leanVM at
-[`4937c851eafb9e93bc7436eebe9e6dc8ae4c227a`](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs).
-The `direct` cases in [matrix.rs](evm2/matrix.rs) time these upstream functions:
+The README uses unmodified upstream `lean_sphincs` from leanVM at
+[`6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b`](https://github.com/leanEthereum/leanVM/tree/6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b/crates/lean_sphincs),
+our native library, and evm2's recovery provider. The exact revisions, Cargo
+features, CPU flags, API signatures and timing boundaries are documented in
+[BENCHMARK_SETUP.md](BENCHMARK_SETUP.md). That document also explains the
+benchmark manifest's local dependency overrides relative to its source commit.
+
+The direct cases in [matrix.rs](evm2/matrix.rs) call:
 
 ```rust
 reference_sphincs::key_gen(&seed.0);
@@ -39,73 +43,35 @@ reference_sphincs::sign(&seed.0, &message.0);
 reference_sphincs::verify(&parsed_key, &message.0, &parsed_signature);
 ```
 
-The corresponding calls are `lean_sphincs::key_gen`, `lean_sphincs::sign` and
-`lean_sphincs::verify`. Both library implementations are unchanged. The harness
-selects inputs and passes arguments/results through `black_box`.
+Our corresponding calls are `lean_sphincs::key_gen`, `lean_sphincs::sign` and
+`lean_sphincs::verify`. Every argument and result passes through `black_box`.
+Verification uses pre-parsed native inputs for leanVM and encoded bytes for
+this crate. Signing and key generation return native values and recompute from
+the seed on each call, without extra timed serialization. The fixture preflight
+compares both outputs byte-for-byte before measuring. Raw builds omit
+`experimental-simd` and require `experimental_adapter == false`.
 
-| Operation | lean-sphincs | Unmodified leanVM |
-| --- | --- | --- |
-| Verification | Borrows the encoded 7,740-byte signature and Alloy public key | Borrows its native public-key and signature objects, parsed before timing |
-| Signing | Returns its native `Result<Signature, SignError>` | Returns its native `LeanSphincsSignature`; no timed `to_bytes()` call |
-| Key generation | Returns its native `B256` public key | Returns its native `LeanSphincsPublicKey`; no timed `to_bytes()` call |
+The matrix measures all 30 CPU/hash/recovery configurations with 44 samples
+per case in one pass. Complete medians select candidates for a separate
+three-pass confirmation; prepared native/compiler controls are included too.
+Each confirmation median uses all 132 samples. The headline selects each
+implementation's lowest complete median, not its fastest individual sample or
+pass. Full matrix samples never enter confirmation medians. Signing's input-dependent
+counter search and single-machine scope limit generalization.
 
-The verification input representations therefore differ. These are native API
-timings, not a claim that both receive identical byte-format inputs. Seed/message
-pairs and scheme parameters are identical. Fixture generation, parsing for
-leanVM verification, and byte-for-byte correctness checks occur before timing.
-Signing and key generation recompute from the seed on every timed call; no
-previous result or persistent tree cache substitutes for either operation.
+The 11 signature inputs receive equal sample weight through rotating offsets.
+Kernel order is shuffled. Recovery uses one fixed valid ECDSA input. No samples
+are discarded. Batch timings retain elapsed nanoseconds and exact work denominators.
 
-leanVM uses its own hash implementation. All four confirmed signature builds
-enable its AVX-512 single-state permutation. Its signature APIs do not call the
-separate batched hashing API. RustCrypto, tiny-keccak and asm-keccak select this
-crate's Alloy backend, not leanVM's. Both libraries share compiler, target and
-LTO flags within each measured binary. `no-vectorize-slp` leaves explicit SIMD enabled.
+## Upstream proving comparison
 
-The `raw` preset measures six direct calls over the same 11-input corpus, with
-44 samples per pass and three passes. Sample offsets rotate across the corpus;
-44 is a multiple of 11, ensuring equal input weighting over each pass. Kernel
-order is shuffled each round. All samples are retained. Add
-`--groups direct,ecrecover` to include the direct evm2 recovery call. The k256
-provider gets a recovery-only build. Recovery uses one fixed valid ECDSA input.
-
-A fresh screening sweep measured eleven signature builds: AVX2, AVX-512 and
-native targets with RustCrypto, tiny-keccak and asm-keccak, plus native RustCrypto
-and asm-keccak with SLP disabled. A separate six-build sweep measured k256 using
-the same three targets with RustCrypto and asm-keccak. Every screening case has
-11 samples. The complete screening median selects one candidate per signature
-operation/implementation and recovery provider; their union contains five builds.
-
-Initial confirmation measures those five builds in three passes of 44 fresh samples.
-Four include both signature libraries and libsecp256k1 recovery; the fifth
-measures k256 recovery. Any additional recovery winners from the later full
-matrix are confirmed with the same three-pass scope. Screening and full-matrix
-samples are excluded from confirmation medians. Headline values select
-the lowest complete 132-sample median for each implementation and operation,
-not individual samples or the fastest pass. Small differences between builds
-are not attributed to a hashing-backend change inside leanVM. These results do
-not establish a universal performance limit.
-
-Raw builds omit `experimental-simd`; the builder checks that the compiled
-`experimental_adapter` marker is false. Only the native signature API calls and
-evm2's provider call are timed. No local experimental implementation, added
-signature decoding, output serialization, VM execution or proof generation is timed.
-
-Reproduce the confirmation candidates with these build/run pairs:
-
-    python benchmarks/run.py build --profile raw --targets native --hashing portable,assembly --recovery libsecp256k1 --groups direct,ecrecover --disable-slp
-    python benchmarks/run.py run --profile raw --targets native --hashing portable,assembly --recovery libsecp256k1 --groups direct,ecrecover --disable-slp
-    python benchmarks/run.py build --profile raw --targets native --hashing assembly --recovery libsecp256k1 --groups direct,ecrecover
-    python benchmarks/run.py run --profile raw --targets native --hashing assembly --recovery libsecp256k1 --groups direct,ecrecover
-    python benchmarks/run.py build --profile raw --targets v4 --hashing assembly --recovery libsecp256k1 --groups direct,ecrecover
-    python benchmarks/run.py run --profile raw --targets v4 --hashing assembly --recovery libsecp256k1 --groups direct,ecrecover
-    python benchmarks/run.py build --profile raw --targets v3 --hashing assembly --recovery k256 --groups ecrecover
-    python benchmarks/run.py run --profile raw --targets v3 --hashing assembly --recovery k256 --groups ecrecover
-
-The recorded confirmation session shuffles the five binaries each pass. The
-commands above reproduce the same candidates and sampling scope in separate
-sessions. Exact compiler flags, selected screening winners and every raw sample
-are recorded in [raw-api-measurements.json](raw-api-measurements.json).
+[PROVING_RESULTS.md](PROVING_RESULTS.md) includes all 24 stock CLI jobs and their
+stable/experimental and previous/current percentage comparisons.
+[proving-measurements.json](proving-measurements.json) retains every CLI proving
+pass and report, binary/lock hashes, cache hashes and argument list. Proving is
+measured under WSL2 with the Linux GNU target; native signatures use Windows
+MSVC. The categories are not pooled. Runtime `--prover` selects the upstream
+implementation; it is not a Cargo feature.
 
 ## Earlier wire-format comparison
 
@@ -358,30 +324,27 @@ machine or a CPU-time ratio do not establish consensus gas pricing.
 ## Published measurements
 
 The current README uses [raw-api-measurements.json](raw-api-measurements.json):
-6 confirmation builds, 44 samples per case per pass and three passes. It
-contains all 3,960 batch timings, per-pass operation counts, exact compiler
-flags, binary/source hashes and dependency revisions. The separate
-[screening dataset](raw-api-screening.json) retains all seventeen candidate builds.
-[RAW_RESULTS.md](RAW_RESULTS.md) shows every matched confirmation build. The
-headline selects the lowest complete median per implementation and operation;
-it does not select individual samples or the fastest pass.
+7 confirmation builds, 44 samples per case per pass and three passes,
+with all 4,884 timings retained. The separate [full matrix](raw-api-matrix.json)
+contains 30 configurations and 5,280 timings. [RAW_RESULTS.md](RAW_RESULTS.md)
+shows every matched row and each headline winner's exact flags.
 
-The [measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/ffd83f95d9d5fa28e27115c976a12a1f765e157b)
-matches every recorded source-file hash. Both signature libraries are unmodified,
-and the experimental implementation is excluded from the measured binaries.
-Recompute summaries and the signature tables from raw data without timing code:
+The library and Rust harness source match
+[`9d48d700`](https://github.com/Soubhik-10/lean-sphincs/tree/9d48d7004cef195fc0558b4c41bd72599db5eb8b).
+The benchmark manifest and lockfile locally override both leanVM dependencies to
+`6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b`; their measured hashes are recorded. Because the setup is not part
+of this results-only publication, `measurement_source_commit` is null and
+`measurement_base_commit`, dependency overrides and exact source hashes identify
+the measured tree. [Setup and reproduction](BENCHMARK_SETUP.md).
+
+Recompute native summaries without compiling or timing code:
 
     python benchmarks/run.py report --measurements benchmarks/raw-api-measurements.json
 
-The README also includes the [full raw API matrix](raw-api-matrix.json):
-all five CPU targets, three Alloy Keccak backends and two evm2 recovery providers.
-These 30 configurations contain 5,280 fresh batch timings: 44 samples per case in
-one pass. Signature cases use the same 11-input corpus; recovery uses the same
-fixed ECDSA input. Their samples remain separate from three-pass confirmation.
-Reproduce the matrix with:
-
-    python benchmarks/run.py build --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover
-    python benchmarks/run.py run --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover --passes 1
+The [screening dataset](raw-api-screening.json) is historical and uses the
+previous pin. It does not select candidates or supply samples for this campaign.
+The old dataset versions remain available in Git history. Current proving
+results are in [proving-measurements.json](proving-measurements.json).
 
 The earlier local SIMD experiment has two separate datasets:
 
@@ -420,9 +383,9 @@ these passes; they do not establish performance across machines or arbitrary
 key/message distributions. Signing's counter search is input-dependent.
 
 [measurements.json](measurements.json) retains the earlier 40-sample, single-pass
-matrix over three specification fixtures, including the separate ecrecover
-measurements still shown in the README. Its signature timings are historical,
-not the current SIMD comparison. Its entire AVX2 tiny-keccak configurations were
+matrix over three specification fixtures, including historical ecrecover
+measurements. Its signature timings are historical,
+not the current raw API comparison. Its entire AVX2 tiny-keccak configurations were
 remeasured with the compiler fix; no individual timed samples were replaced.
 
 ## Setup validation

@@ -1,28 +1,77 @@
 {
+  "schema_version": 2,
+  "role": "Independent three-pass confirmation of selected native API builds",
+  "method": "Native public API calls and results. leanVM verification inputs are parsed before timing; lean-sphincs borrows encoded bytes. No timed serialization, algorithm adapters or experimental implementation. Ecrecover calls the evm2 Crypto provider directly.",
+  "source_revision": "9d48d7004cef195fc0558b4c41bd72599db5eb8b",
+  "source_tracked_changes": true,
+  "measurement_source_commit": null,
+  "source_files_sha256": {
+    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
+    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
+    "benchmarks/evm2/Cargo.lock": "c82adc1ca082fff926a5b33bbcc911c814e53786064120de7745cde358805584",
+    "benchmarks/evm2/Cargo.toml": "5fe587ebabb9d8787f953cb84f58cf58abe84674bbacb5760b5c0709045775e4",
+    "benchmarks/evm2/README.md": "a5c4418eaf59c698eda877354a1418dcb4f5ab3acaded4615162c1ba300fc52d",
+    "benchmarks/evm2/batched/fors.rs": "b058d86d38564c906acaee9f12354262fca2b7ed84a9aa39379f0390267aea18",
+    "benchmarks/evm2/batched/mod.rs": "adc4c1d2caa720acfebd2d70148e9468b87fd6f687b0c7c3c7944e5f7c118d9e",
+    "benchmarks/evm2/batched/trees.rs": "6195781a9dad29699822096e15cc83d98a47ac8da9eb44a890d240b2c1b1add3",
+    "benchmarks/evm2/batched/wots.rs": "3450f4a5e2a88a7f18be654b2b071b1bf70967852df06e3005830f5d95225bee",
+    "benchmarks/evm2/batched_tests.rs": "7f14820cbe8a91ac2c0731867057f722b62f0879055c39d3e22444ab5d81e247",
+    "benchmarks/evm2/codspeed.rs": "f9f7a34ae22a4bd7678ea237149da74d04895f0d2a3bcca8c39a4421b2295a8c",
+    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
+    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
+    "benchmarks/evm2/matrix.rs": "17d6f6291903bb613a6a09c81fae2682bd8481074b3353cf67df2983edcbb98e",
+    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
+    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
+    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
+    "benchmarks/evm2/verify.rs": "4966c1253600187b2949f34d00ef8e88083e0111699c2bf67da223dab9bc7c83",
+    "benchmarks/run.py": "1ad07de2dc9b3ec82cf8a80205612a7f93c72a9f85d010f52cdb15f5f51463c6",
+    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
+    "benchmarks/suite/config.json": "b403aa9f5ebac7185f48469a586b37383a9cb526f4f5722a0669b84c5892f881",
+    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
+    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
+    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
+    "benchmarks/suite/publication.py": "8f797f6176b9a04be436d6c7b0ac712b2bc15d9c9dfaeb7a816283c8fa966cfd",
+    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
+    "benchmarks/suite/test_setup.py": "608180cc4d6174e537ce3096e3efc815fd626aa7e65ee1ac72227d369755b81b",
+    "src/fors.rs": "cee999e9aeaea0841f230ef95f6a8ffc9c4e3c95837889b921310f31329f6741",
+    "src/hash.rs": "906f1488c78a4321753b0eaedc26882a0d22e56c21ff0dcca720d933c472eea9",
+    "src/hash/batch.rs": "7e8a01e66d50cc223ddd8e2192baaea7a82ddc781ca25cb64b820bbf85e7e6c0",
+    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
+    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
+    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
+    "src/signing.rs": "49f6054dd22a841bdc0d64d27c261e40cdfd1f74a3eb3d6c8ae680447c32fea7",
+    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
+    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
+    "src/wots.rs": "e963034d32eab09db7812ad5635438e368de74da0af76d3e12c712c55d8ffb29",
+    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
+    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
+    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
+    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
+    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
+  },
+  "reference_revision": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+  "evm2_revision": "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
   "alloy_revision": "70a63bd609da78dcf03e593ae772fec883ce7768",
+  "specification_revision": "03547dd83f298a63e6dcceff0a0b75f6142490aa",
+  "corpus_sha256": "82652fcc5c3756de7567b147c0d477d3b0a31d5adb224b5289dc2803f813798b",
+  "cpu": {
+    "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
+    "NumberOfCores": 16,
+    "NumberOfLogicalProcessors": 32
+  },
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
+  "sampling": {
+    "samples_per_case": 44,
+    "passes": 3,
+    "positive_fixtures": 11,
+    "batch_target_ms": 10,
+    "warmup_ms": 100,
+    "shuffle_seed": 20261115,
+    "outliers_removed": 0,
+    "ecrecover_fixtures": 1
+  },
   "configurations": {
     "native-assembly-libsecp256k1": {
-      "binary_sha256": "c7ff39c3fb4bab4c524b9de7fddefcadc7613c207c44f4807eaba7aff4d8c322",
-      "build_profile": {
-        "codegen_units": 1,
-        "incremental": false,
-        "lto": "thin",
-        "optimization": 3
-      },
-      "compiled": {
-        "assembly": true,
-        "avx2": true,
-        "avx512f": true,
-        "ecrecover": "libsecp256k1",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 4,
-        "keccak_backend": "assembly",
-        "paired_fors": false,
-        "reference_batch_lanes": 8,
-        "target_arch": "x86_64",
-        "tiny": false,
-        "wots_batch_lanes": 4
-      },
       "configuration": {
         "case_count": 7,
         "ecrecover": "libsecp256k1",
@@ -43,6 +92,31 @@
             "sse2"
           ]
         }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "binary_sha256": "7b7596e907cd39d29199d0e80bb95de28e6859732c0fa71554c5582da0508d5d",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "tiny": false,
+        "keccak_backend": "assembly",
+        "ecrecover": "libsecp256k1",
+        "target_arch": "x86_64",
+        "avx2": true,
+        "avx512f": true,
+        "paired_fors": false,
+        "fors_batch_lanes": 4,
+        "wots_batch_lanes": 4,
+        "reference_batch_lanes": 8,
+        "experimental_adapter": false
       },
       "experimental_adapter": false,
       "resolved_cargo_features": [
@@ -79,7 +153,7 @@
         {
           "features": [],
           "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -94,7 +168,7 @@
         {
           "features": [],
           "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -110,33 +184,14 @@
           "version": "0.7.33"
         }
       ],
-      "rustflags": [
-        "-C",
-        "target-cpu=native"
-      ]
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
     },
     "native-assembly-libsecp256k1-no-slp": {
-      "binary_sha256": "6229e14a5279dd2c1aca785aac448c80bc710d3ded670d47224ce89416d52d4d",
-      "build_profile": {
-        "codegen_units": 1,
-        "incremental": false,
-        "lto": "thin",
-        "optimization": 3
-      },
-      "compiled": {
-        "assembly": true,
-        "avx2": true,
-        "avx512f": true,
-        "ecrecover": "libsecp256k1",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 4,
-        "keccak_backend": "assembly",
-        "paired_fors": false,
-        "reference_batch_lanes": 8,
-        "target_arch": "x86_64",
-        "tiny": false,
-        "wots_batch_lanes": 4
-      },
       "configuration": {
         "case_count": 7,
         "ecrecover": "libsecp256k1",
@@ -162,6 +217,33 @@
           ]
         }
       },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "40c784f5b4896c8da2f5e72153a6359276079cac0028cbf77d8733034ae37a1d",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "tiny": false,
+        "keccak_backend": "assembly",
+        "ecrecover": "libsecp256k1",
+        "target_arch": "x86_64",
+        "avx2": true,
+        "avx512f": true,
+        "paired_fors": false,
+        "fors_batch_lanes": 4,
+        "wots_batch_lanes": 4,
+        "reference_batch_lanes": 8,
+        "experimental_adapter": false
+      },
       "experimental_adapter": false,
       "resolved_cargo_features": [
         {
@@ -197,7 +279,7 @@
         {
           "features": [],
           "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -212,7 +294,7 @@
         {
           "features": [],
           "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -228,35 +310,14 @@
           "version": "0.7.33"
         }
       ],
-      "rustflags": [
-        "-C",
-        "target-cpu=native",
-        "-C",
-        "no-vectorize-slp"
-      ]
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
     },
     "native-portable-libsecp256k1-no-slp": {
-      "binary_sha256": "9b390ce702344bfe55adef5f71a4976be3790ce418c587c1a4045b07ca106cf3",
-      "build_profile": {
-        "codegen_units": 1,
-        "incremental": false,
-        "lto": "thin",
-        "optimization": 3
-      },
-      "compiled": {
-        "assembly": false,
-        "avx2": true,
-        "avx512f": true,
-        "ecrecover": "libsecp256k1",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 4,
-        "keccak_backend": "portable",
-        "paired_fors": false,
-        "reference_batch_lanes": 8,
-        "target_arch": "x86_64",
-        "tiny": false,
-        "wots_batch_lanes": 4
-      },
       "configuration": {
         "case_count": 7,
         "ecrecover": "libsecp256k1",
@@ -281,6 +342,33 @@
           ]
         }
       },
+      "rustflags": [
+        "-C",
+        "target-cpu=native",
+        "-C",
+        "no-vectorize-slp"
+      ],
+      "binary_sha256": "e9490fe2d5444c0edefc8fba033d30525537da39e3ab2b67b6f4e90f5d7ba3d9",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "tiny": false,
+        "keccak_backend": "portable",
+        "ecrecover": "libsecp256k1",
+        "target_arch": "x86_64",
+        "avx2": true,
+        "avx512f": true,
+        "paired_fors": false,
+        "fors_batch_lanes": 4,
+        "wots_batch_lanes": 4,
+        "reference_batch_lanes": 8,
+        "experimental_adapter": false
+      },
       "experimental_adapter": false,
       "resolved_cargo_features": [
         {
@@ -314,7 +402,7 @@
         {
           "features": [],
           "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -328,7 +416,7 @@
         {
           "features": [],
           "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -344,15 +432,46 @@
           "version": "0.7.33"
         }
       ],
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
+    },
+    "native-tiny-libsecp256k1-no-slp": {
+      "configuration": {
+        "case_count": 7,
+        "ecrecover": "libsecp256k1",
+        "extra_rustflags": [
+          "-C",
+          "no-vectorize-slp"
+        ],
+        "features": [
+          "secp256k1",
+          "tiny-keccak"
+        ],
+        "groups": [
+          "direct",
+          "ecrecover"
+        ],
+        "id": "native-tiny-libsecp256k1-no-slp",
+        "keccak": "tiny",
+        "target": {
+          "cpu": "native",
+          "id": "native",
+          "requires": [
+            "sse2"
+          ]
+        }
+      },
       "rustflags": [
         "-C",
         "target-cpu=native",
         "-C",
         "no-vectorize-slp"
-      ]
-    },
-    "v2-tiny-k256": {
-      "binary_sha256": "7533cca31470a054231dfd5c05bfe4db37c8f0068cc88df9a710baca960e6022",
+      ],
+      "binary_sha256": "03dc23c58e742697cec1ea8917cb363c021586aac9a5d8bfc5b7325d4743ccf1",
       "build_profile": {
         "codegen_units": 1,
         "incremental": false,
@@ -361,18 +480,223 @@
       },
       "compiled": {
         "assembly": false,
+        "tiny": true,
+        "keccak_backend": "tiny",
+        "ecrecover": "libsecp256k1",
+        "target_arch": "x86_64",
+        "avx2": true,
+        "avx512f": true,
+        "paired_fors": false,
+        "fors_batch_lanes": 4,
+        "wots_batch_lanes": 4,
+        "reference_batch_lanes": 8,
+        "experimental_adapter": false
+      },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "map",
+            "rlp",
+            "serde",
+            "std",
+            "tiny-keccak"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "secp256k1",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [
+            "default",
+            "keccak"
+          ],
+          "name": "tiny-keccak",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "2.0.2"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
+    },
+    "v2-assembly-k256": {
+      "configuration": {
+        "case_count": 1,
+        "ecrecover": "k256",
+        "features": [
+          "asm-keccak"
+        ],
+        "groups": [
+          "ecrecover"
+        ],
+        "id": "v2-assembly-k256",
+        "keccak": "assembly",
+        "target": {
+          "cpu": "x86-64-v2",
+          "id": "v2",
+          "requires": [
+            "cmpxchg16b",
+            "lahf_sahf",
+            "popcnt",
+            "sse2",
+            "sse3",
+            "sse4.1",
+            "sse4.2",
+            "ssse3"
+          ]
+        }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "7f09904d7b73cdb8271700d729462e0e270f3ba5250635a1eb6db0ee6c9520d5",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "tiny": false,
+        "keccak_backend": "assembly",
+        "ecrecover": "k256",
+        "target_arch": "x86_64",
         "avx2": false,
         "avx512f": false,
-        "ecrecover": "k256",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 2,
-        "keccak_backend": "tiny",
         "paired_fors": true,
+        "fors_batch_lanes": 2,
+        "wots_batch_lanes": 1,
         "reference_batch_lanes": 1,
-        "target_arch": "x86_64",
-        "tiny": true,
-        "wots_batch_lanes": 1
+        "experimental_adapter": false
       },
+      "experimental_adapter": false,
+      "resolved_cargo_features": [
+        {
+          "features": [
+            "asm-keccak",
+            "map",
+            "rlp",
+            "serde",
+            "std"
+          ],
+          "name": "alloy-primitives",
+          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
+          "version": "1.7.3"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "std"
+          ],
+          "name": "evm2",
+          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "std"
+          ],
+          "name": "keccak-asm",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.1.9"
+        },
+        {
+          "features": [],
+          "name": "keccak256",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+          "version": "0.1.0"
+        },
+        {
+          "features": [
+            "asm-keccak",
+            "default"
+          ],
+          "name": "lean-sphincs",
+          "source": null,
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "lean_sphincs",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+          "version": "0.1.0"
+        },
+        {
+          "features": [],
+          "name": "sha3",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.11.0"
+        },
+        {
+          "features": [],
+          "name": "wide",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "version": "0.7.33"
+        }
+      ],
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
+    },
+    "v2-tiny-k256": {
       "configuration": {
         "case_count": 1,
         "ecrecover": "k256",
@@ -398,6 +722,31 @@
             "ssse3"
           ]
         }
+      },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v2"
+      ],
+      "binary_sha256": "3dd46f32e25424d3e98955ca82a15ec06ea4cb7a6b3c525b04056d66ec7d14dd",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": false,
+        "tiny": true,
+        "keccak_backend": "tiny",
+        "ecrecover": "k256",
+        "target_arch": "x86_64",
+        "avx2": false,
+        "avx512f": false,
+        "paired_fors": true,
+        "fors_batch_lanes": 2,
+        "wots_batch_lanes": 1,
+        "reference_batch_lanes": 1,
+        "experimental_adapter": false
       },
       "experimental_adapter": false,
       "resolved_cargo_features": [
@@ -432,7 +781,7 @@
         {
           "features": [],
           "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -446,7 +795,7 @@
         {
           "features": [],
           "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -471,159 +820,14 @@
           "version": "0.7.33"
         }
       ],
-      "rustflags": [
-        "-C",
-        "target-cpu=x86-64-v2"
-      ]
-    },
-    "v3-assembly-k256": {
-      "binary_sha256": "d49cc3f033b7349cff710045130243c45de6180361404b134a6286a6fb394ce5",
-      "build_profile": {
-        "codegen_units": 1,
-        "incremental": false,
-        "lto": "thin",
-        "optimization": 3
-      },
-      "compiled": {
-        "assembly": true,
-        "avx2": true,
-        "avx512f": false,
-        "ecrecover": "k256",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 4,
-        "keccak_backend": "assembly",
-        "paired_fors": false,
-        "reference_batch_lanes": 4,
-        "target_arch": "x86_64",
-        "tiny": false,
-        "wots_batch_lanes": 4
-      },
-      "configuration": {
-        "case_count": 1,
-        "ecrecover": "k256",
-        "features": [
-          "asm-keccak"
-        ],
-        "groups": [
-          "ecrecover"
-        ],
-        "id": "v3-assembly-k256",
-        "keccak": "assembly",
-        "target": {
-          "cpu": "x86-64-v3",
-          "id": "v3",
-          "requires": [
-            "avx",
-            "avx2",
-            "bmi1",
-            "bmi2",
-            "cmpxchg16b",
-            "f16c",
-            "fma",
-            "lahf_sahf",
-            "lzcnt",
-            "movbe",
-            "popcnt",
-            "sse2",
-            "sse3",
-            "sse4.1",
-            "sse4.2",
-            "ssse3"
-          ]
-        }
-      },
-      "experimental_adapter": false,
-      "resolved_cargo_features": [
-        {
-          "features": [
-            "asm-keccak",
-            "map",
-            "rlp",
-            "serde",
-            "std"
-          ],
-          "name": "alloy-primitives",
-          "source": "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768",
-          "version": "1.7.3"
-        },
-        {
-          "features": [
-            "asm-keccak",
-            "std"
-          ],
-          "name": "evm2",
-          "source": "git+https://github.com/alloy-rs/evm2?rev=e681662b6d9ec59edafd112f7c8d64f49f1e6dd1#e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
-          "version": "0.1.0"
-        },
-        {
-          "features": [
-            "std"
-          ],
-          "name": "keccak-asm",
-          "source": "registry+https://github.com/rust-lang/crates.io-index",
-          "version": "0.1.9"
-        },
-        {
-          "features": [],
-          "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
-          "version": "0.1.0"
-        },
-        {
-          "features": [
-            "asm-keccak",
-            "default"
-          ],
-          "name": "lean-sphincs",
-          "source": null,
-          "version": "0.1.0"
-        },
-        {
-          "features": [],
-          "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
-          "version": "0.1.0"
-        },
-        {
-          "features": [],
-          "name": "sha3",
-          "source": "registry+https://github.com/rust-lang/crates.io-index",
-          "version": "0.11.0"
-        },
-        {
-          "features": [],
-          "name": "wide",
-          "source": "registry+https://github.com/rust-lang/crates.io-index",
-          "version": "0.7.33"
-        }
-      ],
-      "rustflags": [
-        "-C",
-        "target-cpu=x86-64-v3"
-      ]
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
     },
     "v4-assembly-libsecp256k1": {
-      "binary_sha256": "dc84260c47f32f09475922fa84f09647755da89498a37c26b4f68cff1bb8bb91",
-      "build_profile": {
-        "codegen_units": 1,
-        "incremental": false,
-        "lto": "thin",
-        "optimization": 3
-      },
-      "compiled": {
-        "assembly": true,
-        "avx2": true,
-        "avx512f": true,
-        "ecrecover": "libsecp256k1",
-        "experimental_adapter": false,
-        "fors_batch_lanes": 4,
-        "keccak_backend": "assembly",
-        "paired_fors": false,
-        "reference_batch_lanes": 8,
-        "target_arch": "x86_64",
-        "tiny": false,
-        "wots_batch_lanes": 4
-      },
       "configuration": {
         "case_count": 7,
         "ecrecover": "libsecp256k1",
@@ -665,6 +869,31 @@
           ]
         }
       },
+      "rustflags": [
+        "-C",
+        "target-cpu=x86-64-v4"
+      ],
+      "binary_sha256": "0b045faf171080b560817a09c53078eacd27a8a448319959ad0c0754698af026",
+      "build_profile": {
+        "codegen_units": 1,
+        "incremental": false,
+        "lto": "thin",
+        "optimization": 3
+      },
+      "compiled": {
+        "assembly": true,
+        "tiny": false,
+        "keccak_backend": "assembly",
+        "ecrecover": "libsecp256k1",
+        "target_arch": "x86_64",
+        "avx2": true,
+        "avx512f": true,
+        "paired_fors": false,
+        "fors_batch_lanes": 4,
+        "wots_batch_lanes": 4,
+        "reference_batch_lanes": 8,
+        "experimental_adapter": false
+      },
       "experimental_adapter": false,
       "resolved_cargo_features": [
         {
@@ -700,7 +929,7 @@
         {
           "features": [],
           "name": "keccak256",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -715,7 +944,7 @@
         {
           "features": [],
           "name": "lean_sphincs",
-          "source": "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+          "source": "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
           "version": "0.1.0"
         },
         {
@@ -731,45 +960,39 @@
           "version": "0.7.33"
         }
       ],
-      "rustflags": [
-        "-C",
-        "target-cpu=x86-64-v4"
-      ]
+      "c_build_environment": {
+        "CC": null,
+        "CFLAGS": null,
+        "CXX": null,
+        "CXXFLAGS": null
+      }
     }
   },
-  "corpus_sha256": "82652fcc5c3756de7567b147c0d477d3b0a31d5adb224b5289dc2803f813798b",
-  "cpu": {
-    "Name": "AMD Ryzen 9 8940HX with Radeon Graphics        ",
-    "NumberOfCores": 16,
-    "NumberOfLogicalProcessors": 32
-  },
-  "evm2_revision": "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1",
-  "measurement_source_commit": "ffd83f95d9d5fa28e27115c976a12a1f765e157b",
   "measurements": [
     {
       "configuration": "native-assembly-libsecp256k1",
       "operation": "direct/lean-sphincs/key_gen",
       "passes": [
         {
-          "elapsed_ns": [46519700, 46356100, 46499700, 46445500, 46779300, 46579800, 46402200, 47204800, 46815100, 46529400, 47510800, 46524900, 47523800, 46498000, 47493100, 48361800, 46573900, 47139800, 46521600, 46560000, 46556600, 46530000, 47026700, 46370300, 46685800, 46615400, 46421700, 46463400, 46845300, 46758600, 46742100, 46447100, 46936100, 46569500, 46536500, 46495600, 46502200, 46653900, 46573400, 46895900, 46531500, 46517900, 46743000, 46473100],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46262400, 46181900, 46238900, 46410200, 46761900, 46325800, 46161200, 46212800, 46174300, 46345100, 46316000, 46424400, 46256800, 46315700, 46317600, 46400800, 46352000, 46232300, 46381400, 46781300, 46340500, 46349800, 46334600, 46529200, 46953000, 46371900, 46305900, 46385200, 46202100, 46370800, 46320900, 47260900, 46891400, 46506800, 46407900, 46368900, 46338700, 46326400, 46720500, 46405300, 46422100, 46453200, 46447800, 46339100],
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1]
         },
         {
-          "elapsed_ns": [46262800, 46343300, 46157100, 46193600, 46343100, 46652900, 46251700, 46380400, 46284900, 48450600, 46565200, 46336000, 46242500, 46443300, 46544900, 46302600, 46422500, 46435100, 46677700, 48064200, 46370600, 46797300, 46306200, 46494500, 46480500, 46264200, 46281800, 46950500, 47319500, 46511500, 46774700, 46518600, 46355000, 46363500, 46473900, 46514300, 46758100, 46294500, 46402000, 46632200, 46437700, 46692400, 46386100, 46877400],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46386700, 46341100, 46271000, 46248200, 46790800, 46454600, 46510100, 46310900, 46350800, 46256700, 47156400, 46206300, 46289800, 46330200, 46253300, 46210500, 46449300, 46261100, 46989200, 47063000, 46367900, 46399500, 46378100, 46417900, 46415300, 46307000, 46270500, 46653800, 46459300, 46519700, 46473100, 46481100, 46436900, 46525700, 46358100, 46466600, 46332600, 46452800, 46210700, 46265800, 46340400, 46198500, 46418300, 46442000],
+          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1]
         },
         {
-          "elapsed_ns": [46014800, 46155000, 46206500, 46199000, 46148100, 46541300, 46218400, 46328700, 46200100, 47941100, 46770600, 46259600, 46189200, 46355800, 47538800, 46530200, 46257900, 46238200, 51247700, 46339900, 46563900, 46316700, 46577400, 46329300, 46269300, 46752100, 46184800, 46288600, 46271400, 46303500, 46391600, 46478800, 46785500, 46326400, 46555700, 46240100, 47072600, 47107400, 46273700, 46272800, 47458300, 47194300, 47718800, 46550800],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46210700, 46354700, 46356400, 46423200, 46218400, 46469800, 46266600, 46224700, 46226800, 46397900, 46807500, 46330800, 46311700, 46396000, 46198900, 46330700, 46323000, 46237600, 46794100, 46459000, 46234800, 46450300, 46342000, 46477900, 46448300, 46310300, 46282700, 46268400, 46408900, 46351400, 46446300, 46452000, 46483100, 46410000, 46274500, 46469500, 46440900, 46765900, 46327300, 46359500, 46280800, 46499100, 46302000, 46417500],
+          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2]
         }
       ]
     },
@@ -778,25 +1001,25 @@
       "operation": "direct/lean-sphincs/sign",
       "passes": [
         {
-          "elapsed_ns": [84806300, 86667300, 92378300, 91616500, 100774100, 87367100, 93433000, 93120800, 84341900, 84626000, 89045500, 85499000, 86784900, 93824100, 95012600, 102121400, 89158400, 94757000, 92326700, 89605000, 85230500, 88777700, 85027900, 87176100, 93498500, 91928300, 101668700, 88348000, 93069000, 92447800, 90745900, 83967800, 87856500, 85041200, 87063400, 92407000, 92737900, 101682400, 87617800, 93680300, 92944100, 84409300, 84255200, 87890100],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [84533600, 86316300, 91980400, 91400400, 100450500, 86923000, 92824600, 92070700, 84218600, 83919200, 88087800, 84619900, 86547700, 92400500, 91892700, 100685000, 86995700, 92876600, 92086200, 84115700, 83678000, 87711600, 84704400, 86625700, 93310000, 91851400, 100967400, 87318800, 92745000, 92284100, 84241600, 84477900, 88496800, 84913900, 86966000, 92273300, 91605000, 101177100, 87368200, 92865700, 92387200, 84425000, 83852900, 87861100],
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5]
         },
         {
-          "elapsed_ns": [84348400, 86357800, 91844400, 91462500, 100708300, 87732600, 93817200, 92557900, 84441100, 84576400, 89986100, 85294400, 86567400, 92211000, 91662000, 100867900, 88832300, 93286700, 94583300, 85998700, 83995100, 87678300, 84679000, 87422000, 96588900, 92080000, 100806400, 88047700, 94715200, 92188300, 87455500, 84054900, 88005000, 85520900, 87658600, 98696700, 93120200, 100657300, 87195600, 92972000, 105475400, 84345400, 83819300, 88654400],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [84483400, 86561300, 92097300, 91507900, 100732100, 86965200, 93123600, 92438600, 84401300, 83901300, 88069500, 84769300, 86439600, 92274400, 91534900, 100583400, 87161000, 92843800, 93656500, 84772200, 83900800, 87776500, 84699200, 86463100, 92272900, 91703200, 100834600, 87159800, 92765600, 92096900, 84377100, 83981600, 87951200, 84734400, 86610900, 92226600, 91687500, 100572800, 87228400, 92728900, 92243100, 84185100, 83745900, 87855600],
+          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3]
         },
         {
-          "elapsed_ns": [84262800, 86023600, 91635800, 91590000, 100370100, 92972600, 92569900, 92106800, 84106200, 83874600, 87619300, 84545800, 86173200, 92233800, 91543800, 103191600, 87051200, 92733100, 92191900, 84452700, 84981300, 87562100, 85419000, 87770300, 92682400, 91281300, 102278700, 89491300, 92758700, 97696000, 84703000, 85020400, 96253000, 84564500, 87258700, 92075800, 93170400, 101035300, 86893500, 94403400, 97904100, 85104900, 84540100, 88690400],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [84476300, 86366200, 91932500, 91516500, 100955200, 87705400, 92711600, 92153500, 84091500, 83939300, 87916100, 84585800, 86572400, 91993500, 91480400, 100819500, 86920000, 92910000, 92161600, 85661800, 83819300, 87763300, 84787200, 86717100, 92188700, 91481300, 100866100, 87246300, 92822500, 92340000, 85361800, 83974300, 88105000, 84684900, 86516500, 92056900, 91512200, 102274000, 87070200, 92925800, 92130000, 84342200, 83775700, 87997500],
+          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4]
         }
       ]
     },
@@ -805,25 +1028,25 @@
       "operation": "direct/lean-sphincs/verify",
       "passes": [
         {
-          "elapsed_ns": [18772700, 18838900, 18801500, 18762100, 18750500, 19070200, 18760700, 18768100, 18900500, 18856500, 19446900, 18931300, 19001300, 18767600, 19582100, 20346400, 18919100, 18875200, 18791000, 19232900, 18861300, 18816000, 18897300, 19008400, 19634000, 19300900, 18833700, 19321500, 18802200, 18818500, 18887200, 18818600, 18919100, 18954600, 18963200, 19657100, 18842000, 18928900, 19356000, 18804900, 19023300, 18798500, 21083400, 18893000],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18711200, 18771600, 18775200, 18717200, 18735600, 18759300, 18714500, 18701000, 18756900, 18718500, 18820700, 18852800, 18772900, 18748600, 18765000, 18700500, 18762800, 18716200, 18737000, 19067600, 18796100, 18724400, 18715500, 18765800, 18823600, 18787800, 18806800, 18709400, 18726800, 18706700, 18682400, 19045500, 19034800, 18898100, 18794000, 18746000, 19007300, 18727900, 18780500, 18725900, 19030900, 18714900, 18787600, 18721400],
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3]
         },
         {
-          "elapsed_ns": [18683000, 18713500, 18710700, 18810400, 18799200, 20819500, 18764400, 18907000, 18973200, 18922900, 18817900, 18877800, 20491600, 18884600, 18874800, 18952400, 19021800, 18939800, 18879800, 19103900, 18762400, 19057700, 18872200, 18766900, 18934500, 18834900, 18902800, 18819500, 18947500, 18846100, 18781400, 18873400, 18761100, 18751100, 18778400, 18853600, 19343200, 19539500, 18905500, 18918800, 19643000, 18950000, 18780800, 18970300],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18714500, 18721300, 18758000, 18789000, 18750000, 18742800, 18730700, 18723800, 18746700, 18728000, 18752200, 18813300, 18706500, 18786900, 18813700, 18789900, 18770100, 18770800, 18751600, 18763900, 18715200, 18813600, 18808700, 18736300, 18726500, 18804600, 18787100, 18723300, 18791500, 18776300, 18756100, 18830500, 18741100, 18755900, 18730700, 18760300, 18736200, 18756000, 18747100, 18789800, 18790400, 18968000, 18742300, 18793900],
+          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0]
         },
         {
-          "elapsed_ns": [18727300, 18702700, 18673800, 18677200, 18787700, 18749100, 18820200, 18902100, 18781700, 18947400, 18825500, 18793300, 18860300, 22395100, 18732900, 18803600, 18885600, 18804700, 20606800, 18853100, 19095900, 19815000, 19571800, 19474400, 18952800, 18853800, 18872200, 18853100, 18792000, 18712900, 18970900, 19289900, 18930100, 18943200, 18833300, 18868800, 18894100, 19160200, 18785800, 18844200, 19110600, 18952400, 20608100, 19027700],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19005800, 18856800, 18823800, 18856200, 18916200, 18893700, 18909900, 18929800, 18900600, 18915700, 18853600, 18836100, 18903300, 19064200, 18871900, 18839600, 18945500, 18862000, 19190200, 19198100, 18919000, 18925600, 18885800, 18883400, 18867500, 18909100, 18927400, 18934200, 18856600, 18902600, 19058400, 18918400, 18965800, 18934100, 18939100, 18947200, 18912800, 18871600, 18904800, 18889300, 18946400, 18952000, 18932800, 18952900],
+          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0]
         }
       ]
     },
@@ -832,25 +1055,25 @@
       "operation": "direct/leanVM/key_gen",
       "passes": [
         {
-          "elapsed_ns": [61721200, 61559800, 61718400, 61670300, 61581200, 61635500, 61568200, 62135900, 63118200, 61581900, 61772400, 62032900, 61745200, 61747100, 62255900, 64408000, 61840000, 61806700, 61625100, 61866700, 61707300, 61616400, 61957900, 61736900, 64604300, 61479000, 61803900, 61639100, 61888400, 61520200, 61616000, 61566800, 62413000, 62370100, 61688000, 61473100, 61778000, 62186400, 61529100, 61693500, 61717700, 61970000, 62416600, 61581700],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [62679100, 62556600, 62653600, 62629100, 62702600, 62513200, 62358400, 62796300, 62662200, 62735400, 62798400, 62487100, 62583700, 62599400, 62742000, 62583100, 62859000, 62907300, 62552000, 63248800, 62526200, 62604600, 62608900, 62676400, 63135300, 62810700, 62806300, 62624400, 62824200, 63730200, 62646100, 63471100, 64163500, 62743700, 62805800, 62579300, 62886900, 64147000, 62711400, 62893200, 62652900, 62592200, 62915500, 62729300],
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2]
         },
         {
-          "elapsed_ns": [62047600, 61614800, 62108100, 62494700, 62033200, 63087100, 62053600, 62330600, 62463400, 62378300, 62059300, 62402400, 62401900, 63025600, 62132000, 62213100, 62393900, 62362100, 62197700, 64035900, 62391500, 62272500, 62797500, 62564800, 61964400, 62141800, 62897900, 62273200, 62548900, 63060300, 63052400, 62067100, 62260900, 62316000, 62329200, 62161800, 63886200, 62071800, 62336400, 62354200, 63819300, 62406700, 62273200, 62267800],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61922600, 61710300, 61536400, 61825200, 61788800, 61855300, 61559800, 61976000, 61953600, 61975200, 61748500, 61940700, 61796200, 62131400, 61573300, 61766000, 61867400, 61847900, 61641400, 62116300, 61773700, 61848500, 61979000, 61865300, 61632900, 61923400, 61803000, 61726900, 61926500, 61705000, 62672000, 61872400, 61903100, 61738200, 61911900, 61832600, 63306400, 61553100, 61871200, 61778700, 61820900, 61850900, 61797700, 61908500],
+          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6]
         },
         {
-          "elapsed_ns": [61029000, 60998600, 61869000, 61600300, 61475200, 61609100, 61827900, 62946300, 62485700, 61565100, 61742900, 62032400, 62219600, 63139700, 61577300, 61637800, 62647300, 61472700, 61638700, 62566300, 62504500, 63243700, 61349300, 61852600, 61449500, 63119000, 62765700, 61708500, 61677000, 62406000, 61630200, 61484300, 61804300, 61943800, 61425100, 61593300, 61815700, 62523800, 61414000, 61843200, 61691600, 62654200, 64233500, 62613400],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61103300, 61193800, 61355300, 61521700, 60999900, 61313500, 61610300, 61322500, 61403200, 61626100, 61742900, 61060100, 61319400, 61327700, 61351500, 61263000, 61599400, 61122800, 61325400, 62230800, 61982800, 61618000, 61089300, 61593700, 61312500, 61477900, 61137500, 62058200, 61386500, 61600200, 61323700, 61364200, 61528800, 61630500, 61218300, 61243600, 61412800, 61475900, 62010400, 61312300, 61285500, 61387800, 61477200, 61260200],
+          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6]
         }
       ]
     },
@@ -859,25 +1082,25 @@
       "operation": "direct/leanVM/sign",
       "passes": [
         {
-          "elapsed_ns": [113998000, 116389200, 124897700, 124310400, 137104700, 118849900, 127993500, 127065900, 116553900, 113701600, 119389800, 114565700, 117668500, 126284400, 127778900, 145624700, 119404800, 128011000, 128662000, 115213200, 113379400, 119575400, 114534300, 118552000, 126393100, 126396300, 140287900, 121235700, 127418000, 126227400, 114169200, 114866100, 119269100, 114621900, 119329600, 127363800, 125081500, 139468300, 118374600, 126778200, 130133300, 117071400, 113242900, 121445400],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [112719200, 115246800, 122697700, 121735300, 134502100, 115751000, 124039800, 122643400, 111799200, 111560400, 116928600, 112256900, 115148600, 122710200, 121941300, 134325500, 116081300, 123861300, 125080400, 114212000, 111978300, 116885100, 112213300, 114850300, 122797900, 122378400, 134470200, 115905800, 123711500, 122848000, 113351700, 111127600, 119497200, 112971000, 115289300, 122762400, 121792700, 134641200, 115980200, 123907500, 123000600, 112312600, 111781200, 117117300],
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4]
         },
         {
-          "elapsed_ns": [113434100, 114857900, 122328100, 122032000, 134956400, 119633200, 127659000, 124732700, 116735200, 115427300, 118397000, 114277600, 117263900, 124089200, 125653700, 136538300, 118632200, 127088100, 125063800, 114914200, 115113000, 118076300, 113865800, 117671000, 124983200, 124180000, 136420000, 117863200, 125483200, 124576600, 113768700, 112972000, 118676400, 114428500, 116027600, 124910200, 125860400, 136922400, 120272600, 125423800, 125082400, 114154600, 112953500, 119290900],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [118121100, 120397300, 128319000, 127486700, 140520900, 121703200, 129721300, 128356900, 117390900, 116686400, 122412800, 117660800, 120569100, 128611000, 127800400, 140734800, 120880000, 129239000, 127949000, 117837300, 116464500, 122654400, 117754000, 120738400, 128323300, 128117100, 140589800, 121341300, 129855300, 128566200, 117567100, 117023500, 122486000, 118193400, 120317100, 128647700, 127849800, 141255000, 122152300, 129453500, 128859800, 117931800, 116552000, 122209600],
+          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2]
         },
         {
-          "elapsed_ns": [112109600, 114685600, 122432600, 121705500, 133919700, 115534400, 124203200, 123164500, 111864500, 111723900, 117567900, 112403500, 116209600, 122495100, 122671300, 134801000, 115879200, 124938300, 124244800, 111893200, 111070400, 119219300, 114062100, 115131100, 127513100, 122122600, 135447200, 116398100, 123557500, 125177900, 112432500, 113250100, 117467100, 113672300, 116124400, 126026800, 122094200, 136896100, 116744500, 124109900, 125265900, 114365200, 116096000, 118405300],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [113162700, 116025200, 123312000, 122841600, 135062100, 117536600, 124643800, 123530100, 112531300, 111868500, 117771000, 113100000, 115761600, 123128500, 122712400, 135304300, 116560200, 124649100, 123287400, 113287600, 111898000, 117524300, 113296300, 115727500, 123543200, 122945400, 135277300, 116713900, 124512300, 123539900, 112370000, 112254400, 117777200, 113342500, 116305500, 123671200, 122566700, 135215500, 116765600, 124722000, 123771100, 112855500, 112200900, 117594500],
+          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5]
         }
       ]
     },
@@ -886,25 +1109,25 @@
       "operation": "direct/leanVM/verify",
       "passes": [
         {
-          "elapsed_ns": [15649800, 15692700, 15517100, 15643900, 15709000, 15650600, 15546200, 15675900, 15767300, 15546100, 15542400, 15617500, 15838900, 15685100, 15569700, 16481600, 15685900, 15507800, 15724900, 16051300, 15702000, 15517700, 15856500, 15634800, 15608600, 15686200, 15779100, 15774200, 15653700, 15767200, 15869400, 15931000, 15732400, 15620100, 15629800, 15679300, 15721200, 16114800, 15801500, 15601700, 15629400, 15821200, 15721800, 15632200],
-          "iterations": 128,
           "pass": 1,
-          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15527000, 15553100, 15397800, 15534500, 15597400, 15483700, 15416600, 15541900, 15539400, 15390400, 15444600, 15543200, 15593900, 15496600, 15410100, 15632400, 15408700, 15445200, 15535900, 15844900, 15748900, 15450700, 15498900, 15407400, 15416000, 15524500, 15640800, 15681000, 15512900, 15570400, 15533100, 15684900, 15644500, 15445700, 15575700, 15552000, 15903900, 15547400, 15608600, 15511500, 15531100, 15528800, 15644700, 15534700],
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6]
         },
         {
-          "elapsed_ns": [15077500, 15176000, 15193600, 15512000, 15515300, 15156800, 15274400, 15191900, 15235300, 15241200, 15337000, 15341800, 15261000, 15210700, 15153400, 15217200, 15186300, 15197400, 15111500, 15297600, 15114700, 15203400, 15087400, 15514600, 15608700, 15272100, 15628400, 15334700, 15264000, 15273500, 15229000, 15312900, 15080000, 15082200, 15176400, 15223000, 15810900, 15316200, 15201100, 15121200, 15279700, 15217000, 15306900, 15687800],
-          "iterations": 128,
           "pass": 2,
-          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15650400, 15727200, 15726200, 15777500, 15774000, 15611600, 15757300, 15738800, 15619300, 15746800, 15796200, 15713800, 15784400, 15729200, 15725800, 15696900, 15706100, 15700300, 15595100, 15934300, 15618800, 15774100, 15645900, 15742500, 15737400, 15820300, 15765500, 15718400, 15770700, 15788100, 15710400, 15851200, 15595400, 15600300, 15714600, 15601400, 15614700, 15797200, 15694500, 15608200, 15742300, 16539800, 15701700, 15724800],
+          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4]
         },
         {
-          "elapsed_ns": [15144600, 15099900, 15365900, 15105800, 15165000, 15244400, 15135800, 15898400, 15173500, 15101200, 15222900, 15095300, 15127100, 15818000, 15172500, 15207800, 15296200, 15907900, 15882100, 15604900, 15274700, 15131700, 15833700, 15008400, 15531200, 15183300, 15261200, 15146500, 15035900, 15226500, 15327200, 15255300, 15067700, 15331700, 15414600, 15140900, 15642700, 15199500, 15297800, 15105400, 15229800, 15135700, 15345700, 15408800],
-          "iterations": 128,
           "pass": 3,
-          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15615800, 15559200, 15456900, 15538800, 15545700, 15675100, 15571400, 15480000, 15635600, 15473800, 15602300, 15474000, 15601800, 15710800, 15453300, 15566300, 15570300, 15560200, 15443600, 15909800, 15663900, 15603400, 15535800, 15487700, 15580100, 15527400, 15456000, 15592000, 15471600, 15483600, 15629100, 15591800, 15606700, 15585300, 15570600, 15621600, 15487200, 15637800, 15676300, 15459800, 15708300, 15841400, 15470100, 15621000],
+          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1]
         }
       ]
     },
@@ -913,25 +1136,25 @@
       "operation": "macro/evm2/ecrecover",
       "passes": [
         {
-          "elapsed_ns": [19650900, 19617600, 19790900, 19644600, 19754600, 20005700, 19986200, 21225600, 21681500, 20609000, 20058600, 19833700, 20144300, 20009600, 20112200, 22918300, 19784500, 19843300, 19880400, 19974700, 19733400, 20060400, 19753500, 20004300, 19793300, 19732100, 20224800, 19765200, 19974800, 22600100, 23193800, 19666800, 19826200, 20194000, 19918600, 20122800, 19782100, 19736300, 19946800, 19797700, 19873500, 27608400, 19781600, 21513900],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19581100, 19590700, 19614300, 19613100, 19667000, 19635200, 19627500, 19688700, 19645600, 19667400, 19658700, 19694300, 19601900, 19600000, 19585500, 19643500, 19678700, 19655800, 19696200, 19651800, 19612800, 19658500, 19610500, 19670700, 19833900, 19606800, 19726900, 19646300, 19580500, 19639000, 19629200, 19649100, 19721600, 19677300, 19633900, 19668700, 19643300, 19700000, 19624200, 19687600, 19579100, 19635800, 19669200, 19621700],
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0]
         },
         {
-          "elapsed_ns": [19635100, 19606100, 19627000, 19599400, 19637000, 19750300, 19915900, 19965700, 19723700, 19919600, 21337300, 19720300, 19903900, 28640200, 19719500, 19721200, 19717200, 20354300, 19963800, 20107600, 19901000, 19737100, 19877100, 20013700, 24156200, 19743800, 19957200, 23419900, 19688300, 20889400, 20134100, 19930400, 19938400, 20641200, 19735300, 21520200, 19751400, 19711600, 19766500, 19929700, 21671300, 19980800, 20001000, 19749400],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19688600, 19596800, 19634400, 19895700, 19584500, 19619900, 19576300, 19641300, 19662200, 19664100, 19591700, 19633600, 19588300, 19659900, 19589700, 19624800, 19622900, 19613500, 19676000, 19572600, 19577500, 19633600, 19606500, 19682100, 19584200, 19579600, 19619100, 19650500, 19646800, 19599100, 19643400, 19619300, 19612800, 19684200, 19619100, 19685100, 19689100, 19595600, 19681200, 19579500, 19601600, 19568600, 19594900, 19588100],
+          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5]
         },
         {
-          "elapsed_ns": [19516800, 19595300, 19576200, 19555400, 19639100, 19722500, 19844700, 28326600, 22814000, 20265600, 19798300, 19808400, 19779400, 23366200, 19606500, 19696500, 19898100, 20577900, 21157300, 19678300, 19862800, 19897200, 24886800, 19875900, 19856400, 19899000, 19987500, 19610300, 19907300, 20138200, 19660600, 24920200, 19828000, 19876400, 22082000, 19655900, 19748400, 20447800, 19742500, 19868100, 21434000, 19895100, 21972400, 20549900],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19584500, 19614300, 19660600, 19624200, 19616800, 19694800, 19618800, 19598800, 19579100, 19705500, 19698600, 19614200, 19610200, 19706800, 19605700, 19631000, 19635400, 19686400, 19583600, 19706800, 19654000, 19625000, 19590300, 19609900, 19766900, 19729300, 19707100, 19628100, 19671900, 19664600, 19604900, 19583100, 19648100, 19656700, 19700500, 19607100, 19650900, 19576000, 19659300, 19646900, 19606600, 19581800, 19618200, 19698700],
+          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3]
         }
       ]
     },
@@ -940,25 +1163,25 @@
       "operation": "direct/lean-sphincs/key_gen",
       "passes": [
         {
-          "elapsed_ns": [46855600, 46767000, 46848800, 46813000, 47687500, 46982700, 47600700, 46933300, 46919200, 47124100, 46988400, 47271300, 46944200, 47066200, 46900100, 46872500, 48110900, 47455500, 46884800, 47525600, 47953200, 47026200, 46960100, 46830500, 49988500, 46923300, 47274500, 47315200, 47867300, 47040900, 46905500, 49583400, 46914700, 46944500, 48700800, 48114400, 48703600, 46957300, 46894500, 46896900, 47030900, 46973400, 46975400, 47058600],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46694500, 46623600, 46758500, 46814200, 46742100, 47224700, 47268600, 47756600, 46988700, 47608100, 46975400, 47029600, 47016600, 47096700, 47002600, 46978400, 47060200, 46942200, 47369400, 47346000, 47007500, 47013900, 47051300, 46935600, 47115400, 46905700, 46917900, 47178000, 46967700, 47036700, 47063900, 46860000, 47001800, 47187400, 47075200, 47102400, 47946900, 47017100, 47000400, 46968600, 47040200, 47040800, 47011900, 46953700],
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1]
         },
         {
-          "elapsed_ns": [46605600, 46601400, 46545700, 46468700, 46596400, 46855700, 46675500, 46635500, 47221300, 48206200, 46704600, 46608400, 46681800, 46805300, 46736700, 46586300, 46849700, 46755500, 47626700, 47145800, 50038600, 46797800, 46648800, 46875400, 46912200, 46631100, 50251900, 48431100, 46757800, 46882200, 46552900, 46747700, 47070900, 46827300, 46566600, 46730800, 46656800, 47000500, 46648900, 47068400, 46612000, 46569300, 46810400, 46902000],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46718500, 46707400, 46650000, 46608000, 46905800, 46851200, 46750100, 46831000, 46685600, 46641000, 46806900, 46729000, 46649800, 46609000, 46668100, 46675700, 46785800, 46705400, 47464600, 46752400, 46767700, 46741600, 46822600, 46766200, 46880900, 46681600, 46773200, 46789500, 46808300, 46795800, 46703100, 46787400, 46810100, 47005300, 47383600, 47124700, 46682900, 47098500, 46791500, 46676200, 46770000, 46789800, 46786900, 46836900],
+          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1]
         },
         {
-          "elapsed_ns": [46510700, 46576400, 46599400, 46601200, 46555800, 46646700, 46578600, 46533800, 46545800, 46625900, 46607700, 46669500, 46577100, 46618500, 46668700, 46607200, 46615200, 46537100, 46528900, 46486400, 46712100, 46584200, 46642200, 46688300, 46679600, 46622000, 46520500, 46583700, 46644400, 46492800, 46759300, 46639600, 46665000, 46588100, 46749100, 46750000, 46732100, 47677700, 46541800, 46525000, 46515000, 46735000, 46505400, 46577000],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [46580900, 46778900, 46784100, 46708400, 46606000, 46730800, 46535500, 46595200, 46542000, 46662600, 46736200, 46739900, 46692200, 47088800, 46611300, 46676800, 46591100, 46581800, 46606800, 46514800, 46908600, 46780700, 46680400, 47005600, 46753900, 46610400, 46600500, 46628800, 46866900, 46700100, 46788300, 46794800, 46828600, 46786100, 46639100, 46773000, 46835200, 46779900, 46666200, 46698700, 46593100, 46793600, 46682300, 46742600],
+          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2]
         }
       ]
     },
@@ -967,25 +1190,25 @@
       "operation": "direct/lean-sphincs/sign",
       "passes": [
         {
-          "elapsed_ns": [85780800, 87634700, 94384000, 93219800, 103191900, 95093000, 97004800, 94221500, 85556300, 84981500, 89929500, 86422900, 87783500, 94636700, 93604800, 103601100, 90948700, 96036100, 93898700, 85492500, 85531900, 89426900, 85972100, 88919600, 94373800, 93413600, 104011500, 89556100, 94816100, 95349200, 86012800, 84837300, 89309100, 85913800, 90087400, 96310800, 95895200, 111189300, 88527600, 94676900, 94577000, 85453800, 91376200, 89160000],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [85469800, 87430500, 93627600, 93021500, 103036100, 88535400, 95598400, 94730400, 86266500, 85961200, 89850500, 86020300, 88160100, 94005800, 93508900, 103258100, 88547500, 94979100, 94070600, 85570700, 85016500, 89408400, 86111700, 88102700, 94148300, 93581100, 103206200, 88545200, 94753100, 94289100, 86380200, 85044200, 89437200, 86067500, 87952000, 94167300, 93431000, 103478000, 88755500, 94809600, 94226800, 85565000, 84976400, 89940700],
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5]
         },
         {
-          "elapsed_ns": [85232100, 87283400, 93580700, 92714200, 102548100, 88620800, 95015200, 93924900, 85366100, 84720000, 89042800, 86799300, 87378400, 94676200, 92914100, 102704900, 90068100, 95727700, 95218800, 86005800, 85882700, 90635200, 85436700, 87413800, 93568900, 93081100, 102852800, 87950500, 95652100, 93781900, 86809400, 84839600, 88891200, 85566100, 88240000, 93605200, 93865300, 105439800, 88227500, 94165900, 95742400, 85019700, 84835200, 89947600],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [85348100, 87651300, 93814300, 92969800, 102765900, 88123100, 94568200, 93879300, 85249000, 84976800, 89032100, 85591100, 87451300, 93921800, 93069700, 102779900, 88316400, 94352700, 95035700, 85767900, 84613300, 88789700, 85617500, 87638400, 93617400, 93105100, 102865900, 88257800, 94329200, 93771900, 85098600, 84825800, 89038600, 85539700, 87951300, 93712900, 94577800, 102959100, 88341100, 94345600, 93670500, 85282600, 84832000, 89000000],
+          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3]
         },
         {
-          "elapsed_ns": [85369400, 87318500, 93227100, 92787900, 102484300, 87888300, 94192800, 93699500, 84886300, 84558600, 88739300, 85236500, 87283400, 93329400, 92719800, 102510700, 87849200, 94096600, 93565200, 84940700, 85991100, 88714900, 85354900, 87594100, 93340800, 92638300, 102545700, 88314000, 93993000, 93355900, 85341100, 84494100, 88918100, 85430700, 87669300, 93526200, 92877800, 102816700, 87915500, 94113400, 93371500, 84965500, 84282100, 88873800],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [85418800, 87488300, 93673900, 92990400, 102624300, 88150400, 94123000, 94297400, 84961700, 84578700, 88991600, 85531600, 87750700, 93540200, 92969900, 102595800, 88288600, 94417400, 93553000, 85102200, 86009300, 88844700, 85567500, 87379900, 93623000, 92892400, 103131400, 88240300, 94333400, 93715100, 85223100, 84755400, 89120000, 85511300, 87598700, 93600800, 92944800, 103349000, 88125100, 94472600, 93508400, 85263700, 84518700, 89102600],
+          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4]
         }
       ]
     },
@@ -994,25 +1217,25 @@
       "operation": "direct/lean-sphincs/verify",
       "passes": [
         {
-          "elapsed_ns": [18667400, 18754800, 18766800, 18700100, 18732300, 19101800, 18940200, 18787600, 18936700, 18719500, 19664000, 21272800, 18876500, 18807200, 19071300, 18783700, 19199400, 18845200, 18910900, 19020600, 19024600, 18760700, 18993100, 19354900, 19674900, 19614100, 19224700, 18824100, 18825700, 18875400, 18804700, 19362300, 22373800, 18886700, 19488100, 19382900, 18905700, 18899700, 19181800, 19691900, 18762600, 18756100, 18780400, 18874500],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18632000, 18699300, 18680100, 18619900, 18626800, 18791100, 18848500, 18927200, 18773700, 18738800, 19024700, 18843900, 18895900, 18748600, 18811800, 18736700, 19134100, 18745300, 19035700, 18768000, 18969700, 18711800, 18696500, 18758500, 18960400, 18750900, 18744800, 18732700, 18697900, 18806400, 18741300, 18785000, 18781800, 18808400, 18914100, 18760300, 19073800, 18731300, 18761200, 18744800, 18726500, 18696900, 18895800, 18716700],
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3]
         },
         {
-          "elapsed_ns": [18652600, 18645400, 18659500, 18717800, 18669900, 18686600, 19318300, 18704600, 19145800, 18838500, 19239200, 18922600, 19742100, 18852400, 18857300, 18788700, 18763300, 18874600, 19002600, 18709600, 18679200, 18822800, 20227100, 19987400, 19257200, 18953400, 19052800, 18799400, 18748800, 20805700, 18694000, 18897400, 18845500, 18752100, 18721600, 18818500, 19051000, 19552200, 18737800, 19021400, 19005000, 22397100, 18689300, 19533100],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18629300, 18662700, 18660600, 18680300, 18675000, 18684200, 18654200, 18656100, 18713000, 18690100, 18667600, 18784500, 18719100, 18739100, 18742500, 18790300, 18750800, 18714500, 18948400, 18679300, 18630300, 18694900, 18728400, 18638400, 18655900, 18684300, 18672500, 18674600, 18698600, 18720200, 18772000, 18709600, 18639300, 18715500, 19045700, 18768900, 18726900, 18749100, 18709600, 18708100, 18680700, 18685600, 18684100, 18748000],
+          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0]
         },
         {
-          "elapsed_ns": [18679800, 18662100, 18618900, 18687700, 18725000, 18702500, 18683400, 18723500, 18671900, 18696900, 18651700, 18615600, 18692300, 18634200, 18633800, 18608400, 19035300, 18631700, 18698700, 18719000, 19009800, 19051300, 18677700, 18665500, 18629100, 18715400, 18690200, 18725900, 18651000, 18597800, 18741200, 18713300, 18666400, 18731200, 18765500, 18741300, 18700200, 19016000, 18722600, 18617900, 18703000, 18709000, 18766700, 18667700],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18705800, 18670300, 18642100, 18659200, 18723600, 18678200, 18977800, 18707000, 18702900, 18690900, 18632800, 18637200, 18700400, 18688300, 18670900, 18643200, 18712500, 18641600, 18695400, 18748600, 18936100, 18880700, 18669000, 18670000, 18655500, 18690700, 18705800, 18699700, 18634900, 18907100, 18769100, 18756600, 18705100, 19003300, 18700900, 18717400, 18696600, 18681900, 18716000, 18668200, 18691000, 18764900, 18752100, 18692400],
+          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0]
         }
       ]
     },
@@ -1021,25 +1244,25 @@
       "operation": "direct/leanVM/key_gen",
       "passes": [
         {
-          "elapsed_ns": [61986900, 61818400, 61868900, 61839200, 61918000, 63034300, 62145200, 63503600, 62690200, 62992000, 62377100, 64298100, 62137500, 63982100, 61892600, 62016500, 62134500, 62357700, 61831900, 62392900, 63746700, 61922100, 62540400, 62214800, 62233900, 61870000, 61978900, 61946000, 62102400, 62908100, 61919500, 62625200, 64196800, 62971000, 63919000, 62895600, 63046100, 62176500, 62345600, 62037900, 62793300, 62024400, 62124800, 62517000],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61892900, 61906200, 61986400, 61937500, 62164300, 62068900, 62946000, 64151700, 63088700, 62892200, 62412000, 62267800, 62684700, 62595000, 62150100, 62204100, 62331600, 62369000, 63649200, 62197100, 62115300, 62159500, 62369100, 62521000, 62146100, 62190900, 62190900, 62221900, 62382400, 62265200, 62332400, 62226100, 62291800, 62171400, 62113000, 62336700, 62466400, 62178400, 62182300, 62299800, 62446500, 62254400, 62249000, 62237400],
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2]
         },
         {
-          "elapsed_ns": [62698000, 62577400, 62629000, 62720400, 62878700, 62793900, 62752900, 63211400, 62904500, 63596200, 63286300, 63383100, 62819900, 63190100, 64002400, 63038700, 63264300, 63183100, 64307000, 62832600, 63214600, 63063800, 62856300, 62753600, 62684500, 63501500, 62777200, 62721500, 63062000, 63081200, 62798800, 62875500, 63137000, 63126500, 62963500, 62701100, 62911500, 63119400, 62922900, 62932200, 63024600, 62842500, 62777800, 63287000],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [63075100, 62995800, 63026500, 63081400, 63074900, 62973000, 63042300, 63179200, 63219500, 63120400, 63051800, 63358800, 63241200, 63275900, 63002700, 63092000, 63472000, 63132400, 63886100, 63588100, 63245600, 63089500, 63252500, 63140800, 63087500, 63327200, 63191100, 63008000, 63110400, 62975500, 63358700, 63067700, 63055200, 63114400, 64480500, 63653700, 63248900, 63236900, 63233400, 63140800, 63463000, 63200000, 63190700, 63215300],
+          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6]
         },
         {
-          "elapsed_ns": [62653100, 62533200, 63558100, 62885000, 62691900, 62858600, 63330000, 64087600, 62813600, 62677800, 62750100, 62470200, 62589500, 62634500, 62618900, 62805000, 62492800, 62433200, 62773400, 62827100, 63061100, 64249700, 62484100, 62650600, 63510700, 62501800, 62519100, 62713600, 62522500, 63016600, 62811300, 62977100, 62708100, 62638900, 63036300, 62815800, 62849300, 62899400, 62640800, 62771500, 62473700, 63345000, 62733300, 62591100],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61545700, 61656900, 62574300, 61566100, 61545500, 61538700, 61726200, 63115700, 61627000, 61655400, 61702100, 61508800, 61681200, 61596000, 61719900, 61688000, 61722200, 61670300, 61694900, 61604400, 61551200, 61809300, 61661100, 61645900, 61620400, 61670300, 61614400, 61661200, 61686900, 61680900, 61828700, 61606800, 61581400, 61686500, 61735300, 61570400, 61665800, 61890600, 61571500, 61693100, 61506800, 61642800, 61630500, 61642800],
+          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6]
         }
       ]
     },
@@ -1048,25 +1271,25 @@
       "operation": "direct/leanVM/sign",
       "passes": [
         {
-          "elapsed_ns": [115775100, 118511900, 126390400, 125433200, 139859100, 120996200, 128241600, 128984400, 115468200, 115106400, 121508800, 117174600, 118308400, 128616300, 127085400, 140079500, 119368900, 128007600, 127153800, 116739400, 115777800, 122655700, 116225000, 118401300, 126970800, 125903900, 143676900, 120129800, 127795200, 127483400, 116008200, 115074300, 121267700, 117214900, 120674800, 129026000, 128887500, 142293200, 120064900, 127897400, 127562000, 116200700, 114943100, 121303400],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [115470400, 117857400, 126286000, 125331300, 139953300, 119333100, 128754800, 129434700, 116325200, 114937400, 123508200, 115992500, 120349300, 126804500, 126222400, 139084900, 119302900, 127864800, 129201400, 116420000, 114738800, 120432300, 115673000, 118338400, 126961100, 126003600, 139881900, 119512800, 127549200, 126631900, 115700200, 114561400, 120521500, 116497000, 119119700, 127153800, 127047500, 140079900, 119490400, 127640100, 127008800, 115570100, 114391200, 120604400],
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4]
         },
         {
-          "elapsed_ns": [113419300, 115724600, 123779600, 123084300, 137479800, 116782600, 125959300, 125833700, 112679800, 115218600, 119561700, 114093000, 116298400, 127742200, 123885400, 137032600, 116660100, 125317400, 124841300, 113993800, 113819200, 118224000, 113088300, 116158600, 125007800, 124084200, 137899700, 117340100, 125859400, 124769700, 115626500, 111858500, 118854600, 113916500, 116537600, 124269500, 127255200, 136937100, 117705600, 125792500, 128089500, 114661700, 112014100, 118593700],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [115939600, 118673300, 126254700, 125870100, 139410200, 119973500, 127798900, 126657100, 115211700, 114388100, 121067200, 115829000, 118574500, 126786900, 126187600, 139160900, 119482300, 127811900, 126538200, 115689600, 114605300, 120503500, 115731200, 118975500, 126802100, 125836200, 140031300, 119656900, 127576200, 126891300, 115559100, 114491500, 120633100, 116182400, 121127700, 128172300, 126527100, 139535400, 119786000, 127745600, 127174800, 115542200, 114602100, 120563400],
+          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2]
         },
         {
-          "elapsed_ns": [113231300, 116123300, 124437600, 124304900, 138088900, 116962700, 125890900, 124929100, 112609100, 112038700, 117888600, 113049000, 116013400, 124226200, 123793200, 137627800, 116814900, 125534200, 124659200, 114203400, 111895600, 118687500, 113082500, 116086000, 124491800, 124106800, 137592400, 116952700, 125713800, 125171200, 112717600, 112317000, 118201000, 113359800, 116424800, 125108800, 124166400, 138708500, 117050100, 125603400, 124802700, 112886700, 111727700, 118031700],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [115731300, 118754600, 126339600, 125695800, 139068800, 119277900, 127282500, 126655000, 115151000, 114677800, 120123500, 115572200, 118455400, 126440200, 125432100, 138552000, 119157000, 127488300, 126421000, 116150500, 116507000, 120183400, 115554600, 118275600, 126379000, 125641900, 138735400, 118991400, 128057100, 126625600, 115304300, 114298800, 120010800, 115589500, 118357700, 126826800, 125489200, 139813300, 119049000, 127388600, 127408600, 115183600, 114252300, 120215300],
+          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5]
         }
       ]
     },
@@ -1075,25 +1298,25 @@
       "operation": "direct/leanVM/verify",
       "passes": [
         {
-          "elapsed_ns": [15293400, 15332600, 15182600, 15320000, 15400600, 15331200, 15545700, 15311300, 15444200, 15260100, 15814200, 15766800, 15487000, 15613700, 15281100, 15367700, 15310000, 15280700, 15342600, 15407400, 15913000, 15484600, 15389200, 15225300, 15215600, 15404800, 15746500, 15435900, 15303400, 15375400, 15316500, 15754200, 15402700, 15873900, 15916400, 15682000, 15432500, 15429200, 15453800, 15278700, 15456800, 15421500, 15379600, 15306300],
-          "iterations": 128,
           "pass": 1,
-          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15245000, 15281700, 15159700, 15271700, 15399800, 15431200, 15397800, 15524400, 15460600, 15336500, 15238800, 15349100, 15359200, 15320100, 15234100, 15389000, 15227500, 15264100, 15639500, 15348600, 15328200, 15240300, 15349100, 15244700, 15297600, 15318300, 15666000, 15416400, 15310300, 15351000, 15331700, 15243900, 15428200, 15230700, 15468800, 15359000, 15374700, 15321000, 15432500, 15247900, 15326300, 15369800, 15432700, 15352400],
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6]
         },
         {
-          "elapsed_ns": [15141100, 15205200, 15212200, 15269700, 15207100, 15220700, 15212800, 15263000, 15187600, 15721100, 15349500, 15211600, 15267800, 15286900, 15254700, 15215700, 15313600, 15398600, 15228000, 15238700, 15127700, 15298800, 15145200, 15864000, 15218900, 15866600, 15233000, 15292900, 15353000, 15460300, 15234500, 15315600, 15201900, 15201300, 15248000, 15183700, 15517000, 15390600, 15215500, 15201800, 15238900, 15858200, 15353200, 15249400],
-          "iterations": 128,
           "pass": 2,
-          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15231800, 15290100, 15269500, 15308900, 15306600, 15180900, 15268900, 15292400, 15174000, 15325000, 15354400, 15276600, 15348500, 15310700, 15288500, 15268300, 15229600, 15234700, 15241100, 15283400, 15222200, 15299300, 15219600, 15298000, 15281300, 15323700, 15254800, 15298800, 15335100, 15334700, 15234900, 15286900, 15193300, 15252900, 15684600, 15348600, 15274700, 15342200, 15295800, 15209200, 15301200, 15266300, 15262800, 15320100],
+          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4]
         },
         {
-          "elapsed_ns": [15122700, 15271200, 15056400, 15073700, 15129100, 15174500, 15082700, 15448800, 15113800, 14979900, 15112400, 14985900, 15081300, 15176900, 14997000, 15112600, 15071300, 15108900, 14988500, 15110400, 15198600, 15099900, 15095900, 14992600, 15083500, 15089600, 14988600, 15071100, 14986200, 15078800, 15117100, 15066800, 15001800, 15020700, 15081000, 15157500, 15038200, 15131800, 15166200, 14987600, 15175600, 15003300, 14989300, 15157400],
-          "iterations": 128,
           "pass": 3,
-          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15497300, 15438600, 15461700, 15430700, 15498600, 15548800, 15572400, 15676000, 15504200, 15376600, 15534700, 15371500, 15552000, 15564900, 15349100, 15506900, 15450600, 15483500, 15400300, 15530400, 15560000, 15445700, 15478900, 15413600, 15471700, 15400000, 15425600, 15471700, 15479000, 15415400, 15509200, 15566900, 15414400, 15448400, 15454400, 15496600, 15404900, 15813700, 15559700, 15412100, 15525200, 15384200, 15383400, 15553300],
+          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1]
         }
       ]
     },
@@ -1102,25 +1325,25 @@
       "operation": "macro/evm2/ecrecover",
       "passes": [
         {
-          "elapsed_ns": [19620000, 19682900, 19678200, 19662500, 19834900, 20147700, 19850100, 21581800, 20056000, 21525100, 19784800, 28954700, 19973700, 21100300, 19893300, 19992300, 19966500, 20007600, 19714500, 20170200, 19919500, 19845300, 19775100, 20087700, 27721100, 20033700, 22283400, 19856800, 19720900, 19855900, 19738200, 19734200, 28680400, 21656300, 25934600, 21014500, 20974500, 20596600, 19817100, 20016300, 19929900, 19847800, 19957200, 25053100],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19613000, 19594100, 19568000, 19600500, 19728500, 19781100, 19811300, 19734300, 19806700, 19906000, 19868200, 19714700, 19782700, 19721100, 19651200, 19751000, 19863100, 19790200, 19720500, 19731700, 19673800, 19777100, 19705800, 19782900, 19709700, 19712100, 19813900, 19734300, 19718300, 19740400, 19735800, 19696200, 19743500, 19798200, 19707400, 19744600, 19707300, 19745400, 19753200, 19732300, 19757000, 19701000, 19773200, 19743700],
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0]
         },
         {
-          "elapsed_ns": [19617000, 19568300, 19590600, 19555600, 19584900, 19858800, 21255000, 19931100, 19677600, 19895800, 19970000, 20216000, 19709900, 20146000, 19729400, 19703100, 20730800, 21137900, 20559400, 19869400, 19642500, 19902200, 19891600, 19707000, 19956500, 28796900, 19886700, 20060800, 19862300, 21320100, 19723600, 19893400, 21653100, 19901700, 19946000, 19689400, 19938600, 25077300, 19735000, 19924700, 20497300, 19957600, 24141000, 21505900],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19639800, 19606700, 19647700, 19576900, 19589800, 19563700, 19558300, 19615400, 19621100, 19639200, 19595300, 19666400, 19598300, 19605700, 19572900, 19616200, 19607500, 19651000, 19720800, 19718900, 19601300, 19641100, 19609600, 19645900, 19622700, 19623000, 19587800, 19725500, 19623400, 19566800, 19974200, 19610100, 19565600, 19692500, 19818600, 19776700, 19711900, 19624100, 19659800, 19619700, 19662500, 19580700, 19624400, 19608500],
+          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5]
         },
         {
-          "elapsed_ns": [19570500, 19631200, 19644100, 19652000, 19588300, 19676200, 19593800, 19742400, 19680300, 19655300, 19610200, 19618300, 19598900, 19950900, 19610700, 19628600, 19658300, 19583900, 19659900, 19597500, 19687800, 19705700, 19586800, 19613400, 19624700, 19648700, 19643500, 19624100, 19611900, 19649600, 19610700, 19574900, 19615800, 19626800, 19841300, 19641400, 19665500, 19619800, 19654700, 19681900, 19606800, 19614800, 19648700, 19627600],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19581700, 19707300, 19609400, 19706600, 19566000, 19711400, 19633500, 19582300, 19588600, 19681300, 19669900, 19582800, 19597600, 19625500, 19565200, 19588900, 19647600, 19620700, 19569700, 19634400, 19624200, 19548800, 19596200, 19926600, 19659100, 19688800, 19696100, 19663500, 19672900, 19723800, 19574000, 19561900, 19573800, 19557100, 19715500, 19601000, 19645900, 19593400, 19659400, 19660300, 19595400, 19554500, 19641300, 19667800],
+          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3]
         }
       ]
     },
@@ -1129,25 +1352,25 @@
       "operation": "direct/lean-sphincs/key_gen",
       "passes": [
         {
-          "elapsed_ns": [58625700, 59770700, 59428200, 59464700, 62398800, 66358800, 59847500, 60225900, 59993200, 60507400, 66414500, 59723700, 59916200, 59094300, 66845500, 60223400, 59858800, 67670600, 62981800, 59655500, 59381000, 58988800, 59391400, 59613200, 81896900, 60025200, 60082600, 59709400, 59827100, 59538600, 59106500, 66077300, 61387700, 59967000, 82666600, 59549600, 60074700, 60496100, 59531200, 66423600, 63215100, 59510000, 63695000, 59361400],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [58522500, 58825000, 58619400, 58776500, 58908300, 58673600, 58888700, 58962900, 59006800, 58838700, 58703700, 59089400, 58865200, 58724300, 59049600, 59032900, 58909000, 59107400, 58894900, 58651600, 58822800, 58812800, 58758700, 59008400, 58704500, 58933600, 58712300, 58812900, 59106300, 58786400, 58660000, 59158000, 58924700, 58664100, 58704200, 58689200, 58943900, 58979800, 58826900, 59039600, 58683900, 58825400, 58829600, 58654300],
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1]
         },
         {
-          "elapsed_ns": [59887200, 59699100, 78146200, 61038700, 62379700, 72886100, 64791000, 67153500, 60849100, 60695300, 61179300, 61785300, 81405200, 61648200, 60912800, 88731300, 60593400, 62609400, 60669200, 64005400, 62093500, 60831400, 60695000, 60555400, 60534400, 62459900, 61236800, 63265900, 62405100, 62198400, 70325900, 61360700, 60445400, 60890100, 60341500, 74448800, 61664000, 65996700, 79359600, 63385700, 60884800, 60312400, 60298500, 67303900],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [58551200, 58424800, 58843500, 58781900, 58693600, 58717100, 58534100, 59215100, 58730200, 58864200, 58884100, 58826200, 58866900, 58862400, 58728100, 58559500, 58632400, 58722700, 58822400, 58710400, 58724900, 58498500, 58530400, 58586300, 58747300, 58684300, 58779800, 58594400, 58563700, 58659300, 58777000, 58661900, 58635500, 59057700, 58926000, 58527200, 58721500, 58532800, 58701900, 58678400, 58753200, 58740700, 58651000, 58613800],
+          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1]
         },
         {
-          "elapsed_ns": [58623800, 58543700, 58714400, 58605100, 58624300, 60477500, 59213900, 59315100, 59781900, 60477400, 59070500, 60737900, 59602900, 60050100, 59457700, 61170900, 59718900, 59487600, 59883900, 74855000, 62262800, 59877000, 59617400, 59228800, 60358900, 72741500, 59349900, 61026500, 61378200, 65102100, 59734600, 59448300, 59242300, 59203900, 59690300, 83381500, 60861300, 59482900, 60384400, 59729900, 59590300, 59639000, 60845800, 59945600],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [60279700, 60192600, 60227400, 60175800, 60264600, 60214900, 60318700, 60248700, 60471200, 60122800, 60211100, 61289800, 60390000, 60088800, 60557500, 60117100, 60338000, 60355500, 60401000, 60185000, 60406300, 60145600, 60063000, 60128200, 60238000, 61141000, 60341700, 60315800, 60024400, 60268500, 60134800, 60160700, 60055800, 60040300, 60328900, 60159600, 60030300, 60315700, 60281600, 60254300, 60295700, 60115700, 60273400, 60297300],
+          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2]
         }
       ]
     },
@@ -1156,25 +1379,25 @@
       "operation": "direct/lean-sphincs/sign",
       "passes": [
         {
-          "elapsed_ns": [107241800, 113194000, 119550800, 118730800, 132160400, 114190300, 120537900, 125812400, 111848100, 108212500, 122161800, 109494800, 111909800, 119612600, 121176000, 181451200, 111816500, 124098900, 128181800, 110447400, 139415400, 114103200, 109144800, 111994500, 128083600, 119066100, 131906700, 140761100, 121372600, 150721300, 110576900, 107496200, 114477500, 116644700, 114721800, 121503200, 126421900, 133639800, 116007500, 134936900, 127632700, 117596400, 108193000, 113795300],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [107401500, 110266900, 117735600, 116864800, 129534100, 111238900, 118865900, 117754200, 107659600, 106500400, 111991200, 107760500, 110051500, 117930500, 117247900, 129814700, 111312600, 119381600, 118342200, 107730400, 106583400, 112267500, 107752200, 110129100, 118419600, 117218100, 129531800, 111249900, 119132100, 117971000, 107406400, 106496000, 112123700, 107532800, 110768700, 118067200, 117345700, 129776600, 111355400, 118842600, 118197100, 107495500, 106636000, 112479500],
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5]
         },
         {
-          "elapsed_ns": [107383800, 110167000, 118723100, 120408300, 132402400, 127188300, 126843100, 121671000, 109058600, 107767500, 125428900, 110964300, 111486200, 121095300, 143710100, 130885700, 113327900, 120248600, 119605500, 108246200, 108444700, 113178900, 108820600, 111344300, 119852700, 118405600, 130968100, 112417700, 120554900, 125371900, 133876400, 107859000, 113445500, 110553200, 111001000, 124722300, 156839200, 132107300, 111976700, 121242800, 119056700, 110265500, 109303200, 113486800],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [107808500, 110108500, 117929900, 117442500, 129921700, 111403800, 119214900, 118308700, 108300200, 106988900, 112217600, 107910200, 110552300, 118343200, 117955300, 130090300, 111229700, 118989600, 118263500, 107672300, 106745300, 112334200, 107773400, 110466000, 118033300, 117456900, 130084300, 111108100, 119196100, 118553400, 107314500, 106579200, 112299100, 107921700, 110380700, 118284300, 117438300, 130048300, 111293500, 119134800, 118346100, 107644500, 106453700, 112552100],
+          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3]
         },
         {
-          "elapsed_ns": [106963200, 109951700, 117854400, 116681600, 166502600, 114800300, 124485400, 120307000, 110672600, 107429000, 113188500, 113537900, 119744700, 142538400, 129277800, 135177200, 111922900, 126031000, 121398300, 108069600, 108252500, 112666500, 115507400, 113775100, 142211100, 125330100, 137939000, 121525100, 122116800, 148592600, 108725500, 108693100, 113062700, 108981400, 112430000, 142387500, 120904800, 154262900, 114364600, 125937900, 119085400, 107821000, 107374900, 113528100],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [107395100, 110227400, 118267300, 117324800, 130527100, 111194800, 119302200, 118393600, 107372900, 106284100, 112247000, 108023100, 110625800, 118463800, 117491500, 130409200, 110878000, 119495200, 118328600, 107130400, 106888200, 112518300, 108018300, 110406400, 118133200, 117693900, 130582200, 110924400, 119412700, 118256100, 107101500, 106292400, 112101100, 107454900, 110318800, 118603300, 117619900, 130294200, 111176500, 119117300, 118511100, 107187400, 106452100, 112266400],
+          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4]
         }
       ]
     },
@@ -1183,25 +1406,25 @@
       "operation": "direct/lean-sphincs/verify",
       "passes": [
         {
-          "elapsed_ns": [10522300, 10711100, 10741000, 10598100, 12009200, 11292600, 10665400, 10561000, 10933200, 10641800, 12603800, 10577100, 10673400, 10850500, 12743100, 10615300, 10859900, 10566100, 10907700, 12937300, 10543600, 10624000, 10605000, 10894100, 10982200, 10751900, 10630000, 10579200, 10545400, 10632500, 10783200, 11004300, 11010300, 10808800, 10640300, 14539600, 10711500, 10615200, 13396400, 10835800, 12071900, 10888800, 10709900, 10611400],
-          "iterations": 256,
           "pass": 1,
-          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3],
-          "work_items_per_iteration": 1
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10543400, 10619000, 10601800, 10536900, 10573800, 10636600, 10552400, 10533400, 10610300, 10522900, 10592600, 10512300, 10613800, 10574500, 10524700, 10505800, 10613700, 10552400, 10567100, 10522500, 10494800, 10592100, 10562800, 10603900, 10503200, 10557900, 10610500, 10521800, 10561600, 10568200, 10760800, 10618200, 10499100, 10529800, 10618200, 10536800, 10587900, 10667700, 10545500, 10590400, 10572200, 10532100, 10600700, 10530100],
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3]
         },
         {
-          "elapsed_ns": [10524800, 10534600, 16036300, 10626600, 12086600, 12859400, 10634200, 10851100, 12304000, 10801000, 10900700, 10532600, 11167100, 10655100, 10588200, 10611700, 10675400, 10635900, 10582100, 10782600, 10603000, 10820600, 10759500, 10782500, 10712300, 11747200, 12873300, 10627400, 11430400, 10655400, 10626200, 11260100, 10601900, 10833100, 10605900, 11833300, 10761900, 12649800, 10585100, 10786000, 11186700, 10808500, 10626600, 10904600],
-          "iterations": 256,
           "pass": 2,
-          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10504900, 10522300, 10528100, 10577100, 10535000, 10559000, 10536100, 10636600, 10549900, 10573700, 10548500, 10518200, 10539500, 10612900, 10490800, 10489800, 10583600, 10580000, 10559600, 10576200, 10510000, 10583500, 10587800, 10513700, 10527000, 10585300, 10571100, 10519800, 10585300, 10586800, 10545800, 10486100, 10510200, 10544800, 10531700, 10509200, 10529100, 10568200, 10542300, 10500100, 10533700, 10548700, 10517000, 10575500],
+          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0]
         },
         {
-          "elapsed_ns": [10581700, 10508900, 10515700, 10564500, 10802300, 10672100, 10823900, 10991200, 11718200, 10761800, 10590900, 11946000, 10633300, 10537200, 10813900, 10549700, 10557800, 10728200, 10608500, 10582700, 10626900, 11980700, 12876900, 12902800, 10606600, 16964500, 10669700, 10569700, 10577700, 10660700, 10853400, 10787500, 10883800, 10528100, 10609100, 10541600, 10694600, 10664200, 10648200, 16830400, 10568000, 10517800, 10556700, 11486000],
-          "iterations": 256,
           "pass": 3,
-          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0],
-          "work_items_per_iteration": 1
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10651700, 10603100, 10601100, 10592400, 10542200, 10622400, 10592200, 10514900, 10642900, 10645700, 10560800, 10569300, 10635500, 10642600, 10604800, 10590500, 10563000, 10606800, 10636100, 10545200, 10626500, 10580600, 10578000, 10623600, 10597500, 10623500, 10642600, 10525200, 10582700, 10581600, 10532100, 10549400, 10623200, 10560200, 10641700, 10556300, 10623000, 10592800, 10612600, 10570300, 10646800, 10532100, 10536000, 10617000],
+          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0]
         }
       ]
     },
@@ -1210,25 +1433,25 @@
       "operation": "direct/leanVM/key_gen",
       "passes": [
         {
-          "elapsed_ns": [62400600, 62555600, 62637600, 62635100, 62398200, 64762700, 63249400, 62439800, 63294400, 62723800, 62278800, 62400500, 62424700, 62324500, 62845200, 61874100, 61975100, 62321900, 62302500, 64583600, 63187000, 62444200, 61914100, 62664500, 62995200, 63299500, 62471100, 61965400, 62053400, 61740100, 62242800, 62460400, 62685500, 61849400, 64336500, 62092500, 62658400, 62249200, 61719800, 64896000, 62440100, 62312500, 62884400, 62479200],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [62861300, 62981000, 62797300, 63112900, 62797400, 62144500, 61965300, 62970500, 62596200, 62902800, 62432600, 62056800, 62615100, 62740300, 63011800, 62909300, 63311700, 62779400, 62773200, 62850600, 62546700, 62117700, 62220000, 62846600, 62973000, 62180200, 62959300, 63163400, 62732500, 62086800, 62383700, 62862100, 62700600, 62115500, 62786700, 62175900, 62435700, 62457500, 62224000, 62926400, 62533700, 62519800, 62716300, 62956800],
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2]
         },
         {
-          "elapsed_ns": [62259800, 62720200, 62246500, 62659000, 62459800, 63150000, 63134500, 62662400, 62427700, 62878300, 63859500, 62441400, 63438700, 62535200, 62841400, 62786500, 62453300, 62360100, 62358300, 63357300, 63753300, 62899500, 62936500, 63775400, 62651500, 63364600, 62479200, 62610400, 62610600, 62301100, 62582700, 63300900, 62150900, 63608100, 62480900, 63575600, 63551500, 61973000, 63096800, 64682300, 62724400, 62268000, 62827600, 62207900],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61783300, 62200500, 61410700, 61994800, 61836700, 62219200, 61295100, 61773200, 62622600, 62383600, 62186800, 61761600, 62304200, 61957200, 62195900, 62245200, 62939200, 61630300, 61734700, 61886100, 61648900, 62446300, 62273500, 62141500, 61377200, 62284100, 61749400, 61890700, 61563500, 61755100, 61904800, 62178700, 61569000, 61449200, 61894700, 62177300, 61759700, 61459300, 61914700, 62041100, 62110100, 61610700, 62228500, 61605600],
+          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6]
         },
         {
-          "elapsed_ns": [61682400, 62074400, 61808200, 61797300, 61573700, 61747300, 63398200, 62166500, 62701800, 62239900, 62415300, 62231300, 62491700, 62291000, 62042500, 62234100, 61788400, 63114900, 62481100, 62291100, 61949300, 62026900, 61438400, 61795100, 62228900, 62068100, 61645500, 62264100, 62120100, 63146100, 61886300, 62410500, 61514800, 62794400, 61737000, 62957200, 62720600, 62379800, 61524200, 62154900, 61554400, 62409000, 61886700, 62556400],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61652000, 62123600, 61793600, 61835200, 61369500, 61487300, 61913700, 62077300, 61590400, 62282800, 62236400, 62061700, 62499800, 61906700, 61585800, 62136200, 62822200, 61544700, 62191300, 62164700, 61663500, 62073000, 61415500, 61661700, 62212400, 61397700, 61476600, 62767200, 61595300, 62088200, 61585900, 61943900, 61352900, 62379300, 61589500, 61509300, 62184200, 62139200, 61324200, 62079200, 62079100, 62088800, 61773500, 61550300],
+          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6]
         }
       ]
     },
@@ -1237,25 +1460,25 @@
       "operation": "direct/leanVM/sign",
       "passes": [
         {
-          "elapsed_ns": [115288700, 117325800, 125140100, 127416500, 138850500, 119002400, 127752700, 125099100, 116070900, 113795300, 121439700, 115144300, 118469400, 127045400, 125851800, 140195100, 119337600, 127043500, 126017500, 114144500, 115947500, 119993600, 114645300, 117495600, 125882300, 125037700, 138183600, 118368000, 126988800, 126943400, 115285300, 112936400, 119839900, 116310400, 119120200, 126900400, 125153100, 138417700, 118143400, 126874200, 126510000, 115764000, 113056900, 119734600],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [113928700, 116139100, 123752100, 123191100, 136583500, 117358300, 125521800, 123832600, 112426900, 111919000, 118151600, 113051000, 116148800, 124792500, 123976400, 137763500, 121796500, 126137000, 124394300, 112687000, 112364200, 118495000, 112866200, 115924500, 124631800, 124058300, 137186700, 117071100, 125495000, 124560700, 113226200, 111737600, 117912800, 114563300, 116198600, 124695500, 123081400, 136982700, 116881700, 125526800, 124700900, 112874600, 111604700, 118011400],
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4]
         },
         {
-          "elapsed_ns": [115670500, 118339400, 126900600, 127350200, 139496100, 120353000, 128652000, 127717000, 115355300, 114699000, 120145800, 115699100, 120890900, 126942000, 127080500, 139140300, 120099700, 131491700, 129330100, 115241600, 117441200, 120209300, 115226200, 119396100, 128250800, 125838100, 141546900, 119541000, 128637100, 126544600, 115338500, 114727500, 121729100, 116219500, 118512500, 126894900, 126708900, 139163300, 120232200, 128297700, 127922400, 115533000, 114390800, 120803000],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [114843500, 117648700, 125029000, 124926800, 138190700, 118445300, 126915700, 126551400, 116315000, 114633800, 119472300, 114757600, 117443500, 125526000, 124587800, 138722400, 120673400, 127301100, 126497200, 114107500, 113714300, 118790300, 114381200, 117197000, 126087100, 124317000, 138387100, 118653000, 126479900, 125773300, 114106800, 113230600, 119651600, 115049200, 117178400, 125931800, 124561900, 137862800, 118615400, 126622100, 126310100, 114065200, 112745500, 119454000],
+          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2]
         },
         {
-          "elapsed_ns": [114292800, 117326100, 125689900, 124094300, 138447000, 118848300, 125913000, 125542100, 114550000, 115041000, 119996100, 115270100, 117121600, 124813300, 124387600, 137183700, 118262300, 126172000, 125133600, 114727500, 113278400, 119186900, 114655600, 118334500, 124967300, 124547900, 137727300, 117860000, 127685500, 127284400, 113983000, 112986300, 119207400, 114557900, 119834000, 125807300, 126378400, 137799300, 118912900, 127551100, 126164900, 115352300, 113973600, 119244200],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [115906300, 118797100, 126260400, 126826500, 139189600, 120052400, 127602900, 126715400, 115457100, 116606100, 121917100, 117042700, 118964700, 126520100, 126116000, 138646500, 120500800, 127963600, 126662000, 115492800, 115235500, 121287400, 116072000, 119424700, 127062600, 126084300, 139489600, 119546300, 127832800, 126766700, 115569400, 114655200, 120847800, 116381200, 119790200, 126521300, 125985200, 139116800, 119630900, 128161600, 127147800, 115811900, 114414800, 120958800],
+          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5]
         }
       ]
     },
@@ -1264,25 +1487,25 @@
       "operation": "direct/leanVM/verify",
       "passes": [
         {
-          "elapsed_ns": [15603700, 15663600, 15412400, 15555100, 15525800, 15767600, 15656400, 15730300, 15875800, 15742900, 15399700, 15747700, 15734900, 15715700, 15444300, 15552200, 15761100, 15417000, 15793100, 15659300, 15842100, 15349400, 15757900, 15476400, 15586300, 15746500, 15611400, 15609100, 15735900, 15615900, 15755300, 15480900, 15746300, 15398600, 15705600, 15888300, 15672100, 15715800, 15658700, 16026300, 15871300, 16070600, 15609900, 15776100],
-          "iterations": 128,
           "pass": 1,
-          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15301700, 15615000, 15014000, 15252600, 15197700, 15389200, 15232400, 15364600, 15257400, 15018700, 15009900, 15398400, 15372900, 15407600, 15190800, 15344800, 15838800, 15084300, 15401400, 15314300, 15406100, 15047900, 15380900, 15270600, 15075400, 15392700, 15213700, 15292900, 15409700, 15234300, 15396000, 15096100, 15374400, 15092700, 15428800, 15264900, 15364200, 15389200, 15310200, 15109700, 15419400, 15271900, 15287200, 15481700],
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6]
         },
         {
-          "elapsed_ns": [14958700, 15776400, 15777600, 15176300, 15392200, 14982300, 15562900, 15535700, 15036800, 15207500, 15219900, 15386100, 15193700, 15349600, 15369400, 15404500, 15354200, 15356700, 15480100, 15391200, 15830200, 15267500, 15016400, 15345000, 15591700, 15226800, 15311000, 15386100, 15558300, 15343100, 15341500, 15376600, 15441900, 15073900, 15337000, 15017300, 14996400, 15295700, 15596100, 15355200, 15321600, 15373700, 15336400, 15332800],
-          "iterations": 128,
           "pass": 2,
-          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15330500, 15734400, 15628500, 15499900, 15726600, 15346600, 15709600, 15843300, 15794900, 15644400, 15562500, 15724400, 15514200, 15733300, 15733000, 15747300, 15764600, 15839100, 15407400, 15766000, 15394500, 15719900, 15470500, 15718400, 15736700, 15527400, 15686300, 15715200, 15646800, 15676000, 16017500, 15787900, 15389400, 15353800, 15735200, 15361900, 15368400, 15639600, 15725900, 15353800, 15602500, 15743800, 15714100, 15704700],
+          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4]
         },
         {
-          "elapsed_ns": [15634100, 15607100, 15238100, 15609900, 15632200, 15563300, 15721800, 15399600, 16398600, 15381800, 15608100, 15355000, 15641300, 15558800, 15402200, 15578000, 15919100, 15998600, 15391400, 15695800, 15836300, 15714500, 15671200, 15591800, 15744300, 15316300, 15375100, 15655400, 15344600, 15594400, 15666400, 15667700, 15343100, 15310400, 15864600, 15914400, 15343500, 15621900, 15611500, 15347100, 15459000, 15369700, 15423000, 15665300],
-          "iterations": 128,
           "pass": 3,
-          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15656100, 15711800, 15362400, 15744300, 15621700, 15559100, 15717100, 15369000, 15656000, 15523800, 15667600, 15511900, 15758600, 15611400, 15358100, 15644300, 15683600, 15672100, 15365500, 15627000, 15605000, 15724600, 15739800, 15333100, 15683000, 15395200, 15387800, 15686600, 15374200, 15378400, 15589200, 15675800, 15353300, 15374500, 15671600, 15616700, 15422700, 15689200, 15593400, 15346900, 15641600, 15419200, 15355500, 15682800],
+          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1]
         }
       ]
     },
@@ -1291,25 +1514,241 @@
       "operation": "macro/evm2/ecrecover",
       "passes": [
         {
-          "elapsed_ns": [19565300, 20274700, 19728700, 19981100, 19961000, 20086500, 20445400, 19905000, 20292700, 21148400, 20058300, 19711500, 19750900, 19911000, 19742900, 19859800, 19826100, 19786700, 19690600, 20129000, 19774900, 20092600, 20211700, 20044000, 20121300, 19704400, 19769200, 20120600, 20880900, 19839300, 20924700, 19705300, 20109400, 20050700, 19953600, 19882200, 20075800, 20013000, 19898200, 19810200, 19928000, 23795200, 20596900, 22598600],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19577200, 19619600, 19590900, 19633500, 19642600, 19835200, 19803200, 19607500, 19807300, 19693700, 19769400, 19611700, 19597800, 19606300, 19607000, 19867700, 19769700, 19694200, 19614600, 19799000, 19681500, 20026900, 19650100, 19704500, 19761400, 19606200, 19651000, 19770300, 19608400, 19657400, 19602300, 19609100, 19621500, 19785800, 19653600, 19787200, 19824400, 19745700, 19821900, 19618000, 19624500, 19631000, 19799200, 19627100],
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0]
         },
         {
-          "elapsed_ns": [19710200, 19682900, 19976600, 20321400, 19809600, 25694200, 24116700, 20823700, 19868500, 19870500, 21259800, 19878400, 19847300, 19657000, 19673200, 20628400, 19836900, 19942300, 19839100, 20003500, 20019000, 19714500, 19868300, 19683000, 19639000, 20030900, 19873800, 19866600, 19727600, 19918500, 20351300, 19650000, 20090300, 19673800, 20039900, 21382500, 22280400, 19675100, 19798300, 20047500, 19849700, 21262900, 19863100, 20064400],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19768500, 19617700, 19755400, 19625700, 19634800, 19628600, 19603200, 19744400, 19866300, 19797000, 19604200, 19773300, 19575200, 19604300, 19593700, 19599000, 19614200, 19674600, 19778000, 19776100, 19639000, 19628300, 19613200, 19637400, 19594400, 19621400, 19594200, 19722300, 19621100, 19607900, 19774700, 19618300, 19602200, 19698200, 19754000, 19623700, 19783100, 19621900, 19797300, 19583000, 19680600, 19581200, 19628500, 19625200],
+          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5]
         },
         {
-          "elapsed_ns": [19510800, 19712000, 19727000, 19709700, 19688100, 19959200, 21030500, 19886100, 19889300, 22220300, 20057100, 19626500, 19863400, 20327100, 20058400, 19690200, 19964100, 21462600, 20211400, 19893600, 20027100, 19845300, 19691400, 19665100, 20041600, 21360500, 19771400, 19808700, 20015900, 19886200, 19978500, 19588100, 19824400, 20795600, 20159200, 19772700, 19992600, 20822300, 20043700, 28634900, 21524500, 19847900, 19777500, 19856100],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19589000, 19751200, 19725000, 19724400, 19600600, 19648600, 19633500, 19602700, 19613800, 19738000, 19797000, 19571700, 19610200, 19775400, 19639500, 19610600, 19798800, 19769400, 19613300, 19810000, 19788400, 19624000, 19592400, 19597300, 19765500, 19718700, 19742700, 19601900, 19701200, 19633100, 19595800, 19594300, 19592500, 19901300, 19709100, 19624200, 20094800, 19625300, 19781100, 19627300, 19596400, 19619600, 19742200, 19719200],
+          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/key_gen",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [58220500, 58668700, 58253500, 58358300, 58359200, 58383100, 58384100, 58383100, 58478100, 58440500, 58420800, 58592300, 58424700, 58335200, 58450900, 58457600, 58289500, 58023700, 58222300, 58151900, 58151900, 58224900, 58216500, 58607100, 58179400, 58284400, 58199200, 58456100, 58478400, 58191300, 58037700, 58273300, 58376900, 58216600, 58405000, 58250900, 58328700, 58331500, 58191400, 58384100, 58059800, 58160200, 58252100, 58228800],
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1]
+        },
+        {
+          "pass": 2,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [58546300, 58445900, 58817400, 58727900, 58762400, 58753100, 58457000, 58635100, 58655600, 58760800, 58794300, 59065000, 58751200, 58917100, 58994900, 58795800, 58668100, 58919200, 58754700, 58609200, 58879400, 58567900, 58659800, 58824200, 58818900, 58892100, 58736600, 58650000, 58796600, 58627300, 58655300, 58731500, 58653700, 58661100, 58861700, 58606400, 58809600, 58790900, 58913400, 58682600, 58693000, 58768200, 58680300, 58732700],
+          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1]
+        },
+        {
+          "pass": 3,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [62425600, 61202300, 60985200, 61024200, 61149100, 60937100, 61138200, 61029400, 60890700, 61097500, 60980900, 61057100, 61121000, 61004900, 61215300, 60905100, 61182500, 61131900, 61029400, 61036900, 61106400, 60959000, 60853300, 60990700, 61019800, 61025900, 61075600, 61163700, 60958500, 61012300, 60893300, 61045900, 60950200, 60941000, 61222000, 60960200, 61002000, 61094000, 61058500, 61363700, 61162400, 60995100, 61116600, 61159000],
+          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/sign",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [108947200, 111920300, 118992900, 118287400, 130860300, 112448400, 120051400, 118950300, 108907100, 108105700, 113607000, 109149600, 111454800, 119229800, 118031800, 130402600, 112446900, 119884300, 119205600, 108508800, 108017400, 113523800, 109084400, 111379000, 120235000, 118124700, 130331300, 112325700, 119894000, 119155000, 108570400, 107816000, 113244100, 108786500, 111590800, 119591800, 118280900, 130445500, 112331400, 119768200, 118853700, 108505700, 107971600, 113500200],
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5]
+        },
+        {
+          "pass": 2,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [107014900, 109430600, 117285600, 116605300, 128554400, 110574300, 118218000, 117219600, 106684700, 105993700, 111881300, 107267600, 109817700, 117138100, 116425200, 128937400, 110421700, 118263200, 117138400, 106882400, 106125100, 111572100, 107222600, 109660700, 117158000, 116531600, 128838100, 110828200, 118436200, 117373300, 106774200, 105966400, 111408600, 106770600, 109833600, 117330700, 116402600, 128722000, 110794100, 118245700, 117351400, 106913100, 105831700, 111677600],
+          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3]
+        },
+        {
+          "pass": 3,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [109527400, 112273100, 119784300, 118689200, 131787700, 113012300, 120710000, 119631700, 109165000, 108307800, 114028800, 109777400, 112260000, 119592900, 118887700, 130963600, 112910600, 120748500, 119797600, 109290500, 108805800, 114083600, 109667600, 112605000, 119772800, 118895000, 130897200, 113199400, 121655800, 119624000, 109179300, 108598100, 113880000, 109981000, 112470800, 119934200, 119126900, 130911700, 113051400, 120482400, 119775500, 108936400, 108868100, 113824800],
+          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/lean-sphincs/verify",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10395900, 10452700, 10453500, 10454500, 10414100, 10437700, 10419600, 10400300, 10527200, 10421800, 10441800, 10356000, 10451900, 10408200, 10365500, 10366800, 10455100, 10462500, 10413900, 10341900, 10346000, 10400900, 10392300, 10438200, 10360300, 10383600, 10435900, 10373400, 10404900, 10441800, 10348800, 10426200, 10315900, 10376700, 10438200, 10425200, 10425200, 10406000, 10389400, 10391500, 10366000, 10377700, 10456500, 10399700],
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3]
+        },
+        {
+          "pass": 2,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10478800, 10473500, 10432700, 10534500, 10457200, 10515900, 10487100, 10471100, 10465600, 10464900, 10508200, 10469300, 10499000, 10547000, 10436500, 10431800, 10521400, 10546200, 10508700, 10500200, 10472200, 10524100, 10538000, 10506600, 10454800, 10542400, 10514800, 10470900, 10547400, 10533700, 10465700, 10445600, 10479900, 10498000, 10445600, 10465500, 10452400, 10517000, 10496500, 10455100, 10472700, 10480900, 10490000, 10528700],
+          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0]
+        },
+        {
+          "pass": 3,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [10448000, 10387500, 10378600, 10363000, 10345200, 10466800, 10434700, 10339100, 10447300, 10443000, 10388600, 10400600, 10427800, 10372100, 10413700, 10376000, 10354700, 10359100, 10420000, 10353300, 10432600, 10388900, 10411100, 10395500, 10398200, 10428500, 10419300, 10346200, 10385400, 10400900, 10358800, 10333100, 10414200, 10331800, 10431900, 10335800, 10410600, 10385300, 10443500, 10397500, 10421800, 10366700, 10323300, 10412600],
+          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/key_gen",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [62315300, 62888200, 62330200, 62977000, 62529500, 61697800, 61887200, 62456200, 61864000, 62877600, 61999200, 61735900, 62030000, 62452300, 62164600, 61799700, 63224200, 62052500, 62426800, 62298100, 62042200, 61890300, 61655500, 62132500, 62384700, 61417000, 62165800, 61594100, 62014600, 61694300, 61775000, 62313300, 62100100, 61747900, 61960800, 61479300, 61807700, 62003600, 61519200, 62287000, 62326900, 62050100, 62120800, 62318500],
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2]
+        },
+        {
+          "pass": 2,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [63379300, 63632500, 62952000, 63685100, 63281800, 63686200, 62917500, 63248100, 63345300, 63998700, 63663700, 63275200, 63832800, 63331800, 63340900, 63654100, 63800300, 63442900, 62959700, 63359600, 63138900, 63710000, 63691900, 63693600, 63285400, 63733700, 63361500, 63399400, 63032200, 63248300, 63347400, 63806800, 63097100, 63007400, 63494400, 63679100, 63353800, 63351800, 63331800, 63739900, 63700500, 63039200, 63656600, 63394200],
+          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6]
+        },
+        {
+          "pass": 3,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [61967200, 62172500, 61990600, 61976700, 61502600, 61685900, 61880500, 62392700, 61846000, 62136100, 61937400, 61265000, 62091700, 61677100, 61872800, 62449000, 61922800, 62124900, 62221000, 62125000, 61386500, 61837100, 61815800, 61610700, 62097600, 61309500, 61699100, 62167800, 61868100, 61981800, 61817200, 61698400, 63235300, 61747100, 61533200, 61542700, 61939800, 62024300, 61624300, 62113300, 61506300, 62066300, 61971400, 61575600],
+          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/sign",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [116377000, 118767800, 126681000, 125806200, 139031500, 119912000, 128257900, 126295500, 115048600, 114508600, 120834500, 115692300, 118613200, 127308000, 126173400, 139590600, 122090000, 127922700, 126799600, 114957800, 114728000, 120892900, 115201900, 118340600, 127241900, 126204800, 139334100, 119183900, 127927300, 127102900, 115863000, 113932300, 120281800, 116003100, 119029700, 127015800, 125363500, 139209500, 119018200, 127863400, 127058400, 114844700, 114498800, 121945400],
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4]
+        },
+        {
+          "pass": 2,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [113753100, 115969600, 124525000, 124258400, 136695400, 117266700, 125434700, 123939400, 112492500, 112294300, 118054200, 113748500, 116322900, 124557200, 123216700, 136758800, 119393900, 126090600, 124583800, 112949500, 112421700, 118342500, 113082300, 116001000, 124450500, 123257300, 136716000, 117232500, 125253400, 124263900, 113735300, 111921300, 118641400, 113693100, 116100100, 125199800, 123620200, 136790600, 117631000, 125764600, 124719100, 113160700, 111747000, 118383300],
+          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2]
+        },
+        {
+          "pass": 3,
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [117960300, 120692500, 128509800, 128180500, 141818300, 121804200, 129607600, 129191300, 117887200, 116291000, 122512300, 117937800, 120724700, 128481400, 128062500, 141160900, 123916500, 130029900, 128594300, 117423400, 116226500, 122547300, 118381200, 121086300, 128777500, 127945300, 141648800, 121424600, 129832200, 129156400, 117101100, 116206400, 123046400, 118268800, 120957400, 128774300, 127647300, 141329000, 121634400, 130051000, 129000900, 117643300, 116364600, 122959200],
+          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "direct/leanVM/verify",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15498000, 15557900, 15275800, 15543400, 15445900, 15600000, 15437900, 15632700, 15487000, 15286800, 15270800, 15603400, 15598100, 15594300, 15291600, 15477200, 15653500, 15407700, 15625200, 15497700, 15603300, 15229700, 15560500, 15231400, 15225800, 15576500, 15433700, 15500300, 15619800, 15500500, 15634900, 15276300, 15593900, 15239800, 15614300, 15554800, 15531600, 15614900, 15478000, 15274600, 15614900, 15442900, 15476900, 15617800],
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6]
+        },
+        {
+          "pass": 2,
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15480100, 15845200, 15767200, 15673400, 15863000, 15535100, 15868700, 15859600, 15639900, 15720900, 15674800, 15856900, 15645500, 15849700, 15878800, 15870900, 15876400, 15887600, 15544100, 15875900, 15501200, 15798800, 15553000, 15847700, 15844300, 15667200, 15839100, 15850400, 15815100, 15820800, 15853700, 15847200, 15555700, 15501600, 15862800, 15487800, 15534200, 15794200, 15862700, 15531200, 15750700, 15869400, 15829700, 15850900],
+          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4]
+        },
+        {
+          "pass": 3,
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15373800, 15432900, 15039600, 15414000, 15318400, 15267200, 15399500, 15094500, 15355800, 15112700, 15293300, 15097300, 15409900, 15273800, 15054500, 15334200, 15401700, 15437400, 15083800, 15317100, 15235500, 15416500, 15424400, 15087900, 15522200, 15097000, 15117600, 15374100, 15065900, 15100300, 15335600, 15377500, 15348000, 15068600, 15396300, 15306100, 15089800, 15418500, 15307900, 15064300, 15236800, 15069800, 15036300, 15348500],
+          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1]
+        }
+      ]
+    },
+    {
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19583200, 19610300, 19926200, 19628600, 19645600, 19894600, 19780800, 19638200, 19819500, 19714000, 19823200, 19617900, 19631300, 19599800, 19621200, 19748500, 19709400, 19667500, 19600800, 19757900, 19600800, 19716400, 19632000, 19720000, 19770100, 19634600, 19711000, 19785400, 19609500, 19639100, 19616900, 19607800, 19617600, 19808200, 19603800, 19778900, 19755200, 19720600, 19778600, 19668800, 19610700, 19639600, 19768800, 19609000],
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0]
+        },
+        {
+          "pass": 2,
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19776900, 19633600, 19765800, 19605100, 19606800, 19599300, 19594900, 19726500, 20028900, 19771900, 19580400, 19794700, 19605300, 19610000, 19602600, 19631000, 19584600, 19785600, 19772300, 19771800, 19616700, 19633700, 19551000, 19642700, 19619400, 19623800, 19569700, 19786900, 19628900, 19572200, 19743400, 19702900, 19597700, 19679600, 19766300, 19680700, 19749300, 19572400, 19755800, 19594400, 19592400, 19590000, 19643500, 19618500],
+          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5]
+        },
+        {
+          "pass": 3,
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19619700, 19732000, 19780000, 19765800, 19585600, 19680000, 19665200, 19597200, 19574600, 19715600, 19756500, 19624500, 19564300, 19852500, 19602900, 19610900, 19778400, 19744700, 19632400, 19747200, 19690500, 19598200, 19589100, 19601800, 19763100, 19678400, 19743300, 19598100, 19759000, 19634400, 19617100, 19573600, 19544200, 19615200, 19661400, 19606600, 19752100, 19618300, 19784100, 19658100, 19604700, 19577600, 19709900, 19732800],
+          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3]
+        }
+      ]
+    },
+    {
+      "configuration": "v2-assembly-k256",
+      "operation": "macro/evm2/ecrecover",
+      "passes": [
+        {
+          "pass": 1,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12805300, 12765800, 12757300, 12756100, 12766100, 12768800, 12774300, 12776800, 12755500, 12820300, 12774900, 12798800, 12757900, 12769100, 12782200, 12808700, 12778400, 12801600, 12875100, 12825300, 12764600, 12759700, 12770000, 12940800, 12780000, 12762800, 12809300, 12761700, 12802200, 12812200, 12764400, 12765500, 12895300, 13716200, 12778400, 12780500, 12836700, 12802000, 12777800, 12809800, 12777200, 12777500, 12786300, 12768500],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+          "pass": 2,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12756600, 12808300, 12833800, 12784900, 12796100, 12830700, 12928600, 12861600, 12841100, 12871100, 12778400, 12781300, 12870800, 12836900, 12859500, 12901300, 12798200, 12791200, 12793000, 12760400, 12761500, 12769600, 12786400, 12770100, 12768900, 12766000, 12800200, 12792900, 12766800, 12795600, 12753100, 12796700, 12778800, 12788800, 12775100, 12774200, 12756400, 12774000, 12769400, 12794600, 12769400, 12801700, 12772600, 12821500],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+          "pass": 3,
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12767500, 12813500, 12835200, 12861100, 12841100, 12886700, 12846900, 12829200, 12868700, 12876000, 12820000, 12814900, 12808000, 12801400, 12811800, 12788400, 12829400, 12902600, 12779100, 12770100, 12776700, 12778300, 12783300, 12807800, 12831500, 12799500, 12778800, 12777000, 12773400, 12799100, 12772000, 12801600, 12822300, 12806000, 12798000, 12779500, 12812800, 12780700, 12806200, 12777000, 12781500, 12835600, 12811500, 12791100],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
       ]
     },
@@ -1318,52 +1757,25 @@
       "operation": "macro/evm2/ecrecover",
       "passes": [
         {
-          "elapsed_ns": [12991900, 12997400, 13001300, 13018200, 13008600, 13024300, 13012900, 13006800, 12994800, 13015200, 12997400, 13015600, 13016800, 13002800, 13009100, 13026100, 13019000, 13058300, 13001800, 12999600, 13040100, 12996000, 12997300, 13283000, 13032600, 13016300, 13019800, 13001600, 13020200, 13007200, 13025400, 13076700, 13022100, 13030800, 13049600, 13114200, 13138100, 13250600, 13290700, 13260200, 13248200, 13477400, 13312100, 13167500],
-          "iterations": 256,
           "pass": 1,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12837700, 12825200, 12829600, 12831100, 12811500, 12869600, 12852300, 12863400, 12858300, 12825700, 12838700, 12850600, 12847400, 12853600, 12875200, 12852000, 12876900, 12846400, 12847600, 12850300, 12834600, 12840500, 12879200, 12851700, 12836800, 12889400, 12883600, 12863300, 12847300, 12848800, 12841300, 12851100, 12886400, 13117100, 12844700, 12873500, 12892800, 12877800, 12839500, 12837400, 12853900, 12844600, 12863900, 12875000],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
         {
-          "elapsed_ns": [13048400, 13098600, 13082500, 13039300, 13240200, 13214000, 13126300, 13130600, 13087700, 13091100, 13094100, 13083800, 13077000, 13120500, 13076900, 13104100, 13129200, 13111400, 13088400, 13015800, 12963200, 12968000, 12976900, 13026400, 13195800, 13032600, 13030700, 13045600, 13037900, 13009500, 13019000, 13061700, 13096600, 13054700, 13116900, 13081300, 13034500, 13014600, 13182200, 13298900, 13293600, 13330100, 13347300, 13423000],
-          "iterations": 256,
           "pass": 2,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
+          "iterations": 256,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12880300, 12845600, 12846500, 12876900, 12854600, 12857000, 12837100, 12872200, 12911400, 12842800, 12883500, 12859400, 12841400, 12854600, 12859400, 12855900, 12871400, 12839700, 12859800, 12849900, 12885500, 12816700, 13809600, 12888700, 12872200, 12850700, 12878700, 12885500, 12870200, 12879800, 12871200, 12856100, 12839200, 12871000, 12878100, 13128000, 12842400, 12873500, 12865600, 12952700, 12853900, 12846600, 12853400, 12853900],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
         {
-          "elapsed_ns": [12969000, 12950700, 12906900, 12906200, 12889700, 12957500, 12953600, 12977300, 13001700, 12955400, 12933900, 12949300, 12966300, 12935500, 12943000, 12930900, 12935600, 12957300, 12950300, 12935400, 12956100, 12970200, 12956700, 12949600, 12940200, 12941500, 12948400, 12949700, 12947700, 13197800, 12960400, 12965700, 12965300, 12939600, 13115700, 12948000, 12983700, 12989200, 12993000, 12968700, 12959600, 12952800, 12954900, 12967100],
-          "iterations": 256,
           "pass": 3,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
-        }
-      ]
-    },
-    {
-      "configuration": "v3-assembly-k256",
-      "operation": "macro/evm2/ecrecover",
-      "passes": [
-        {
-          "elapsed_ns": [12820000, 12824700, 12868300, 12832400, 12828200, 12832000, 12807900, 12857500, 12813600, 12815000, 12840600, 12809200, 12840200, 12833800, 12849300, 13085000, 14485300, 12956700, 13188600, 13581000, 14784000, 14691100, 15641900, 12975900, 14604000, 13105000, 14445600, 12991000, 14322100, 14382600, 13175900, 13697700, 14268400, 13220700, 14440300, 13114400, 13383300, 14861600, 13161900, 14578800, 14542600, 14876500, 14682400, 14495500],
           "iterations": 256,
-          "pass": 1,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
-        },
-        {
-          "elapsed_ns": [12777100, 12784300, 14622100, 13244200, 14513100, 13615500, 13178700, 13120600, 13132200, 14638500, 14318100, 13058800, 14629100, 14087500, 12905200, 13142900, 13047700, 13620800, 13962300, 13378100, 14692900, 13164100, 13379900, 13159700, 14462400, 13707600, 13112500, 14268200, 13784900, 14548400, 13401800, 14402000, 14184200, 14404300, 13195700, 13161000, 14518700, 13049000, 14560300, 14747300, 14864300, 14100600, 14489800, 12829500],
-          "iterations": 256,
-          "pass": 2,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
-        },
-        {
-          "elapsed_ns": [12763400, 12777600, 12790200, 12758600, 12820500, 12812000, 12784000, 12811800, 12764800, 12765400, 12789300, 12767300, 14534300, 21135200, 21226800, 13103700, 14361900, 13046900, 14542800, 14513900, 14011800, 13548900, 14391200, 13575500, 14356000, 14517100, 14081100, 13350400, 14357300, 13275100, 14161000, 13999400, 14534400, 14447400, 14246500, 13120600, 14279600, 14469500, 13312600, 14450400, 14990900, 13444600, 12975400, 14668400],
-          "iterations": 256,
-          "pass": 3,
-          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          "work_items_per_iteration": 1
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [12846400, 12813400, 12817500, 12851200, 12822400, 12855400, 12896700, 12852000, 12883500, 12892900, 12907500, 12906300, 12887100, 12887000, 12955900, 12913600, 12973000, 12967900, 12940600, 12931300, 12953700, 12992700, 12986900, 12935500, 12935100, 12906800, 12936800, 12993600, 12980400, 13012100, 12975000, 13133900, 12961400, 12977300, 12974800, 12926900, 12895700, 12915700, 12857400, 12897100, 12886100, 12900800, 12908800, 12927000],
+          "sample_order": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
       ]
     },
@@ -1372,25 +1784,25 @@
       "operation": "direct/lean-sphincs/key_gen",
       "passes": [
         {
-          "elapsed_ns": [48275400, 47771600, 48695700, 49066300, 49119100, 47567700, 49160800, 48282100, 47971200, 48172900, 49661800, 49123500, 49902500, 49570300, 48348400, 49653400, 49097600, 50337400, 49411600, 48487700, 50233200, 51818200, 48011600, 48075700, 48685200, 51839800, 48518200, 47517400, 48751600, 47812000, 48592100, 53247600, 48726200, 48932700, 49328000, 48212800, 49423800, 47840900, 49055000, 47995600, 48544200, 47546400, 48045900, 49374900],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [47015400, 47012900, 47117100, 47169800, 47292700, 47037300, 47016600, 47017700, 47038200, 47119100, 47086200, 47090300, 47022800, 47028800, 47063900, 47092200, 47110000, 47017600, 47116100, 47121800, 47125200, 47165700, 47092200, 46945800, 47154800, 47063100, 47026300, 47184300, 47029000, 47107600, 47457700, 47073100, 47040900, 47148200, 47123100, 47167800, 47032600, 47052400, 47122600, 47050600, 47187700, 47103100, 47165400, 47084000],
+          "sample_order": [3, 2, 2, 3, 6, 5, 5, 3, 5, 4, 3, 4, 2, 4, 4, 5, 1, 0, 1, 5, 5, 3, 6, 4, 5, 3, 0, 1, 0, 3, 3, 5, 6, 3, 3, 4, 1, 1, 2, 0, 0, 6, 0, 1]
         },
         {
-          "elapsed_ns": [46989700, 46999600, 46865900, 46966600, 47233900, 48052900, 47246100, 50013000, 47049500, 46968400, 52044500, 47307500, 47012000, 47062500, 46960600, 47006800, 52419800, 47055100, 48002700, 47599500, 47172700, 47381500, 47427400, 47261300, 47207600, 47017500, 50798000, 49152700, 47110900, 47044800, 47056600, 47019100, 47262700, 47105400, 47069500, 47209200, 52461400, 47791700, 47474100, 47337300, 47377400, 47066200, 52535300, 47196400],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [47152500, 47209000, 47292100, 47264800, 47326100, 47346600, 47322500, 47295700, 47347900, 47280300, 47257600, 47314900, 47322500, 47335100, 47335600, 47362200, 47371500, 47309800, 48097300, 47388700, 47308800, 47433900, 47350700, 47263900, 47365700, 47308000, 47230800, 47368000, 47305300, 47302200, 47346500, 47330500, 47341200, 47264700, 47499300, 47805400, 47941000, 47371400, 47590100, 47405800, 47310800, 47257900, 47366600, 47342500],
+          "sample_order": [6, 3, 4, 2, 5, 4, 1, 5, 6, 1, 3, 3, 2, 3, 6, 4, 2, 2, 4, 0, 0, 6, 4, 1, 2, 6, 6, 0, 2, 3, 3, 5, 4, 6, 3, 1, 6, 6, 4, 0, 2, 2, 6, 1]
         },
         {
-          "elapsed_ns": [46884400, 46944300, 46945000, 46936200, 46857200, 47740800, 48091900, 47288100, 47169000, 48067600, 47328800, 47345900, 47372800, 51526400, 48960600, 47267400, 47215300, 47369300, 47406800, 48425500, 48155000, 47331600, 47328700, 47451400, 47324900, 47697600, 47896400, 47292600, 47453500, 47393400, 47443400, 47516600, 47373300, 47291700, 47379200, 51277400, 48264000, 47444800, 47815300, 52310700, 49715800, 47537600, 47298000, 47417000],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [47074400, 47151700, 47162000, 47096400, 47073000, 47098600, 47056800, 47114000, 47076400, 47119900, 47129200, 47137200, 47074100, 47145300, 47085100, 47132100, 47101300, 47085300, 47075400, 47177900, 47854900, 47297700, 47234900, 47317600, 47185600, 47115700, 47097400, 47107500, 47132000, 47112300, 47095900, 47124100, 47150500, 47336100, 47227800, 47352900, 47290200, 47221800, 47127300, 47105100, 47105500, 47081800, 47074900, 47131900],
+          "sample_order": [6, 4, 1, 3, 0, 2, 4, 2, 2, 0, 4, 5, 3, 1, 5, 5, 1, 5, 5, 5, 0, 5, 6, 1, 3, 0, 3, 2, 6, 2, 6, 5, 2, 6, 4, 6, 5, 5, 0, 4, 6, 5, 1, 2]
         }
       ]
     },
@@ -1399,25 +1811,25 @@
       "operation": "direct/lean-sphincs/sign",
       "passes": [
         {
-          "elapsed_ns": [87014900, 89383200, 95512000, 96531600, 108342500, 89259900, 104498000, 94765100, 87302000, 87787400, 93176200, 88493200, 92804300, 99080800, 96325500, 107114000, 91799500, 102794800, 97823100, 89251300, 93604400, 93084400, 88771700, 89752000, 98174400, 100308600, 106551800, 89724100, 96544100, 94673200, 87953600, 87063900, 92145800, 90302200, 89771300, 95347800, 95722400, 107420900, 91722600, 95353200, 95327700, 88490700, 86462100, 90928300],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [85932800, 87878200, 93594000, 93135200, 102213900, 88554700, 94672000, 93731200, 85740000, 85395700, 89719700, 86047000, 87931200, 93890000, 93189600, 102376400, 88563100, 94513900, 93691300, 86105400, 85495000, 89355800, 86140700, 88073600, 93695700, 93217600, 102435200, 88527000, 94393600, 93998300, 85780300, 85235700, 89327000, 86196600, 88260600, 93779600, 94292100, 102885500, 88957400, 94370700, 93878500, 85748500, 85217100, 89357500],
+          "sample_order": [0, 4, 1, 2, 3, 3, 2, 1, 1, 6, 2, 6, 6, 1, 1, 0, 0, 1, 0, 3, 0, 6, 5, 0, 3, 1, 2, 0, 4, 4, 0, 2, 4, 0, 0, 2, 4, 4, 1, 3, 4, 5, 4, 5]
         },
         {
-          "elapsed_ns": [85815200, 87869000, 93796300, 92896700, 102300600, 88954300, 95032600, 96954900, 85846900, 85425300, 93615300, 92517500, 87928200, 96382600, 94890400, 102942300, 88735300, 94449600, 94283600, 85896400, 85146800, 92038600, 86475700, 93263900, 93845800, 94556000, 102692100, 88385600, 94693700, 93750300, 86374700, 85553800, 95713300, 87124000, 88973200, 94904200, 93165100, 104373800, 89519300, 95319700, 93833200, 85734900, 85102200, 89606500],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [86114200, 88196200, 94488800, 93687000, 102955300, 89911900, 95183400, 94319800, 86359300, 85663800, 89873300, 86614700, 88398700, 94707100, 93740100, 102924100, 90061600, 94876400, 94680100, 86287000, 85805600, 89756600, 86610900, 88421800, 94329400, 93770600, 103410800, 90072200, 94844300, 94267500, 86578600, 85674100, 89915300, 86566200, 88593600, 94773300, 94105500, 103553100, 90343700, 94948100, 94310100, 86227200, 85774800, 89966200],
+          "sample_order": [1, 0, 5, 4, 3, 3, 3, 0, 1, 5, 4, 0, 6, 0, 3, 6, 0, 4, 6, 3, 6, 2, 5, 6, 6, 1, 1, 3, 1, 2, 0, 0, 3, 3, 0, 4, 3, 5, 2, 2, 4, 6, 2, 3]
         },
         {
-          "elapsed_ns": [85796000, 87713200, 93605600, 92967800, 102583900, 89764500, 95021300, 94407500, 86125900, 92852000, 90396300, 88028700, 88407800, 101181900, 93865400, 102982400, 89016300, 105005400, 94327200, 86407400, 85570500, 89751000, 86549500, 88672200, 94357000, 93976600, 103217600, 89505900, 94850500, 94448400, 86975300, 85708000, 91505500, 86587000, 89671900, 97522600, 93547300, 105468700, 90353100, 95021500, 94429900, 87684800, 87370500, 89823400],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [86190600, 88066300, 94048500, 93296300, 102542700, 89130800, 94461500, 94343900, 85785100, 85327400, 89508000, 86121500, 88355700, 94068800, 93231200, 102680500, 88920600, 94593800, 94037700, 85827900, 87546300, 90028300, 87021100, 88154300, 93889700, 93197000, 103185000, 88647300, 94450100, 93901100, 85735200, 85259700, 89469000, 86094600, 88403500, 94098300, 93150600, 103224000, 88644800, 94589000, 93867200, 85918100, 85269900, 89556400],
+          "sample_order": [1, 1, 6, 4, 6, 1, 0, 3, 6, 3, 3, 6, 1, 0, 6, 6, 3, 2, 1, 1, 5, 4, 1, 6, 5, 6, 5, 0, 4, 3, 5, 6, 1, 1, 1, 5, 3, 1, 4, 2, 3, 4, 6, 4]
         }
       ]
     },
@@ -1426,25 +1838,25 @@
       "operation": "direct/lean-sphincs/verify",
       "passes": [
         {
-          "elapsed_ns": [19654700, 19392400, 19101600, 18494600, 19143700, 18901200, 19019900, 18669800, 19703000, 18739700, 19703600, 19201800, 19325400, 18930600, 19639300, 19008600, 19374900, 22231200, 19257800, 19575100, 18936300, 21092400, 19525500, 18997800, 19638100, 20695300, 18719200, 19789600, 19391900, 18747700, 19065400, 21108100, 18671400, 19168900, 21197800, 19451800, 19271500, 18730100, 19599900, 18712500, 19443900, 19066800, 18829600, 18826600],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18272000, 18323700, 18347800, 18272000, 18263100, 18354900, 18285500, 18273900, 18315500, 18254400, 18342400, 18323900, 18312900, 18354700, 18394800, 18262500, 18362700, 18277800, 18325100, 18604100, 18330700, 18278900, 18287100, 18332900, 18408000, 18271000, 18320200, 18254800, 18268100, 18311400, 18289600, 18366900, 18320800, 18414100, 18321700, 18274800, 18420800, 18282400, 18292300, 18306800, 18277500, 18292200, 18370200, 18284200],
+          "sample_order": [5, 5, 3, 5, 0, 0, 1, 6, 6, 3, 0, 3, 3, 6, 0, 4, 2, 4, 4, 0, 4, 1, 4, 5, 0, 0, 3, 5, 6, 1, 5, 6, 2, 2, 4, 0, 5, 3, 0, 5, 6, 3, 1, 3]
         },
         {
-          "elapsed_ns": [18511000, 18537100, 18526200, 18590300, 18543900, 18585800, 20600200, 19151400, 19653300, 19249000, 18704600, 19485500, 18834100, 18680100, 18657600, 18657700, 18677500, 18636900, 19039000, 18588100, 18653400, 22519600, 18770500, 18669900, 18686300, 19544300, 19080500, 18731400, 18748800, 18688000, 18668700, 18769200, 21293500, 19260000, 18653500, 19553700, 18673100, 19658900, 18898300, 18706100, 20769100, 18646500, 19005300, 19190100],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18336600, 18346100, 18497300, 18473500, 18404800, 18487500, 18459800, 18469600, 18400300, 18650700, 18552100, 18503300, 18580000, 18496900, 18460300, 18476800, 18522300, 18527000, 18795500, 18428000, 18451100, 18511000, 18476500, 18705700, 18572500, 18534800, 18672400, 18407000, 18602500, 18523800, 18416900, 18488100, 18412900, 18397700, 18856400, 18621800, 18552100, 18635900, 18492400, 18575100, 18493300, 18449700, 18457700, 18525300],
+          "sample_order": [5, 5, 2, 5, 0, 0, 6, 4, 0, 3, 6, 5, 0, 4, 2, 2, 1, 5, 3, 5, 5, 3, 6, 3, 1, 0, 0, 6, 3, 4, 6, 4, 2, 1, 6, 3, 2, 0, 1, 6, 0, 4, 5, 0]
         },
         {
-          "elapsed_ns": [18390700, 18484500, 18298400, 18332400, 18390500, 18562400, 19858900, 19108400, 18618400, 18624800, 19228400, 18506800, 18544700, 18522300, 18699700, 18658200, 18627100, 18735700, 18562200, 18757400, 18568700, 18697200, 19291300, 19548300, 18604800, 18712800, 18658800, 18712100, 18583800, 19418900, 18937500, 18574400, 19542600, 18623600, 21015000, 18556500, 18762900, 18605400, 18553800, 18645100, 18604200, 18599800, 18577300, 18593700],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [18347900, 18279000, 18283300, 18283300, 18343400, 18349500, 18649100, 18381400, 18322700, 18341000, 18299100, 18266400, 18368500, 18319100, 18311100, 18307800, 18412500, 18305400, 18342700, 18414300, 18731000, 18701900, 18385800, 18413200, 18332800, 18367000, 18350200, 18386200, 18300000, 18334500, 18428700, 18393100, 18339300, 18704200, 18436300, 18484200, 18375200, 18344900, 18399000, 18294200, 18365500, 18464400, 18402200, 18344300],
+          "sample_order": [2, 3, 0, 2, 4, 3, 1, 0, 3, 1, 1, 4, 4, 4, 1, 2, 5, 1, 6, 3, 6, 0, 0, 0, 2, 1, 4, 5, 1, 5, 0, 4, 0, 5, 5, 2, 4, 4, 1, 0, 4, 3, 3, 0]
         }
       ]
     },
@@ -1453,25 +1865,25 @@
       "operation": "direct/leanVM/key_gen",
       "passes": [
         {
-          "elapsed_ns": [64679300, 63551100, 64400800, 63618900, 63925600, 62820600, 63526400, 65102400, 64144500, 64982000, 65106600, 64570400, 66400900, 65726400, 64922300, 64542600, 65868000, 65352100, 64927500, 65077900, 64592100, 66710800, 64012400, 64589100, 64473300, 64168300, 63445900, 63639600, 64167700, 65371600, 64045100, 64927700, 64568700, 63277100, 63843700, 64969000, 66193800, 63853300, 63165500, 64370800, 63977300, 63531200, 65184600, 64390600],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [62140100, 62348000, 62487800, 62030700, 62233800, 61827600, 62131600, 62325900, 62400000, 62157100, 62391300, 62074900, 62149300, 62494600, 62345700, 62179900, 62323400, 62256600, 62300300, 62308000, 61824900, 62201200, 62223700, 62262100, 62240900, 62095400, 62250500, 62161600, 62327200, 62199900, 62467800, 62272600, 62327800, 62289900, 62337000, 62171300, 62467700, 62397200, 62195600, 62408300, 62048200, 62328200, 62066000, 62189800],
+          "sample_order": [1, 3, 4, 4, 4, 2, 4, 4, 3, 5, 5, 0, 4, 0, 5, 3, 4, 6, 3, 6, 2, 0, 2, 1, 6, 5, 1, 4, 3, 6, 6, 3, 0, 5, 6, 6, 3, 0, 6, 1, 2, 4, 2, 2]
         },
         {
-          "elapsed_ns": [62217300, 61974700, 61834600, 62120100, 62045900, 63437000, 62868400, 62731600, 62656300, 63520000, 62627700, 62908200, 62446200, 62398400, 62540800, 62860900, 62696000, 64100200, 64677500, 63744200, 62653300, 62259300, 63334100, 63486100, 62574400, 62868800, 62573600, 62478100, 62598000, 63684200, 62686700, 62557500, 63190900, 62567800, 64037900, 62578100, 63545700, 63682000, 63206900, 62822600, 62588800, 62696400, 62623700, 62556000],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [63613400, 63676500, 63754500, 63981600, 64029900, 63764000, 63700200, 64065700, 64114300, 63947700, 63923100, 63883000, 63819400, 63658300, 63797200, 63830500, 63814000, 63988200, 65081100, 64940500, 63994600, 63848100, 63877700, 63886100, 63876900, 64042200, 63792500, 63685300, 63930400, 63724800, 63986400, 63797000, 63983000, 63810600, 65128200, 64858600, 64987700, 63852100, 64446700, 63824600, 63993600, 63906100, 63856700, 63959100],
+          "sample_order": [3, 4, 1, 6, 1, 5, 5, 2, 3, 0, 5, 6, 3, 2, 5, 0, 5, 1, 2, 2, 4, 0, 0, 2, 4, 2, 3, 5, 6, 6, 2, 6, 1, 0, 5, 2, 5, 3, 6, 3, 5, 1, 3, 6]
         },
         {
-          "elapsed_ns": [62012200, 62015800, 62215000, 61963100, 62115300, 62808000, 63951100, 62701800, 62878600, 63949900, 65100800, 64133200, 63506100, 62897200, 62758900, 62928400, 63554400, 64555200, 64158500, 66084200, 62789000, 62997100, 64005300, 63723900, 62819600, 62670800, 65175400, 63023100, 63246000, 62959400, 62798800, 62728300, 63175400, 63817600, 62713800, 63270200, 63923200, 63555600, 62703700, 63162300, 63725300, 63368400, 63142400, 62581400],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [63130600, 63224800, 63669300, 62931700, 62953600, 63179300, 63382000, 64522700, 63246000, 63092900, 63468100, 63017800, 63363200, 63080700, 63156600, 63096000, 63083900, 62571200, 63087900, 63822700, 64491800, 64273600, 63453800, 63347900, 63112200, 62746200, 62995600, 63223600, 63326600, 63136800, 63466700, 63260600, 63138400, 63147800, 63715800, 63552600, 63847600, 63286100, 63093500, 63116200, 63009600, 62736600, 63121500, 63005500],
+          "sample_order": [4, 2, 3, 1, 2, 6, 2, 4, 1, 4, 6, 0, 0, 5, 4, 0, 6, 0, 2, 6, 3, 1, 4, 5, 6, 4, 1, 1, 0, 0, 3, 1, 4, 0, 3, 4, 0, 6, 3, 3, 2, 0, 4, 6]
         }
       ]
     },
@@ -1480,25 +1892,25 @@
       "operation": "direct/leanVM/sign",
       "passes": [
         {
-          "elapsed_ns": [118722000, 120929900, 128191500, 127598100, 140250300, 119605800, 128836600, 133683500, 117059200, 117532200, 124723900, 122413400, 122205800, 133882200, 131333300, 142326500, 121655500, 131528500, 128170600, 119781000, 122100000, 129264000, 117549300, 124226700, 130420600, 127730900, 140733900, 121762900, 129400200, 128540400, 116949300, 116206300, 122956300, 117251500, 122001100, 130758100, 128813700, 140693500, 120914200, 130905600, 128194400, 116730100, 117594300, 124668700],
-          "iterations": 1,
           "pass": 1,
-          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [113690700, 116260900, 124628300, 123022800, 136189300, 117020100, 125055700, 124087200, 113046700, 112372100, 118333400, 113539500, 116063700, 123982900, 123212200, 135410300, 117325500, 124895500, 126834100, 113722900, 112422700, 118380600, 113746900, 116445500, 123990300, 124208100, 135699900, 117062700, 124976700, 124945300, 114021600, 112904800, 118089300, 113661700, 116376300, 124083000, 123143700, 135699700, 117080100, 125182400, 124391800, 113178000, 112614000, 118163800],
+          "sample_order": [4, 1, 6, 0, 5, 1, 3, 5, 4, 1, 1, 1, 1, 2, 2, 6, 5, 2, 5, 2, 6, 4, 3, 2, 1, 4, 6, 6, 5, 5, 4, 0, 3, 4, 5, 5, 0, 6, 5, 4, 5, 2, 3, 4]
         },
         {
-          "elapsed_ns": [114902000, 117469700, 125128800, 124522800, 138152500, 120474400, 126573900, 125892000, 114828300, 114031000, 121922300, 115501300, 117669500, 125874700, 125439000, 137042800, 118742700, 126591400, 125797800, 116991200, 114003000, 120720100, 115124700, 119041100, 125501100, 124935200, 139171400, 118925200, 127125800, 126402000, 115367900, 114232300, 119606100, 118427600, 117797900, 125340300, 128183600, 138399300, 121049900, 126928400, 126138200, 115918900, 114969800, 120476800],
-          "iterations": 1,
           "pass": 2,
-          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [115966800, 117832900, 125696400, 125123600, 138425000, 119970200, 127117100, 125945800, 115292700, 114684000, 122182600, 115538600, 118979500, 126325300, 125431200, 137616100, 119028600, 127146300, 126306400, 115569300, 115584400, 119783100, 115489800, 118633200, 127346700, 125016800, 137751400, 119493300, 126848300, 125995700, 115199200, 114242200, 120320500, 116052800, 120695500, 127913500, 126453800, 138853200, 119305200, 127237500, 126868800, 115789000, 113927500, 120050800],
+          "sample_order": [0, 6, 0, 3, 4, 1, 4, 3, 4, 2, 2, 2, 1, 5, 0, 3, 6, 6, 0, 6, 1, 1, 1, 5, 3, 5, 5, 2, 0, 1, 5, 2, 5, 4, 2, 5, 0, 2, 0, 1, 3, 5, 4, 2]
         },
         {
-          "elapsed_ns": [113117900, 116457300, 124186100, 123779200, 136430300, 117340500, 126295600, 125452900, 114299200, 113835400, 120492900, 116364200, 117862700, 126063300, 126470200, 137288500, 119266400, 127131000, 129721200, 114458000, 114017300, 119438300, 115084100, 118300900, 125713600, 129147100, 139498800, 118816300, 127411300, 125257700, 118425300, 113453400, 119247800, 117074100, 120238900, 125885900, 126722900, 142959700, 119028200, 129118000, 126005000, 114486900, 114014500, 120516800],
-          "iterations": 1,
           "pass": 3,
-          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5],
-          "work_items_per_iteration": 1
+          "iterations": 1,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [113723400, 116480600, 123955700, 123379700, 135630900, 116936200, 124997900, 123856800, 113257700, 112626500, 117931500, 113620800, 116357900, 124007500, 123219600, 135496800, 117195400, 124771600, 123902600, 114769700, 115917600, 118996600, 114542600, 116678900, 124352400, 123544900, 135431700, 117480900, 124907700, 124073200, 112991300, 112419400, 118044500, 114046700, 117355100, 124928400, 123518900, 137140000, 117062600, 125046300, 124995500, 113216900, 112396800, 117943700],
+          "sample_order": [5, 6, 5, 6, 1, 0, 3, 1, 5, 6, 0, 2, 5, 6, 2, 1, 2, 4, 3, 4, 4, 3, 3, 2, 1, 3, 0, 6, 2, 4, 4, 2, 3, 2, 2, 0, 1, 3, 2, 5, 5, 6, 0, 5]
         }
       ]
     },
@@ -1507,25 +1919,25 @@
       "operation": "direct/leanVM/verify",
       "passes": [
         {
-          "elapsed_ns": [16003000, 15582800, 15304600, 15260200, 15348600, 15269200, 15860100, 15454100, 15485600, 15308800, 15652200, 16114100, 16155400, 15567100, 15666300, 15763900, 15844800, 16276100, 15502500, 15834300, 15787200, 16138400, 15620400, 15499300, 16391600, 16309000, 15641700, 15390400, 15826400, 15716500, 16158600, 15420800, 15727800, 15224300, 15506300, 15467100, 15669600, 15409300, 15446500, 15180800, 15656700, 15806200, 16111700, 15575500],
-          "iterations": 128,
           "pass": 1,
-          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15677200, 15677100, 15593600, 15678000, 15729300, 15643400, 15528900, 15628600, 15642500, 15566600, 15508600, 15641200, 15636000, 15634000, 15563300, 15721600, 15544100, 15530200, 15691800, 15991600, 15656100, 15574700, 15641000, 15702200, 15570900, 15641600, 15740700, 15746100, 15668300, 15657700, 15664900, 15596400, 15652400, 15586300, 15657000, 15684000, 15705000, 15669400, 15773300, 15589800, 15633700, 15682400, 15722900, 15662200],
+          "sample_order": [6, 6, 5, 6, 2, 6, 0, 2, 0, 2, 6, 5, 0, 5, 6, 2, 6, 3, 2, 1, 1, 5, 0, 3, 2, 2, 5, 3, 1, 0, 1, 4, 5, 6, 1, 1, 6, 2, 4, 2, 1, 0, 6, 6]
         },
         {
-          "elapsed_ns": [15642500, 15701300, 15805800, 15808900, 15735300, 15695600, 15786300, 17473400, 15627300, 15982700, 15822200, 15906900, 15784000, 15822500, 15770900, 15750200, 16047400, 15711800, 16055300, 15753600, 15666500, 16063500, 15640800, 15795400, 15844000, 15845800, 15752300, 15726400, 15845400, 15829200, 15828700, 15757900, 15642900, 15817000, 15805300, 15681500, 15765200, 15925800, 15866900, 15669200, 15915200, 15779600, 15856600, 15732400],
-          "iterations": 128,
           "pass": 2,
-          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15141600, 15182500, 15305900, 15344800, 15292100, 15205300, 15265800, 15276600, 15263400, 15462600, 15368900, 15283900, 15403300, 15269800, 15259400, 15297700, 15552900, 15245800, 15483900, 15306100, 15448700, 15377100, 15183000, 15347600, 15252100, 15328200, 15277000, 15275200, 15325100, 15316500, 15288600, 15283100, 15208300, 15192600, 15302600, 15448600, 15531100, 15532600, 15433300, 15194800, 15314400, 15281100, 15352100, 15406200],
+          "sample_order": [4, 1, 3, 1, 6, 2, 2, 6, 5, 4, 1, 1, 5, 1, 4, 5, 3, 3, 1, 4, 2, 4, 2, 0, 0, 4, 2, 4, 4, 5, 4, 1, 6, 5, 1, 6, 1, 1, 3, 4, 1, 3, 0, 4]
         },
         {
-          "elapsed_ns": [15209300, 15164600, 15038100, 15159300, 15201400, 15452100, 15592700, 15217300, 15339000, 15942700, 15589600, 15244100, 15299400, 15449700, 15528200, 15319400, 15459600, 16374000, 15639900, 15633900, 15422900, 15338900, 15317900, 15316600, 15745200, 15236000, 15389400, 15420200, 15226800, 15331400, 15409700, 15489900, 15300400, 15108600, 15613200, 15295200, 15231400, 16145200, 15395400, 15244800, 15481900, 15255500, 15290400, 15447900],
-          "iterations": 128,
           "pass": 3,
-          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1],
-          "work_items_per_iteration": 1
+          "iterations": 128,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [15647100, 15565300, 15519700, 15558900, 15599900, 15691200, 15684800, 15802600, 15619800, 15484700, 15619100, 15500900, 15575200, 15714700, 15509300, 15633200, 15556600, 15575900, 15496900, 15651600, 15861300, 15675900, 15664300, 15566800, 15631900, 15526400, 15519200, 15578200, 15511600, 15568300, 15619100, 15641800, 15531200, 15754100, 15651200, 15736700, 15567300, 15940400, 15684100, 15519800, 15681600, 15516500, 15509400, 15669500],
+          "sample_order": [3, 0, 4, 0, 5, 5, 5, 5, 4, 5, 2, 3, 2, 3, 0, 3, 0, 3, 4, 0, 2, 6, 2, 3, 0, 5, 2, 3, 3, 1, 1, 0, 5, 3, 0, 3, 2, 2, 6, 6, 1, 1, 5, 1]
         }
       ]
     },
@@ -1534,200 +1946,113 @@
       "operation": "macro/evm2/ecrecover",
       "passes": [
         {
-          "elapsed_ns": [20598800, 20419900, 21415100, 19977100, 20223600, 20147400, 20440300, 20137100, 20101100, 25183800, 21374200, 21152300, 21784400, 20371000, 20329300, 24076700, 26705800, 29121000, 20667900, 24497800, 20619500, 25590800, 20567000, 21031800, 21178800, 21112500, 20447600, 19897200, 20670700, 23382600, 21657600, 20760200, 20123600, 20224700, 20665400, 20971600, 24370300, 20131000, 20558700, 20198300, 20396500, 20322200, 24513200, 28271100],
-          "iterations": 512,
           "pass": 1,
-          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19576600, 19578000, 19572800, 19554000, 19670300, 19610500, 19694300, 19558500, 19603300, 19775800, 19603100, 19599900, 19604000, 19550800, 19571500, 19582400, 19624400, 19647800, 19678300, 19640600, 19560800, 19658700, 19592800, 19631100, 19647100, 19561300, 19638000, 19620400, 19573500, 19626100, 19576300, 19581600, 19590800, 19621000, 19603500, 19619700, 19641700, 19632100, 19637700, 19679300, 19567400, 19616100, 19594800, 19582700],
+          "sample_order": [2, 0, 0, 1, 1, 4, 6, 0, 2, 0, 4, 2, 5, 3, 3, 1, 3, 5, 6, 4, 3, 2, 1, 6, 4, 6, 4, 2, 2, 2, 2, 1, 1, 1, 2, 3, 2, 5, 3, 6, 3, 1, 5, 0]
         },
         {
-          "elapsed_ns": [19594200, 19591700, 19608700, 19584300, 19562400, 19806900, 19897100, 19970800, 20122600, 19925800, 19898100, 23470000, 20002800, 19841500, 19664700, 19701100, 19761300, 20073800, 19823400, 19921300, 20630700, 19971200, 19654000, 19934600, 19957700, 19863600, 19891500, 19734400, 19888400, 21119400, 19718100, 19630900, 20470900, 21705800, 19740300, 21188000, 19966300, 21847500, 20066900, 20110400, 19981900, 21581400, 19954600, 19859600],
-          "iterations": 512,
           "pass": 2,
-          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19664700, 19616400, 19724700, 19642700, 19686000, 19677300, 19692400, 19736600, 19752600, 19784400, 19690000, 19705500, 19685200, 19669000, 19698500, 19719600, 19699000, 19673900, 19817200, 19815200, 19700000, 19691300, 19638700, 19750300, 19694600, 19709600, 19709600, 19718900, 19753400, 19684700, 19756300, 19649500, 19672100, 19798100, 19748200, 19910700, 19859900, 19808100, 19943300, 19690200, 19655200, 19868100, 19726900, 19993500],
+          "sample_order": [2, 2, 6, 0, 2, 6, 0, 1, 2, 6, 0, 4, 4, 6, 1, 1, 4, 0, 5, 1, 3, 5, 3, 4, 5, 3, 4, 1, 5, 0, 1, 3, 0, 2, 4, 0, 4, 4, 5, 5, 6, 0, 1, 5]
         },
         {
-          "elapsed_ns": [19531100, 19630600, 19603400, 19582200, 19526300, 20003100, 19924700, 19850100, 20002700, 20980700, 20100600, 20616600, 19877500, 20865700, 19919500, 19718800, 19949600, 19844400, 20215800, 19811800, 20015800, 19983400, 19870600, 19957900, 19965700, 20042800, 19825000, 19786000, 19744700, 20100700, 20055100, 19936100, 19945100, 19953100, 20363900, 19689300, 19898200, 20072900, 19924900, 20197600, 21127600, 20322000, 19851400, 19823100],
-          "iterations": 512,
           "pass": 3,
-          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3],
-          "work_items_per_iteration": 1
+          "iterations": 512,
+          "work_items_per_iteration": 1,
+          "elapsed_ns": [19562100, 19709600, 19622800, 19687900, 19584400, 19695500, 19605700, 19592700, 19553000, 19662200, 19629700, 19555500, 19551600, 19652200, 19598500, 19583800, 19705200, 19681500, 19560700, 19643900, 19663400, 19754700, 19625200, 19938200, 19677500, 19698100, 19688900, 19695600, 19643000, 19678200, 19611000, 19582400, 19561400, 19597400, 19738300, 19662700, 19681300, 19593700, 19667000, 19671100, 19613200, 19614800, 19664500, 19636300],
+          "sample_order": [0, 5, 2, 5, 3, 4, 6, 6, 0, 2, 5, 1, 6, 2, 3, 4, 4, 6, 0, 2, 1, 2, 5, 4, 4, 2, 6, 4, 5, 6, 2, 3, 6, 4, 6, 1, 6, 0, 5, 1, 0, 2, 2, 3]
         }
       ]
     }
   ],
-  "method": "Native public API calls and results. leanVM verification inputs are parsed before timing; lean-sphincs borrows encoded bytes. No timed serialization, algorithm adapters or experimental implementation. Ecrecover calls the evm2 Crypto provider directly.",
-  "reference_revision": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
-  "role": "Direct unmodified public API measurements",
-  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.1\nLLVM version: 22.1.6",
-  "sampling": {
-    "batch_target_ms": 10,
-    "outliers_removed": 0,
-    "passes": 3,
-    "positive_fixtures": 11,
-    "samples_per_case": 44,
-    "shuffle_seed": 20261115,
-    "warmup_ms": 100
+  "measurement_base_commit": "9d48d7004cef195fc0558b4c41bd72599db5eb8b",
+  "implementation_source_commit": "9d48d7004cef195fc0558b4c41bd72599db5eb8b",
+  "measured_sources_match_commit": false,
+  "measurement_source_changes": [
+    "benchmarks/evm2/Cargo.lock",
+    "benchmarks/evm2/Cargo.toml",
+    "benchmarks/evm2/README.md"
+  ],
+  "dependency_overrides": {
+    "reference-sphincs": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+    "reference-keccak": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b"
   },
-  "schema_version": 2,
-  "source_files_sha256": {
-    "Cargo.lock": "45d4017fcc54e8b923c7591f87295011cfd60f2baedbe4502dddaa312c3bec8c",
-    "Cargo.toml": "6ecbed0d04833d94867550ecd8513e5d3144d5caef8386a3b59ae1fd55fbf674",
-    "benchmarks/evm2/Cargo.lock": "a69c4ef001686d63625e979b2433653352c6f4e3ebba1fbfaacabdd45fdd1c72",
-    "benchmarks/evm2/Cargo.toml": "efcc4d1536a9ee96b728cb50c851fe4b1b04857019bb026c70e341e23529deaf",
-    "benchmarks/evm2/README.md": "969ec5db6069782e468c7854c18b0cae918b4e2c7185e01465765869079dd241",
-    "benchmarks/evm2/batched/fors.rs": "b058d86d38564c906acaee9f12354262fca2b7ed84a9aa39379f0390267aea18",
-    "benchmarks/evm2/batched/mod.rs": "adc4c1d2caa720acfebd2d70148e9468b87fd6f687b0c7c3c7944e5f7c118d9e",
-    "benchmarks/evm2/batched/trees.rs": "6195781a9dad29699822096e15cc83d98a47ac8da9eb44a890d240b2c1b1add3",
-    "benchmarks/evm2/batched/wots.rs": "3450f4a5e2a88a7f18be654b2b071b1bf70967852df06e3005830f5d95225bee",
-    "benchmarks/evm2/batched_tests.rs": "7f14820cbe8a91ac2c0731867057f722b62f0879055c39d3e22444ab5d81e247",
-    "benchmarks/evm2/codspeed.rs": "f9f7a34ae22a4bd7678ea237149da74d04895f0d2a3bcca8c39a4421b2295a8c",
-    "benchmarks/evm2/codspeed_cases.rs": "a45b92e234ece750f2609810c9a2950d6721ca8062db0fd6ae9962a726e3e58f",
-    "benchmarks/evm2/keccak_codegen.rs": "3cbc165ebbd09a94a6a87da81b6984ef32f547b2529965c8146ba1d33f5e900a",
-    "benchmarks/evm2/matrix.rs": "17d6f6291903bb613a6a09c81fae2682bd8481074b3353cf67df2983edcbb98e",
-    "benchmarks/evm2/reference.rs": "a08157aaaf10a99a03b893bbe9bdc538202908c0c07bae8a48518b38d6f4973c",
-    "benchmarks/evm2/suite/fixtures.rs": "26129f74cf211b70803600944b12b7ee5f6e635e942874ed621b189dd4fd6b55",
-    "benchmarks/evm2/suite/sampling.rs": "de3504dfcd991ac4ef3d47b0cc25d58b5ab896938bcaf9482878709cf0036b61",
-    "benchmarks/evm2/verify.rs": "4966c1253600187b2949f34d00ef8e88083e0111699c2bf67da223dab9bc7c83",
-    "benchmarks/run.py": "1ad07de2dc9b3ec82cf8a80205612a7f93c72a9f85d010f52cdb15f5f51463c6",
-    "benchmarks/suite/__init__.py": "006063fec57ffca4d945345f208f3feb9aa61023201a69f704be2aeda6541e3b",
-    "benchmarks/suite/config.json": "b403aa9f5ebac7185f48469a586b37383a9cb526f4f5722a0669b84c5892f881",
-    "benchmarks/suite/host.py": "3fe2a3340e2497f1332bdb8cf8d3510ab4b652b09ad333663c8d34be4019b08e",
-    "benchmarks/suite/host_probe.rs": "3c55e4d19839cd3c0b4862c4e71aef753bed77f8f2517f3472c15aa0a19e5338",
-    "benchmarks/suite/machine.ps1": "16cbfab6fc832881f3016953426abd7cfe8195998ea3ba9d89b5006c7eda870c",
-    "benchmarks/suite/publication.py": "8f797f6176b9a04be436d6c7b0ac712b2bc15d9c9dfaeb7a816283c8fa966cfd",
-    "benchmarks/suite/stats.py": "77ab650ccaa9860c820ff9ea32504195b16ab06e8b6fd3d09c11c9446ddf31af",
-    "benchmarks/suite/test_setup.py": "608180cc4d6174e537ce3096e3efc815fd626aa7e65ee1ac72227d369755b81b",
-    "src/fors.rs": "cee999e9aeaea0841f230ef95f6a8ffc9c4e3c95837889b921310f31329f6741",
-    "src/hash.rs": "906f1488c78a4321753b0eaedc26882a0d22e56c21ff0dcca720d933c472eea9",
-    "src/hash/batch.rs": "7e8a01e66d50cc223ddd8e2192baaea7a82ddc781ca25cb64b820bbf85e7e6c0",
-    "src/lib.rs": "7712291fa9f35da2b58e11518d9a8994c267aad74a8a6d4ee9b846eabe4c07e2",
-    "src/params.rs": "087e6f242232a65d45e729deedb3721d09738a8383ff4058e7dbdb1916bf8254",
-    "src/signature.rs": "f1485d7fb5a8a3ee6cf85efed77acf09a57fabce33eb72f0f990389146b15ff5",
-    "src/signing.rs": "49f6054dd22a841bdc0d64d27c261e40cdfd1f74a3eb3d6c8ae680447c32fea7",
-    "src/tree.rs": "85a2ed88668506d130c588a122874df059080e117cd76f89ad7228bd4a4500aa",
-    "src/verifier.rs": "f1ec5aa12d1dae8c87b1f39fded81926ddb9ebfa1a2c2a2ef30d7cc6f519d130",
-    "src/wots.rs": "e963034d32eab09db7812ad5635438e368de74da0af76d3e12c712c55d8ffb29",
-    "tests/vectors/README.md": "37491ff4cc408c57b422f9b71cb1fcd459e6568f6c8ac64e448e280bf5fe9b41",
-    "tests/vectors/SHA256SUMS": "9793f7e1adea1e8e771b1edfc6286abc2b49b64c9c45e99a1022ed1dd0dd17a0",
-    "tests/vectors/ethlib.json": "3583225bcaca18d274b70d3355c3dfd4d8f5816372ec1b34a1d700e30dbff8a1",
-    "tests/vectors/key_gen.json": "dcdd7a299403dd77872ff48bc1b8ffcbf7dc21c8e6dc792cf0bd7efea1bc1910",
-    "tests/vectors/sign.json": "39140c39f6a9396dc6401692efc808a904816df0d72b414f8bd5dafe2a085df4"
-  },
-  "source_revision": "ffd83f95d9d5fa28e27115c976a12a1f765e157b",
-  "source_tracked_changes": true,
-  "specification_revision": "03547dd83f298a63e6dcceff0a0b75f6142490aa",
-  "candidate_policy": "A fresh 11-build signature sweep and six-build k256 recovery sweep selected five distinct builds for independent three-pass confirmation. The later full 30-build matrix selected additional recovery winners for the same three-pass confirmation. Headline cells select the lowest complete 132-sample median per implementation and operation across confirmation builds; no samples or passes are discarded.",
-  "additional_recovery_selection": {
-    "k256": {
-      "configuration": "v2-tiny-k256",
-      "median_ns": 50605.859375
-    },
-    "libsecp256k1": {
-      "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 38512.79296875
-    }
-  },
-  "screening_data": "raw-api-screening.json",
-  "screening_winners": {
+  "source_provenance": "Library and Rust harness sources match measurement_base_commit. Both benchmark leanVM Git pins were changed to reference_revision; benchmark documentation was also edited. Exact measured file hashes are retained. Runner setup changes are not included in the results-only commit.",
+  "candidate_selection": {
     "direct/lean-sphincs/key_gen": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 46893400.0,
+      "configuration": "native-assembly-libsecp256k1",
+      "median_ns": 46152700.0,
       "name": "direct/lean-sphincs/key_gen",
       "pass_medians_ns": [
-        46893400.0
+        46152700.0
       ]
     },
     "direct/lean-sphincs/sign": {
       "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 89481300.0,
+      "median_ns": 87317450.0,
       "name": "direct/lean-sphincs/sign",
       "pass_medians_ns": [
-        89481300.0
+        87317450.0
       ]
     },
     "direct/lean-sphincs/verify": {
       "configuration": "v4-assembly-libsecp256k1",
-      "median_ns": 36553.125,
+      "median_ns": 35746.19140625,
       "name": "direct/lean-sphincs/verify",
       "pass_medians_ns": [
-        36553.125
+        35746.19140625
       ]
     },
     "direct/leanVM/key_gen": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 61939900.0,
+      "configuration": "native-tiny-libsecp256k1-no-slp",
+      "median_ns": 61935400.0,
       "name": "direct/leanVM/key_gen",
       "pass_medians_ns": [
-        61939900.0
+        61935400.0
       ]
     },
     "direct/leanVM/sign": {
-      "configuration": "native-portable-libsecp256k1-no-slp",
-      "median_ns": 119878300.0,
+      "configuration": "native-assembly-libsecp256k1",
+      "median_ns": 117360150.0,
       "name": "direct/leanVM/sign",
       "pass_medians_ns": [
-        119878300.0
+        117360150.0
       ]
     },
     "direct/leanVM/verify": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 119651.5625,
+      "configuration": "native-assembly-libsecp256k1",
+      "median_ns": 118093.75,
       "name": "direct/leanVM/verify",
       "pass_medians_ns": [
-        119651.5625
+        118093.75
       ]
     },
     "ecrecover/k256": {
-      "configuration": "v3-assembly-k256",
-      "median_ns": 49983.984375,
+      "configuration": "v2-assembly-k256",
+      "median_ns": 49842.1875,
       "name": "macro/evm2/ecrecover",
       "pass_medians_ns": [
-        49983.984375
+        49842.1875
       ]
     },
     "ecrecover/libsecp256k1": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 38607.8125,
+      "configuration": "native-assembly-libsecp256k1",
+      "median_ns": 38232.03125,
       "name": "macro/evm2/ecrecover",
       "pass_medians_ns": [
-        38607.8125
+        38232.03125
       ]
     }
   },
-  "headline_selection": {
-    "lean-sphincs/verify": {
-      "configuration": "v4-assembly-libsecp256k1",
-      "median_ns": 36640.91796875
-    },
-    "leanVM/verify": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 119053.125
-    },
-    "lean-sphincs/sign": {
-      "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 89324850.0
-    },
-    "leanVM/sign": {
-      "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 119397300.0
-    },
-    "lean-sphincs/key_gen": {
-      "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 46506850.0
-    },
-    "leanVM/key_gen": {
-      "configuration": "native-assembly-libsecp256k1",
-      "median_ns": 62033050.0
-    },
-    "evm2/libsecp256k1": {
-      "configuration": "native-assembly-libsecp256k1-no-slp",
-      "median_ns": 38673.73046875
-    },
-    "evm2/k256": {
-      "configuration": "v2-tiny-k256",
-      "median_ns": 50843.9453125
-    }
-  }
+  "prepared_control_builds": [
+    "native-assembly-libsecp256k1",
+    "native-assembly-libsecp256k1-no-slp",
+    "native-portable-libsecp256k1-no-slp",
+    "v4-assembly-libsecp256k1",
+    "v2-tiny-k256"
+  ]
 }

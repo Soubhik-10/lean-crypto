@@ -1,0 +1,1164 @@
+{
+  "schema_version": 1,
+  "role": "Unmodified upstream leanVM CLI proving comparison",
+  "repository": "https://github.com/leanEthereum/leanVM",
+  "revisions": {
+    "previous": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+    "current": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b"
+  },
+  "pr_758_merge": "d1c9175ff0522809685a9cfc27a70ab70cf29f53",
+  "both_revisions_include_pr_758": true,
+  "cpu": {
+    "model": "AMD Ryzen 9 8940HX",
+    "cores": 16,
+    "logical_processors": 32
+  },
+  "platform": "x86_64-unknown-linux-gnu, Ubuntu on WSL2",
+  "sampling": {
+    "discarded_upstream_warmup_passes": 1,
+    "measured_proving_passes": 5,
+    "measured_verification_passes": 5,
+    "proving_statistic": "Arithmetic mean of all five retained stock CLI per-pass times",
+    "per_pass_precision_s": 0.001,
+    "outliers_removed": 0,
+    "shuffle_seed": 758,
+    "cooldown_seconds": 2
+  },
+  "parameters": {
+    "log_inverse_rate": 1,
+    "target_cpu": "native",
+    "workers": [1, 16],
+    "runtime_prover_selection": [
+      "--prover stable",
+      "--prover experimental"
+    ],
+    "important_cpu_features": [
+      "avx2",
+      "avx512f",
+      "avx512bw",
+      "avx512vl",
+      "gfni",
+      "pclmulqdq",
+      "vpclmulqdq"
+    ]
+  },
+  "boundaries": {
+    "proving": "Whole stock aggregate::<P> invocation, including witness generation, after input/cache preparation",
+    "recursion": "Parent aggregation only; child proof construction excluded",
+    "verification": "Upstream quiet verifier; stock mean of five passes, no per-pass verification times exposed",
+    "peak_rss": "Lifetime peak of the parent CLI process; excludes child-process RSS and is not an isolated proving allocation measure",
+    "not_measured": "Network propagation, transaction/block building, finality or complete process latency"
+  },
+  "fixture_caches_sha256": {
+    "current": {
+      "lean_sphincs_signers_1275da487e4c22fd.bin": "11d02c74e10076f1d9a7ba8178024fad6feccee5e62686da9c10a1e57825f536",
+      "lean_xmss_signers_887679f9d6a5e2ff.bin": "2b6aa42785afde48bc1d1fbe695c176bb69fe4ad0a8c1886a9f6604d7299f3b3"
+    },
+    "previous": {
+      "lean_sphincs_signers_1275da487e4c22fd.bin": "11d02c74e10076f1d9a7ba8178024fad6feccee5e62686da9c10a1e57825f536",
+      "lean_xmss_signers_887679f9d6a5e2ff.bin": "2b6aa42785afde48bc1d1fbe695c176bb69fe4ad0a8c1886a9f6604d7299f3b3"
+    }
+  },
+  "builds": {
+    "previous": {
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.97.1\nLLVM version: 22.1.6",
+      "cargo_lock_sha256": "68ee7f9f5c1cdcdefb7aa4387af369aefe9f12485f9eeb13499d5d319a4b1bf7",
+      "cargo_package": "leanvm-cli",
+      "cargo_features": "Default upstream CLI dependencies, including aggregation/signers-cache; both prover implementations compiled in",
+      "profile": {
+        "opt_level": 3,
+        "lto": "thin",
+        "codegen_units": 1
+      }
+    },
+    "current": {
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "rustflags": [
+        "-C",
+        "target-cpu=native"
+      ],
+      "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.97.1\nLLVM version: 22.1.6",
+      "cargo_lock_sha256": "ee84f00404fff0915e06ddb46e7813ee798c521b8e6d9a101421f6ddabb0b132",
+      "cargo_package": "leanvm-cli",
+      "cargo_features": "Default upstream CLI dependencies, including aggregation/signers-cache; both prover implementations compiled in",
+      "profile": {
+        "opt_level": 3,
+        "lto": "thin",
+        "codegen_units": 1
+      }
+    }
+  },
+  "measurements": [
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.692,
+          0.677,
+          0.678,
+          0.681,
+          0.671
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.68,
+        "reported_verify_mean_ms": 11.818,
+        "reported_proof_size_kib": 271.0,
+        "reported_peak_rss_gib": 0.831
+      },
+      "raw_stdout": "aggregation bytecode: 456,056 instructions (2^19 padded), compiled in 0.754 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 439,873 = 2^18.747\n    details                   : MUL 2^17.352 (38.0%)  XOR 2^16.857 (27.0%)  DEREF 2^16.223 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.381  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 271.0 KiB\n  proving time                : 0.68 s \u00b1 1.4%      peak memory 0.831 GiB\n  verifying                   : 11.818 ms\n",
+      "raw_stderr": "  passes                      : 0.692 s  0.677 s  0.678 s  0.681 s  0.671 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.296,
+          0.295,
+          0.298,
+          0.295,
+          0.319
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.301,
+        "reported_verify_mean_ms": 9.804,
+        "reported_proof_size_kib": 272.5,
+        "reported_peak_rss_gib": 0.917
+      },
+      "raw_stdout": "aggregation bytecode: 456,124 instructions (2^19 padded), compiled in 0.489 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 440,926 = 2^18.75\n    details                   : MUL 2^17.357 (38.1%)  XOR 2^16.86 (27.0%)  DEREF 2^16.228 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.383  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 272.5 KiB\n  proving time                : 0.301 s \u00b1 4.2%      peak memory 0.917 GiB\n  verifying                   : 9.804 ms\n",
+      "raw_stderr": "  passes                      : 0.296 s  0.295 s  0.298 s  0.295 s  0.319 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.519,
+          0.486,
+          0.483,
+          0.479,
+          0.485
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.49,
+        "reported_verify_mean_ms": 8.975,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.399
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.49 s \u00b1 4.0%      peak memory 0.399 GiB\n  per signature               : 32.639 signatures/s\n  verifying                   : 8.975 ms\n",
+      "raw_stderr": "  passes                      : 0.519 s  0.486 s  0.483 s  0.479 s  0.485 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          1.028,
+          1.042,
+          1.042,
+          1.027,
+          1.115
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 1.051,
+        "reported_verify_mean_ms": 12.382,
+        "reported_proof_size_kib": 271.0,
+        "reported_peak_rss_gib": 0.803
+      },
+      "raw_stdout": "aggregation bytecode: 456,056 instructions (2^19 padded), compiled in 0.719 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 439,873 = 2^18.747\n    details                   : MUL 2^17.352 (38.0%)  XOR 2^16.857 (27.0%)  DEREF 2^16.223 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.381  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 271.0 KiB\n  proving time                : 1.051 s \u00b1 4.3%      peak memory 0.803 GiB\n  verifying                   : 12.382 ms\n",
+      "raw_stderr": "  passes                      : 1.028 s  1.042 s  1.042 s  1.027 s  1.115 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.329,
+          0.303,
+          0.31,
+          0.308,
+          0.306
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.311,
+        "reported_verify_mean_ms": 9.865,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.415
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.311 s \u00b1 4.0%      peak memory 0.415 GiB\n  per signature               : 51.398 signatures/s\n  verifying                   : 9.865 ms\n",
+      "raw_stderr": "  passes                      : 0.329 s  0.303 s  0.310 s  0.308 s  0.306 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.114,
+          0.112,
+          0.113,
+          0.115,
+          0.113
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.114,
+        "reported_verify_mean_ms": 7.257,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.504
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.114 s \u00b1 1.3%      peak memory 0.504 GiB\n  per signature               : 140.923 signatures/s\n  verifying                   : 7.257 ms\n",
+      "raw_stderr": "  passes                      : 0.114 s  0.112 s  0.113 s  0.115 s  0.113 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.768,
+          0.83,
+          0.828,
+          0.765,
+          0.776
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.793,
+        "reported_verify_mean_ms": 7.245,
+        "reported_proof_size_kib": 242.8,
+        "reported_peak_rss_gib": 0.565
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 242.8 KiB\n  proving time                : 0.793 s \u00b1 5.1%      peak memory 0.565 GiB\n  per signature               : 161.317 signatures/s\n  verifying                   : 7.245 ms\n",
+      "raw_stderr": "  passes                      : 0.768 s  0.830 s  0.828 s  0.765 s  0.776 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.206,
+          0.209,
+          0.204,
+          0.206,
+          0.2
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.205,
+        "reported_verify_mean_ms": 9.207,
+        "reported_proof_size_kib": 272.5,
+        "reported_peak_rss_gib": 0.947
+      },
+      "raw_stdout": "aggregation bytecode: 456,124 instructions (2^19 padded), compiled in 0.479 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 440,926 = 2^18.75\n    details                   : MUL 2^17.357 (38.1%)  XOR 2^16.86 (27.0%)  DEREF 2^16.228 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.383  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 272.5 KiB\n  proving time                : 0.205 s \u00b1 1.9%      peak memory 0.947 GiB\n  verifying                   : 9.207 ms\n",
+      "raw_stderr": "  passes                      : 0.206 s  0.209 s  0.204 s  0.206 s  0.200 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.167,
+          0.138,
+          0.136,
+          0.134,
+          0.135
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.142,
+        "reported_verify_mean_ms": 9.547,
+        "reported_proof_size_kib": 244.7,
+        "reported_peak_rss_gib": 0.777
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 244.7 KiB\n  proving time                : 0.142 s \u00b1 11.9%      peak memory 0.777 GiB\n  per signature               : 901.351 signatures/s\n  verifying                   : 9.547 ms\n",
+      "raw_stderr": "  passes                      : 0.167 s  0.138 s  0.136 s  0.134 s  0.135 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.204,
+          0.199,
+          0.209,
+          0.203,
+          0.199
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.203,
+        "reported_verify_mean_ms": 7.765,
+        "reported_proof_size_kib": 242.8,
+        "reported_peak_rss_gib": 0.681
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 242.8 KiB\n  proving time                : 0.203 s \u00b1 2.5%      peak memory 0.681 GiB\n  per signature               : 630.747 signatures/s\n  verifying                   : 7.765 ms\n",
+      "raw_stderr": "  passes                      : 0.204 s  0.199 s  0.209 s  0.203 s  0.199 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.151,
+          0.146,
+          0.145,
+          0.145,
+          0.146
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.146,
+        "reported_verify_mean_ms": 7.386,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.484
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.146 s \u00b1 2.1%      peak memory 0.484 GiB\n  per signature               : 109.289 signatures/s\n  verifying                   : 7.386 ms\n",
+      "raw_stderr": "  passes                      : 0.151 s  0.146 s  0.145 s  0.145 s  0.146 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.457,
+          0.456,
+          0.461,
+          0.465,
+          0.454
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.458,
+        "reported_verify_mean_ms": 9.576,
+        "reported_proof_size_kib": 244.7,
+        "reported_peak_rss_gib": 0.577
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 244.7 KiB\n  proving time                : 0.458 s \u00b1 1.2%      peak memory 0.577 GiB\n  per signature               : 279.19 signatures/s\n  verifying                   : 9.576 ms\n",
+      "raw_stderr": "  passes                      : 0.457 s  0.456 s  0.461 s  0.465 s  0.454 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.474,
+          0.474,
+          0.488,
+          0.49,
+          0.476
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.48,
+        "reported_verify_mean_ms": 6.972,
+        "reported_proof_size_kib": 242.8,
+        "reported_peak_rss_gib": 0.585
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 242.8 KiB\n  proving time                : 0.48 s \u00b1 2.0%      peak memory 0.585 GiB\n  per signature               : 266.457 signatures/s\n  verifying                   : 6.972 ms\n",
+      "raw_stderr": "  passes                      : 0.474 s  0.474 s  0.488 s  0.490 s  0.476 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.191,
+          0.191,
+          0.19,
+          0.19,
+          0.193
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.191,
+        "reported_verify_mean_ms": 12.846,
+        "reported_proof_size_kib": 271.0,
+        "reported_peak_rss_gib": 0.944
+      },
+      "raw_stdout": "aggregation bytecode: 456,056 instructions (2^19 padded), compiled in 0.736 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 439,873 = 2^18.747\n    details                   : MUL 2^17.352 (38.0%)  XOR 2^16.857 (27.0%)  DEREF 2^16.223 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.381  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 271.0 KiB\n  proving time                : 0.191 s \u00b1 0.7%      peak memory 0.944 GiB\n  verifying                   : 12.846 ms\n",
+      "raw_stderr": "  passes                      : 0.191 s  0.191 s  0.190 s  0.190 s  0.193 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.307,
+          0.305,
+          0.3,
+          0.298,
+          0.299
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.302,
+        "reported_verify_mean_ms": 7.299,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.413
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.302 s \u00b1 1.6%      peak memory 0.413 GiB\n  per signature               : 53.031 signatures/s\n  verifying                   : 7.299 ms\n",
+      "raw_stderr": "  passes                      : 0.307 s  0.305 s  0.300 s  0.298 s  0.299 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.467,
+          0.468,
+          0.483,
+          0.467,
+          0.466
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.47,
+        "reported_verify_mean_ms": 7.228,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.399
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.47 s \u00b1 1.8%      peak memory 0.399 GiB\n  per signature               : 34.009 signatures/s\n  verifying                   : 7.228 ms\n",
+      "raw_stderr": "  passes                      : 0.467 s  0.468 s  0.483 s  0.467 s  0.466 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.74,
+          0.757,
+          0.755,
+          0.727,
+          0.741
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.744,
+        "reported_verify_mean_ms": 9.932,
+        "reported_proof_size_kib": 244.7,
+        "reported_peak_rss_gib": 0.553
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 244.7 KiB\n  proving time                : 0.744 s \u00b1 2.0%      peak memory 0.553 GiB\n  per signature               : 172.059 signatures/s\n  verifying                   : 9.932 ms\n",
+      "raw_stderr": "  passes                      : 0.740 s  0.757 s  0.755 s  0.727 s  0.741 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.295,
+          0.3,
+          0.307,
+          0.294,
+          0.309
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.301,
+        "reported_verify_mean_ms": 13.11,
+        "reported_proof_size_kib": 271.0,
+        "reported_peak_rss_gib": 0.898
+      },
+      "raw_stdout": "aggregation bytecode: 456,056 instructions (2^19 padded), compiled in 0.734 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 439,873 = 2^18.747\n    details                   : MUL 2^17.352 (38.0%)  XOR 2^16.857 (27.0%)  DEREF 2^16.223 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.381  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 271.0 KiB\n  proving time                : 0.301 s \u00b1 2.8%      peak memory 0.898 GiB\n  verifying                   : 13.11 ms\n",
+      "raw_stderr": "  passes                      : 0.295 s  0.300 s  0.307 s  0.294 s  0.309 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.158,
+          0.15,
+          0.152,
+          0.151,
+          0.155
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.153,
+        "reported_verify_mean_ms": 9.883,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.484
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.153 s \u00b1 2.8%      peak memory 0.484 GiB\n  per signature               : 104.309 signatures/s\n  verifying                   : 9.883 ms\n",
+      "raw_stderr": "  passes                      : 0.158 s  0.150 s  0.152 s  0.151 s  0.155 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "sphincs-16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--sphincs",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.107,
+          0.103,
+          0.107,
+          0.104,
+          0.106
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.105,
+        "reported_verify_mean_ms": 9.58,
+        "reported_proof_size_kib": 219.1,
+        "reported_peak_rss_gib": 0.516
+      },
+      "raw_stdout": "\naggregation, 16 leanSPHINCS signatures\n  cycles (VM steps)           : 107,073 = 2^16.708\n    details                   : SET 2^15.212 (35.5%)  XOR 2^14.791 (26.5%)  MUL 2^14.476 (21.3%)  KECCAK 2^13.011 (7.7%)  DEREF 2^12.874 (7.0%)  JUMP 2^11.111 (2.1%)  MEMORY 2^17.263  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.036\n  proof size                  : 219.1 KiB\n  proving time                : 0.105 s \u00b1 2.4%      peak memory 0.516 GiB\n  per signature               : 151.841 signatures/s\n  verifying                   : 9.58 ms\n",
+      "raw_stderr": "  passes                      : 0.107 s  0.103 s  0.107 s  0.104 s  0.106 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.753,
+          0.753,
+          0.781,
+          0.766,
+          0.775
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.766,
+        "reported_verify_mean_ms": 8.895,
+        "reported_proof_size_kib": 272.5,
+        "reported_peak_rss_gib": 0.841
+      },
+      "raw_stdout": "aggregation bytecode: 456,124 instructions (2^19 padded), compiled in 0.497 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 440,926 = 2^18.75\n    details                   : MUL 2^17.357 (38.1%)  XOR 2^16.86 (27.0%)  DEREF 2^16.228 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.383  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 272.5 KiB\n  proving time                : 0.766 s \u00b1 2.0%      peak memory 0.841 GiB\n  verifying                   : 8.895 ms\n",
+      "raw_stderr": "  passes                      : 0.753 s  0.753 s  0.781 s  0.766 s  0.775 s\n"
+    },
+    {
+      "revision": "current",
+      "sha": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b",
+      "prover": "stable",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "c7ce1e5b58c1803e51ea5ef60721ff0ec5e4d23fb2e1179b5db62fb3a78bf546",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.196,
+          0.196,
+          0.193,
+          0.196,
+          0.195
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.195,
+        "reported_verify_mean_ms": 9.412,
+        "reported_proof_size_kib": 244.7,
+        "reported_peak_rss_gib": 0.663
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 244.7 KiB\n  proving time                : 0.195 s \u00b1 0.9%      peak memory 0.663 GiB\n  per signature               : 656.362 signatures/s\n  verifying                   : 9.412 ms\n",
+      "raw_stderr": "  passes                      : 0.196 s  0.196 s  0.193 s  0.196 s  0.195 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "stable",
+      "workers": 1,
+      "cpu_allocation": [0],
+      "workload": "recursion-sphincs-2x16",
+      "command": [
+        "leanvm",
+        "--prover",
+        "stable",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "recursion",
+        "--n",
+        "2",
+        "--xmss-per-leaf",
+        "0",
+        "--sphincs-per-leaf",
+        "16"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "1"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          1.117,
+          1.126,
+          1.126,
+          1.147,
+          1.146
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 1.132,
+        "reported_verify_mean_ms": 8.899,
+        "reported_proof_size_kib": 272.5,
+        "reported_peak_rss_gib": 0.819
+      },
+      "raw_stdout": "aggregation bytecode: 456,124 instructions (2^19 padded), compiled in 0.49 s\n\nrecursion 2\u21921, over leaves of 16 leanSPHINCS signatures\n  cycles (VM steps)           : 440,926 = 2^18.75\n    details                   : MUL 2^17.357 (38.1%)  XOR 2^16.86 (27.0%)  DEREF 2^16.228 (17.4%)  SET 2^15.422 (10.0%)  JUMP 2^14.375 (4.8%)  KECCAK 2^13.571 (2.8%)  MEMORY 2^19.383  BYTECODE 2^18.799  TOTAL_COMMITTED 2^23.637\n  proof size                  : 272.5 KiB\n  proving time                : 1.132 s \u00b1 1.4%      peak memory 0.819 GiB\n  verifying                   : 8.899 ms\n",
+      "raw_stderr": "  passes                      : 1.117 s  1.126 s  1.126 s  1.147 s  1.146 s\n"
+    },
+    {
+      "revision": "previous",
+      "sha": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+      "prover": "experimental",
+      "workers": 16,
+      "cpu_allocation": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30],
+      "workload": "xmss-128",
+      "command": [
+        "leanvm",
+        "--prover",
+        "experimental",
+        "--repeat",
+        "5",
+        "--cooldown",
+        "2",
+        "--log-inv-rate",
+        "1",
+        "aggregate",
+        "--xmss",
+        "128"
+      ],
+      "environment": {
+        "LEANVM_NUM_THREADS": "16"
+      },
+      "binary_sha256": "b54689a03499267947152a41f0096103b73cec697878f30bb8a0eb67af1568a0",
+      "exit_code": 0,
+      "metrics": {
+        "proof_samples_s": [
+          0.154,
+          0.149,
+          0.146,
+          0.148,
+          0.151
+        ],
+        "sample_precision_s": 0.001,
+        "reported_proving_mean_s": 0.15,
+        "reported_verify_mean_ms": 7.514,
+        "reported_proof_size_kib": 242.8,
+        "reported_peak_rss_gib": 0.673
+      },
+      "raw_stdout": "\naggregation, 128 leanXMSS signatures\n  cycles (VM steps)           : 122,645 = 2^16.904\n    details                   : SET 2^14.887 (24.7%)  KECCAK 2^14.543 (19.5%)  XOR 2^14.542 (19.4%)  MUL 2^14.418 (17.9%)  DEREF 2^14.091 (14.2%)  JUMP 2^12.367 (4.3%)  MEMORY 2^17.754  BYTECODE 2^18.799  TOTAL_COMMITTED 2^22.512\n  proof size                  : 242.8 KiB\n  proving time                : 0.15 s \u00b1 2.3%      peak memory 0.673 GiB\n  per signature               : 855.993 signatures/s\n  verifying                   : 7.514 ms\n",
+      "raw_stderr": "  passes                      : 0.154 s  0.149 s  0.146 s  0.148 s  0.151 s\n"
+    }
+  ]
+}
