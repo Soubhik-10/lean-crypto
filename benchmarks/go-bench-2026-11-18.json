@@ -1,0 +1,1148 @@
+{
+  "summary": {
+    "1": {
+      "operations": {
+        "BenchmarkVerify": {
+          "median_ns": 130525.0,
+          "min_ns": 129780.0,
+          "max_ns": 133005.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1520,
+          "median_allocs_per_op": 2
+        },
+        "BenchmarkEcrecover": {
+          "median_ns": 28755.0,
+          "min_ns": 28525.0,
+          "max_ns": 29069.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 80,
+          "median_allocs_per_op": 1
+        },
+        "BenchmarkP256Verify": {
+          "median_ns": 49228.0,
+          "min_ns": 48953.0,
+          "max_ns": 49676.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1232,
+          "median_allocs_per_op": 20
+        },
+        "BenchmarkSign": {
+          "median_ns": 195271108.0,
+          "min_ns": 194176483.0,
+          "max_ns": 199077450.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 9952,
+          "median_allocs_per_op": 16
+        },
+        "BenchmarkKeyGen": {
+          "median_ns": 69081794.0,
+          "min_ns": 68454274.0,
+          "max_ns": 70242045.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1664,
+          "median_allocs_per_op": 10
+        }
+      },
+      "verify_ecrecover_ratio": 4.539210572074422,
+      "gas_calibration_3000": 13617.631716223266,
+      "gas_calibration_2800": 12709.789601808383
+    },
+    "0": {
+      "operations": {
+        "BenchmarkVerify": {
+          "median_ns": 133878.0,
+          "min_ns": 132632.0,
+          "max_ns": 135428.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1520,
+          "median_allocs_per_op": 2
+        },
+        "BenchmarkEcrecover": {
+          "median_ns": 109749.0,
+          "min_ns": 108523.0,
+          "max_ns": 110570.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1512,
+          "median_allocs_per_op": 27
+        },
+        "BenchmarkP256Verify": {
+          "median_ns": 49360.0,
+          "min_ns": 48992.0,
+          "max_ns": 49549.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1232,
+          "median_allocs_per_op": 20
+        },
+        "BenchmarkSign": {
+          "median_ns": 198353617.0,
+          "min_ns": 196538408.0,
+          "max_ns": 200356970.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 9952,
+          "median_allocs_per_op": 16
+        },
+        "BenchmarkKeyGen": {
+          "median_ns": 69698830.0,
+          "min_ns": 69155612.0,
+          "max_ns": 70385079.0,
+          "sample_count": 9,
+          "median_bytes_per_op": 1664,
+          "median_allocs_per_op": 10
+        }
+      },
+      "verify_ecrecover_ratio": 1.219856217368723,
+      "gas_calibration_3000": 3659.5686521061693,
+      "gas_calibration_2800": 3415.5974086324245
+    }
+  },
+  "runs": [
+    {
+      "cgo": 1,
+      "pass": 1,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   18124\t    132340 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18122\t    132556 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18033\t    133005 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      12\t 199037917 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 199077450 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 199022417 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      33\t  70120712 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  70242045 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  70117942 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   82528\t     29069 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   82604\t     29034 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   82609\t     28984 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkP256Verify \t   48273\t     49660 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48337\t     49668 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48307\t     49676 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18124,
+          "ns_per_op": 132340.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18122,
+          "ns_per_op": 132556.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18033,
+          "ns_per_op": 133005.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 199037917.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 199077450.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 199022417.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70120712.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70242045.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70117942.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 82528,
+          "ns_per_op": 29069.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 82604,
+          "ns_per_op": 29034.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 82609,
+          "ns_per_op": 28984.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48273,
+          "ns_per_op": 49660.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48337,
+          "ns_per_op": 49668.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48307,
+          "ns_per_op": 49676.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    },
+    {
+      "cgo": 1,
+      "pass": 2,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   18382\t    130525 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18376\t    130495 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18370\t    130676 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      12\t 195210983 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 195481050 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 195271108 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      34\t  69081794 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      34\t  68853082 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      34\t  69768188 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   82969\t     28755 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   83157\t     28786 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   83661\t     28691 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkP256Verify \t   48702\t     49228 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48789\t     49206 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48750\t     49229 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18382,
+          "ns_per_op": 130525.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18376,
+          "ns_per_op": 130495.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18370,
+          "ns_per_op": 130676.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 195210983.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 195481050.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 195271108.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 69081794.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 68853082.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 69768188.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 82969,
+          "ns_per_op": 28755.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 83157,
+          "ns_per_op": 28786.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 83661,
+          "ns_per_op": 28691.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48702,
+          "ns_per_op": 49228.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48789,
+          "ns_per_op": 49206.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48750,
+          "ns_per_op": 49229.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    },
+    {
+      "cgo": 1,
+      "pass": 3,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   18440\t    130051 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18478\t    129832 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18487\t    129780 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      12\t 194200892 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 194176483 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 194204342 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      34\t  68454274 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      34\t  68515121 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      34\t  68578438 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   84036\t     28544 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   84138\t     28527 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkEcrecover  \t   84008\t     28525 ns/op\t      80 B/op\t       1 allocs/op\nBenchmarkP256Verify \t   49033\t     48953 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   49039\t     48954 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48984\t     48996 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18440,
+          "ns_per_op": 130051.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18478,
+          "ns_per_op": 129832.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18487,
+          "ns_per_op": 129780.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 194200892.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 194176483.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 194204342.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 68454274.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 68515121.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 34,
+          "ns_per_op": 68578438.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 84036,
+          "ns_per_op": 28544.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 84138,
+          "ns_per_op": 28527.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 84008,
+          "ns_per_op": 28525.0,
+          "bytes_per_op": 80,
+          "allocs_per_op": 1
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 49033,
+          "ns_per_op": 48953.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 49039,
+          "ns_per_op": 48954.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48984,
+          "ns_per_op": 48996.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    },
+    {
+      "cgo": 0,
+      "pass": 1,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   17698\t    135428 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   17751\t    135171 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   17738\t    135171 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      10\t 200239430 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      10\t 200356970 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 199596083 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      33\t  70174915 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  70385079 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  70129406 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   21711\t    110242 ns/op\t    1611 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   21866\t    109874 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   21841\t    109794 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkP256Verify \t   48498\t     49549 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48340\t     49522 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48417\t     49521 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17698,
+          "ns_per_op": 135428.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17751,
+          "ns_per_op": 135171.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17738,
+          "ns_per_op": 135171.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 10,
+          "ns_per_op": 200239430.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 10,
+          "ns_per_op": 200356970.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 199596083.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70174915.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70385079.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 70129406.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21711,
+          "ns_per_op": 110242.0,
+          "bytes_per_op": 1611,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21866,
+          "ns_per_op": 109874.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21841,
+          "ns_per_op": 109794.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48498,
+          "ns_per_op": 49549.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48340,
+          "ns_per_op": 49522.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48417,
+          "ns_per_op": 49521.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    },
+    {
+      "cgo": 0,
+      "pass": 2,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   17872\t    134105 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   17935\t    133855 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   17928\t    133878 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      12\t 198282075 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 198525617 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 198353617 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      33\t  69740761 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  69698830 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  69621088 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   21792\t    110570 ns/op\t    1610 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   21891\t    109749 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   21903\t    109473 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkP256Verify \t   48596\t     49360 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48651\t     49308 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48604\t     49365 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17872,
+          "ns_per_op": 134105.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17935,
+          "ns_per_op": 133855.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 17928,
+          "ns_per_op": 133878.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 198282075.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 198525617.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 198353617.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69740761.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69698830.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69621088.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21792,
+          "ns_per_op": 110570.0,
+          "bytes_per_op": 1610,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21891,
+          "ns_per_op": 109749.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 21903,
+          "ns_per_op": 109473.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48596,
+          "ns_per_op": 49360.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48651,
+          "ns_per_op": 49308.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48604,
+          "ns_per_op": 49365.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    },
+    {
+      "cgo": 0,
+      "pass": 3,
+      "raw_output": "goos: windows\ngoarch: amd64\ncpu: AMD Ryzen 9 8940HX with Radeon Graphics        \nBenchmarkVerify     \t   18048\t    133274 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18084\t    132632 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkVerify     \t   18106\t    132669 ns/op\t    1520 B/op\t       2 allocs/op\nBenchmarkSign       \t      12\t 196795225 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 196577408 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkSign       \t      12\t 196538408 ns/op\t    9952 B/op\t      16 allocs/op\nBenchmarkKeyGen     \t      33\t  69361485 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  69263236 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkKeyGen     \t      33\t  69155612 ns/op\t    1664 B/op\t      10 allocs/op\nBenchmarkEcrecover  \t   22003\t    108762 ns/op\t    1609 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   22102\t    108523 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkEcrecover  \t   22070\t    108827 ns/op\t    1512 B/op\t      27 allocs/op\nBenchmarkP256Verify \t   48940\t     48992 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   48577\t     49100 ns/op\t    1232 B/op\t      20 allocs/op\nBenchmarkP256Verify \t   49010\t     49008 ns/op\t    1232 B/op\t      20 allocs/op\nPASS\n",
+      "samples": [
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18048,
+          "ns_per_op": 133274.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18084,
+          "ns_per_op": 132632.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkVerify",
+          "iterations": 18106,
+          "ns_per_op": 132669.0,
+          "bytes_per_op": 1520,
+          "allocs_per_op": 2
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 196795225.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 196577408.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkSign",
+          "iterations": 12,
+          "ns_per_op": 196538408.0,
+          "bytes_per_op": 9952,
+          "allocs_per_op": 16
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69361485.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69263236.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkKeyGen",
+          "iterations": 33,
+          "ns_per_op": 69155612.0,
+          "bytes_per_op": 1664,
+          "allocs_per_op": 10
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 22003,
+          "ns_per_op": 108762.0,
+          "bytes_per_op": 1609,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 22102,
+          "ns_per_op": 108523.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkEcrecover",
+          "iterations": 22070,
+          "ns_per_op": 108827.0,
+          "bytes_per_op": 1512,
+          "allocs_per_op": 27
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48940,
+          "ns_per_op": 48992.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 48577,
+          "ns_per_op": 49100.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        },
+        {
+          "operation": "BenchmarkP256Verify",
+          "iterations": 49010,
+          "ns_per_op": 49008.0,
+          "bytes_per_op": 1232,
+          "allocs_per_op": 20
+        }
+      ]
+    }
+  ],
+  "source": {
+    "pr": "https://github.com/ethereum/go-ethereum/pull/36137",
+    "head": "3ab7560bd2bf5bae47b4cafdf76c4f5c04b25cd1",
+    "pr_base": "142458d3dafaa05f013eee70703b280641780612",
+    "local_geth_head": "14f4be01e9d24659bc241922b2e43beba685554f",
+    "pinned_files_sha256": {
+      "go.mod": "b2148ad7c261ca18ceb3996db98a98706f90c56aa6cb4934fdcd22a5fb0829de",
+      "go.sum": "659738efe073fc111e5b10d92ad225f7bdf7351a3b675f04c30e8c9096a54b33",
+      "crypto/keccak.go": "32fb3087f1d9c58c3379b6d0205a0a6c07e51d519aea402e159e89979eef7cf2",
+      "crypto/keccak_cache.go": "0b8cd5025382012eb2d94f4e2758b558dc019eea048e339d706b26c66dcbddb0",
+      "crypto/signature_nocgo.go": "cecd94fcb44e2e556701b6c608e6ec044f1821491d3ab85b4d8c5b3e9380f633",
+      "core/vm/testdata/precompiles/p256Verify.json": "72be71957c3e4292d874b3e2a6a2fc2142524433b01cb9a9552b9bb2528c214d"
+    },
+    "package_files_sha256": {
+      "fors.go": "d24390d9aee53ec8a746523c1cf1ad2ac0898f4b12b32be2e9d68148d8c18c07",
+      "hash.go": "d74e9ac97dc53a5eb158a4b62a8860987acd275acb339de2932f13553d650369",
+      "leansphincs.go": "345a106abedb6018c734c1ef3a7e53f501e414fa70c52ffd27d263f692df3a99",
+      "leansphincs_test.go": "1a49cc5111ecc7d0b63d675c1a37951e6da6ecad5becb9bc9dad97cb85062f20",
+      "tree.go": "140df1632366e087ea9ba3f343caff474173d776693d214fbcc8d499ede78712",
+      "wots.go": "6023d893114dc68b34425aa65023c67ed6b7603c2e371817cbb1364901704b8e",
+      "testdata/ethlib/leanvm_known_answer.hex": "23b5637e7f8753607b50d673c80de4561eea54c75aea92d2674d2f011a136b81"
+    },
+    "overlay": [
+      "<existing-geth-checkout>\\crypto\\keccak.go",
+      "<existing-geth-checkout>\\crypto\\keccak_cache.go",
+      "<existing-geth-checkout>\\crypto\\signature_nocgo.go"
+    ],
+    "matching_source_trees_at_pr_base_and_local_checkout": {
+      "common": "f4a3e55b3a36aa60df8943545b50272f65b1c694",
+      "crypto/keccak": "7950c9d574cebe9cfb6f34cf1b2bee310aa01c37",
+      "crypto/secp256k1": "2e803795a3773c0568c0f04c734187b97f036abf",
+      "crypto/secp256r1": "7964686798d9db247a22f07dec6c81384c3028f7"
+    }
+  },
+  "build": {
+    "go_version": "go version go1.27.3 windows/amd64",
+    "gcc_version": "gcc (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0",
+    "configurations": {
+      "1": {
+        "command": [
+          "go",
+          "test",
+          "-mod=readonly",
+          "-modfile=<benchmark-workspace>\\work\\go-amd64-confirmation\\pinned\\go.mod",
+          "-overlay=<benchmark-workspace>\\work\\go-amd64-confirmation\\overlay.json",
+          "-c",
+          "-vet=off",
+          "-buildvcs=false",
+          "-o",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo1.test.exe",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\fors.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\hash.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\leansphincs.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\leansphincs_test.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\tree.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\wots.go"
+        ],
+        "environment": {
+          "CC": "gcc",
+          "CGO_CFLAGS": "-O2 -g",
+          "CGO_ENABLED": "1",
+          "CGO_LDFLAGS": "-O2 -g",
+          "GOAMD64": "v1",
+          "GOARCH": "amd64",
+          "GOEXPERIMENT": "",
+          "GOOS": "windows"
+        },
+        "selected_files": {
+          "crypto": {
+            "GoFiles": [
+              "crypto.go",
+              "keccak.go",
+              "keccak_cache.go",
+              "signature_cgo.go"
+            ],
+            "CgoFiles": [],
+            "SFiles": [],
+            "IgnoredGoFiles": [
+              "keccak_ziren.go",
+              "signature_nocgo.go"
+            ]
+          },
+          "crypto/keccak": {
+            "GoFiles": [
+              "hashes.go",
+              "keccakf_amd64.go",
+              "sha3.go"
+            ],
+            "CgoFiles": [],
+            "SFiles": [
+              "keccakf_amd64.s"
+            ],
+            "IgnoredGoFiles": [
+              "keccakf.go"
+            ]
+          }
+        },
+        "executable_sha256": "aa092501c3ac08ac585b787cf9f0da73a9a78df62869b9c68f7dc9c7aa0d8239",
+        "GOMAXPROCS": "1"
+      },
+      "0": {
+        "command": [
+          "go",
+          "test",
+          "-mod=readonly",
+          "-modfile=<benchmark-workspace>\\work\\go-amd64-confirmation\\pinned\\go.mod",
+          "-overlay=<benchmark-workspace>\\work\\go-amd64-confirmation\\overlay.json",
+          "-c",
+          "-vet=off",
+          "-buildvcs=false",
+          "-o",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo0.test.exe",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\fors.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\hash.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\leansphincs.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\leansphincs_test.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\tree.go",
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\crypto\\leansphincs\\wots.go"
+        ],
+        "environment": {
+          "CC": "gcc",
+          "CGO_CFLAGS": "-O2 -g",
+          "CGO_ENABLED": "0",
+          "CGO_LDFLAGS": "-O2 -g",
+          "GOAMD64": "v1",
+          "GOARCH": "amd64",
+          "GOEXPERIMENT": "",
+          "GOOS": "windows"
+        },
+        "selected_files": {
+          "crypto": {
+            "GoFiles": [
+              "crypto.go",
+              "keccak.go",
+              "keccak_cache.go",
+              "signature_nocgo.go"
+            ],
+            "CgoFiles": [],
+            "SFiles": [],
+            "IgnoredGoFiles": [
+              "keccak_ziren.go",
+              "signature_cgo.go"
+            ]
+          },
+          "crypto/keccak": {
+            "GoFiles": [
+              "hashes.go",
+              "keccakf_amd64.go",
+              "sha3.go"
+            ],
+            "CgoFiles": [],
+            "SFiles": [
+              "keccakf_amd64.s"
+            ],
+            "IgnoredGoFiles": [
+              "keccakf.go"
+            ]
+          }
+        },
+        "executable_sha256": "eb2cd208e67bdca34a4fcb02403eff586b8cb6b69ede0baa6861c5c75aec1d27",
+        "GOMAXPROCS": "1"
+      }
+    }
+  },
+  "session": {
+    "report_date": "2026-11-18",
+    "started_utc": "2026-11-18T11:14:11.556326+00:00",
+    "cpu": "AMD Ryzen 9 8940HX",
+    "os": "Windows amd64",
+    "logical_cpu": 8,
+    "priority": "above normal",
+    "core_groups": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        10,
+        11
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        14,
+        15
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        18,
+        19
+      ],
+      [
+        20,
+        21
+      ],
+      [
+        22,
+        23
+      ],
+      [
+        24,
+        25
+      ],
+      [
+        26,
+        27
+      ],
+      [
+        28,
+        29
+      ],
+      [
+        30,
+        31
+      ]
+    ],
+    "power_before": {
+      "ac_line_status": 1,
+      "battery_percent": 86
+    },
+    "power_scheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "passes_per_configuration": 3,
+    "repetitions_per_process": 3,
+    "benchtime": "2s",
+    "completed": [
+      {
+        "cgo": 1,
+        "pass": 1,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo1.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 35.74466029999894,
+        "system_cpu_percent": 4.431037784891512,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      },
+      {
+        "cgo": 0,
+        "pass": 1,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo0.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 34.9769907000009,
+        "system_cpu_percent": 4.457532028916744,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      },
+      {
+        "cgo": 0,
+        "pass": 2,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo0.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 35.68098699999973,
+        "system_cpu_percent": 4.600500827871212,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      },
+      {
+        "cgo": 1,
+        "pass": 2,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo1.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 35.70648229999642,
+        "system_cpu_percent": 4.745665214890293,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      },
+      {
+        "cgo": 1,
+        "pass": 3,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo1.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 35.608495499996934,
+        "system_cpu_percent": 4.485245721807807,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      },
+      {
+        "cgo": 0,
+        "pass": 3,
+        "command": [
+          "<benchmark-workspace>\\work\\go-amd64-confirmation\\leansphincs-cgo0.test.exe",
+          "-test.run=^$",
+          "-test.bench=^(BenchmarkVerify|BenchmarkEcrecover|BenchmarkP256Verify|BenchmarkSign|BenchmarkKeyGen)$",
+          "-test.benchtime=2s",
+          "-test.count=3",
+          "-test.cpu=1",
+          "-test.benchmem"
+        ],
+        "elapsed_seconds": 35.59348090000276,
+        "system_cpu_percent": 4.5856444615300145,
+        "power_after": {
+          "ac_line_status": 1,
+          "battery_percent": 86
+        }
+      }
+    ],
+    "complete": true,
+    "finished_utc": "2026-11-18T11:17:48.271617+00:00"
+  },
+  "correctness": {
+    "1": "=== RUN   TestKnownAnswer\n--- PASS: TestKnownAnswer (0.27s)\n=== RUN   TestRoundTrip\n--- PASS: TestRoundTrip (1.19s)\n=== RUN   TestMalformed\n--- PASS: TestMalformed (0.00s)\n=== RUN   TestVerifyCost\n--- PASS: TestVerifyCost (0.00s)\nPASS\n",
+    "0": "=== RUN   TestKnownAnswer\n--- PASS: TestKnownAnswer (0.27s)\n=== RUN   TestRoundTrip\n--- PASS: TestRoundTrip (1.19s)\n=== RUN   TestMalformed\n--- PASS: TestMalformed (0.00s)\n=== RUN   TestVerifyCost\n--- PASS: TestVerifyCost (0.00s)\nPASS\n"
+  },
+  "methodology": {
+    "assembly_keccak": true,
+    "purego_build_tag": false,
+    "outliers_removed": 0,
+    "reported_statistic": "median of nine ns/op results from three fresh processes per configuration",
+    "earlier_campaign_samples_pooled": false,
+    "runtime_api": "native Go cryptographic functions; no EVM frame or client block benchmark"
+  }
+}

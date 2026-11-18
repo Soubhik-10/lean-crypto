@@ -303,13 +303,13 @@ Newer instructions do not automatically produce faster code. Compiler decisions,
 
 The current raw API comparison tests native CPU builds with default SLP and with SLP disabled, plus an AVX-512 assembly build with default SLP. leanVM's explicit AVX-512 code remains enabled in both cases. The full results record the compiler settings for each build.
 
-Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](../README.md#native-benchmark-results).
+Enabling assembly also does not change the signature scheme or reduce its required permutations. It changes how the CPU executes the hashing. [Benchmark configurations and results](../benchmarks/RAW_RESULTS.md).
 
 # What the performance numbers actually show
 
-The native signature results use an AMD Ryzen 9 8940HX, Rust 1.97.1 and LLVM 22.1.6. The full matrix measures five compiler targets and three Alloy hashing choices. A separate confirmation measures the selected leading builds and prepared compiler controls with 44 samples per pass, three passes and 11 shared key/message pairs. Headline values select the lowest complete 132-sample median for each implementation and operation; every matched row and sample is retained.
+The [latest evm2 comparison](../benchmarks/ECRECOVER_RESULTS.md) reports matched builds and every retained sample. The earlier native signature results below use an AMD Ryzen 9 8940HX, Rust 1.97.1 and LLVM 22.1.6. The full matrix measures five compiler targets and three Alloy hashing choices. A separate confirmation measures the selected leading builds and prepared compiler controls with 44 samples per pass, three passes and 11 shared key/message pairs. Headline values select the lowest complete 132-sample median for each implementation and operation; every matched row and sample is retained.
 
-The leanVM column calls the unmodified upstream Rust `lean_sphincs` public APIs at the revision linked in the README. Our hashing feature does not select leanVM's backend. Its own CPU-selected hasher runs without a local adapter or a replacement algorithm. The compiled experimental adapter marker is false in every measured binary.
+The leanVM column calls the unmodified upstream Rust `lean_sphincs` public APIs at the revision recorded in the benchmark setup. Our hashing feature does not select leanVM's backend. Its own CPU-selected hasher runs without a local adapter or a replacement algorithm. The compiled experimental adapter marker is false in every measured binary.
 
 | Operation | Our crate | leanVM (unmodified) |
 | --- | ---: | ---: |
@@ -321,11 +321,11 @@ A microsecond (µs) is one millionth of a second; a millisecond (ms) is one thou
 
 Verification borrows encoded signature bytes in our crate and pre-parsed native objects in leanVM. Signing and key generation return native results without extra serialization, and recompute from the seed on every call. Input preparation and correctness checks happen before timing. These are native API timings, not identical wire-format integration costs.
 
-The README separately reports leanVM's stable and experimental provers, using its unmodified CLI. Proving builds a compact proof of signature verification; it is a different operation from verifying a signature directly. Those tables measure two upstream revisions, 1 and 16 workers, and leaf and recursive aggregation. Our crate has no aggregate prover. For recursion, only the parent aggregation step is timed; producing the child proofs is excluded.
+The [upstream proving report](../benchmarks/PROVING_RESULTS.md) compares leanVM's stable and experimental provers, using its unmodified CLI. Proving builds a compact proof of signature verification; it is a different operation from verifying a signature directly. Those tables measure two upstream revisions, 1 and 16 workers, and leaf and recursive aggregation. Our crate has no aggregate prover. For recursion, only the parent aggregation step is timed; producing the child proofs is excluded.
 
 Earlier wire-format results and the local batching experiment remain historical. They use different boundaries and are not pooled into the current raw API comparison. These results describe this CPU and measured inputs, not a universal performance limit or a security audit. Small timing differences do not establish statistical significance.
 
-[Full tables](../README.md#native-benchmark-results), [exact setup and features](../benchmarks/BENCHMARK_SETUP.md), and [every proving measurement](../benchmarks/proving-measurements.json).
+[Full tables](../benchmarks/RAW_RESULTS.md), [exact setup and features](../benchmarks/BENCHMARK_SETUP.md), and [every proving measurement](../benchmarks/proving-measurements.json).
 
 # Why verification uses 515 permutations
 
