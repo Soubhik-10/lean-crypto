@@ -176,11 +176,9 @@ The checkout HEAD is `3dcacee12b0926e1beb57518b106a34024406f86`, with existing
 documentation and benchmark-runner edits. The implementation was unchanged.
 The exact source and binary hashes are retained in the raw data.
 
-The measured benchmark manifest/lockfile locally repin leanVM from
-`4937c851eafb9e93bc7436eebe9e6dc8ae4c227a` to the revision in the table below.
-Apply that pin before reproducing this campaign; the repository's default
-benchmark manifest may still use the earlier revision. The measured manifest
-and lockfile hashes are included in the raw dataset.
+The benchmark manifest and lockfile pin leanVM to the revision in the table
+below. The historical dataset retains the measured manifest and lockfile hashes.
+The shell runner records its own source and platform snapshots for new campaigns.
 
 | Dependency | Pinned revision |
 | --- | --- |
@@ -215,11 +213,50 @@ it need not reproduce the Windows numbers.
 
 ## Interpreting the gas comparison
 
-`3,000 × verify_time / ecrecover_time` is a local CPU-time calibration against
-the ecrecover precompile. The additional 2,800 column uses EIP-8141's native
-secp256k1 frame-signature charge. Neither calculation sets consensus gas prices.
-EIP-1108 provides an earlier example of
-[using ecrecover runtime as a calibration anchor](https://eips.ethereum.org/EIPS/eip-1108#specification).
+| Gas reference | Charge | Status and source |
+| --- | ---: | --- |
+| Ecrecover precompile | 3,000 | Existing precompile; [EIP-1108 calibration](https://eips.ethereum.org/EIPS/eip-1108#specification) |
+| P256VERIFY precompile | 6,900 | [EIP-7951 gas schedule](https://eips.ethereum.org/EIPS/eip-7951#gas-schedule) |
+| Native SECP256K1 signature | 2,800 | [Draft EIP-8141](https://eips.ethereum.org/EIPS/eip-8141) |
+| Native P256 signature | 6,700 | [Draft EIP-8141](https://eips.ethereum.org/EIPS/eip-8141) |
+| Native leanSPHINCS signature | 12,600 | [Draft PR #12616](https://github.com/ethereum/EIPs/pull/12616), older 492-permutation pin |
+| Updated leanSPHINCS price | 13,200 | [Review suggestion](https://github.com/ethereum/EIPs/pull/12616#pullrequestreview-5920543343) for 515 permutations |
+
+These are verification charges, excluding signature-data costs and other
+transaction work. Draft and review prices are not finalized protocol rules.
+
+CPU time is the local proxy for computational work. Convert it relative to a
+measured reference, not through a universal gas-per-second constant:
+
+```text
+cpu_work_ratio = verification_time / ecrecover_time
+time_equivalent_gas = reference_gas * cpu_work_ratio
+checks_per_second = 1,000,000 / median_microseconds_per_check
+relative_cpu_time_per_gas = cpu_work_ratio / (scheme_gas / reference_gas)
+```
+
+| Rust audit build | CPU-work ratio | Verify checks/s/core | Ecrecover checks/s/core | Gas equivalent at 3,000 | Gas equivalent at 2,800 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Assembly Keccak + MSVC C recovery | 0.957x | 27,222 | 26,050 | 2871 | 2679 |
+| Assembly Keccak + Clang C recovery | 1.437x | 27,142 | 39,010 | 4312 | 4024 |
+| RustCrypto Keccak + k256 | 0.803x | 24,592 | 19,745 | 2409 | 2248 |
+
+Rates are reciprocals of median batch times. They are not full-node TPS or
+measured multicore scaling. These are the 32-ECDSA-input audit rows; the
+original campaign's single-fixture rows are retained separately above.
+
+For the faster Clang C reference, 3,000 / 25.634 gives
+117.031 gas/µs on this machine. Multiplying by
+36.843 µs gives 4312 equivalent gas.
+The pure-Rust recovery backend is slower, so its calibration yields a smaller
+estimate even though leanSPHINCS verification takes more time in that build.
+Backend choice must be recorded alongside the estimate.
+
+[EIP-1108](https://eips.ethereum.org/EIPS/eip-1108#specification) used Ecrecover
+runtime as a pricing anchor. Its historical gas/µs value belongs to that
+hardware; this table uses the measured reference times on the present CPU.
+The native 2,800 reference comes from draft EIP-8141. All figures exclude
+signature-data costs, EVM dispatch and transaction handling.
 
 The current [leanSPHINCS proposal](https://github.com/ethereum/EIPs/pull/12616)
 arrives at 12,600 gas by pricing the older format's 492 Keccak permutations at

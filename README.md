@@ -102,7 +102,7 @@ The C recovery compiler materially changes the comparison; the earlier MSVC-C
 control took 38.35 µs. These are native CPU timings, excluding transaction-data
 costs, and do not determine consensus gas prices.
 
-[Ecrecover comparison, methodology and raw samples](benchmarks/ECRECOVER_RESULTS.md) ·
+[Ecrecover comparison, gas references and raw samples](benchmarks/ECRECOVER_RESULTS.md) ·
 [Full native matrix](benchmarks/RAW_RESULTS.md) ·
 [Upstream proving comparison](benchmarks/PROVING_RESULTS.md) ·
 [Reproduction commands](benchmarks/SUITE.md).
