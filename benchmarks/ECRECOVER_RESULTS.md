@@ -4,6 +4,98 @@ Measured 18 November 2026 on an AMD Ryzen 9 8940HX, Windows x86-64 MSVC,
 Rust 1.97.1 / LLVM 22.1.6. The benchmark profile uses optimization level 3,
 Thin LTO and one codegen unit.
 
+## Fresh upstream leanVM versus evm2 confirmation
+
+This separate campaign measures **upstream leanVM's native verifier**, pinned to
+[`6a828ecf`](https://github.com/leanEthereum/leanVM/tree/6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b),
+against the actual evm2 recovery provider. The same-process lean-sphincs column
+is a control from our crate. These are medians of 132 retained batch samples
+per operation/configuration, collected in three fresh processes on the AMD
+machine above.
+
+| evm2 recovery backend | leanVM verify (µs) | evm2 ecrecover (µs) | leanVM / ecrecover | Ratio × 3,000 gas | Ratio × 2,800 gas | Our verify control (µs) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Clang C/libsecp256k1 | 121.076 | 25.545 | 4.740x | 14219 | 13271 | 37.016 |
+| Rust k256 | 119.701 | 50.825 | 2.355x | 7066 | 6595 | 40.970 |
+
+The faster Clang C recovery control gives **4.740x**,
+or approximately **14219 gas** at the existing
+[3,000-gas precompile anchor](https://eips.ethereum.org/EIPS/eip-1108#specification),
+and **13271 gas** at the
+[draft 2,800-gas native signature anchor](https://eips.ethereum.org/EIPS/eip-8141).
+At the [draft 12,600-gas leanSPHINCS charge](https://github.com/ethereum/EIPs/pull/12616),
+the ratio of CPU time per gas to the 2,800-gas recovery reference is
+1.0533x. This is a local timing
+calibration, not gas consumed by the Rust call or a network-wide pricing verdict.
+The measured format has 515 permutations; the proposal's older 492-permutation
+pin and the [13,200-gas review suggestion](https://github.com/ethereum/EIPs/pull/12616#pullrequestreview-5920543343)
+still need to be distinguished.
+
+Upstream verification uses its own native AVX-512 single-state Keccak path in
+both configurations. Disabling Alloy's optional assembly feature in the k256
+build does not replace leanVM's hashing backend. The pinned upstream verifier
+walks independent [FORS trees](https://github.com/leanEthereum/leanVM/blob/6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b/crates/lean_sphincs/src/fors.rs)
+and [WOTS chains](https://github.com/leanEthereum/leanVM/blob/6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b/crates/lean_sphincs/src/wots.rs)
+sequentially. Our native verifier batches independent hashes in four AVX2
+lanes. The same-process Clang row measures our verifier as
+3.27x faster than upstream on this CPU.
+
+Our Clang-build control has process medians of 37.016, 52.141 and 36.512 µs.
+The second process stays slower across all 44 samples; it is not a single
+outlier. Its batch calibration chooses 512 iterations instead of 1,024.
+The cause is not isolated by this campaign. All samples remain included and
+the pooled speedup does not describe every process. The upstream and recovery
+kernels in that process remain close to their other passes, as shown below.
+
+The pure-Rust recovery baseline takes longer and therefore gives a smaller
+ratio. It does not reduce the upstream verifier's work. Use the Clang C row
+when comparing against the faster measured recovery backend.
+
+| Recovery backend | Pass | leanVM verify (µs) | evm2 ecrecover (µs) | Ratio | Our verify control (µs) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Clang C/libsecp256k1 | 1 | 121.929 | 26.076 | 4.676x | 37.016 |
+| Clang C/libsecp256k1 | 2 | 121.076 | 25.521 | 4.744x | 52.141 |
+| Clang C/libsecp256k1 | 3 | 119.785 | 25.517 | 4.694x | 36.512 |
+| Rust k256 | 1 | 119.563 | 50.999 | 2.344x | 41.518 |
+| Rust k256 | 2 | 122.498 | 50.773 | 2.413x | 40.904 |
+| Rust k256 | 3 | 118.409 | 50.775 | 2.332x | 40.560 |
+
+| Recovery backend | Operation | p05 (µs) | Median (µs) | p95 (µs) |
+| --- | --- | ---: | ---: | ---: |
+| Clang C/libsecp256k1 | leanVM verify | 119.514 | 121.076 | 122.948 |
+| Clang C/libsecp256k1 | evm2 ecrecover | 25.452 | 25.545 | 26.197 |
+| Clang C/libsecp256k1 | Our verify control | 36.420 | 37.016 | 52.540 |
+| Rust k256 | leanVM verify | 117.179 | 119.701 | 122.879 |
+| Rust k256 | evm2 ecrecover | 50.612 | 50.825 | 51.514 |
+| Rust k256 | Our verify control | 40.432 | 40.970 | 41.833 |
+
+Each process runs 44 randomized rounds, with 300 ms warmup per kernel and
+adaptive batches targeting at least 20 ms. Configuration order is Clang/k256,
+k256/Clang, Clang/k256. Affinity (CPU 8) and above-normal priority are checked
+before releasing the start handshake. AC power remains connected. The Balanced
+power policy is unchanged; SMT sibling 9 is not reserved, and temperature and
+clock frequency are not fixed or measured. Percentiles describe batch-average
+times, not individual-call latency or confidence intervals.
+
+The binaries are the already audited native builds, reused after verifying
+executable and implementation/harness source hashes. Both are Rust 1.97.1,
+MSVC ABI, optimization level 3, native CPU features, Thin LTO and one codegen
+unit. The C backend uses Clang-cl 21.1.8 with secp256k1 0.33.1 / sys 0.14.1;
+the alternative provider uses k256 0.14.0. Dependency pins remain the revisions
+listed below. Run the existing matrix with `--sample-ms 20 --groups direct,ecrecover`
+using the reproduction procedure below for this campaign's batch settings.
+
+All eleven shared PQ fixtures are checked for byte-identical keys/signatures
+before timing. leanVM inputs are parsed before timing, while our API receives
+signature bytes. Recovery includes parsing, public-key recovery, serialization
+and address hashing, with provider initialization outside timing. This campaign
+uses the existing fixed ECDSA input; the 32-input audit below checks its
+representativeness. No EVM execution, signature-data charges or aggregation
+proof work is included. All seven existing direct/recovery kernels run in
+each process; the full data also retains signing and key-generation samples.
+
+[All six reports, 1,848 samples, corpus, setup, build/source hashes and launch metadata](leanvm-ecrecover-2026-11-18.json).
+
 ## Backend and compiler audit
 
 The earlier near-equality result is specific to the MSVC C build. Rebuilding
