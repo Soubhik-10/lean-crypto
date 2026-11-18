@@ -28,11 +28,12 @@ graph contains no evm2, libsecp256k1, benchmark framework, or fixture parser.
 Run from the `lean-sphincs` repository:
 
 ```sh
+mkdir -p benchmarks/results
 cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench verify -- \
-  --samples 30 --sample-ms 100 --json benchmarks/portable.json
+  --samples 30 --sample-ms 100 --json benchmarks/results/portable.json
 cargo bench --manifest-path benchmarks/evm2/Cargo.toml --bench verify \
   --features asm-keccak -- \
-  --samples 30 --sample-ms 100 --json benchmarks/asm-keccak.json
+  --samples 30 --sample-ms 100 --json benchmarks/results/asm-keccak.json
 ```
 
 The default harness feature selects evm2's libsecp256k1 backend. With

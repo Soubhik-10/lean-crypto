@@ -1,5 +1,7 @@
 # Direct public API results
 
+Historical campaign. For the maintained summary, see [current Rust results](../README.md).
+
 CPU: AMD Ryzen 9 8940HX (16 cores, 32 threads).
 
 Compiler: Rust 1.97.1; LLVM 22.1.6; x86-64 MSVC target. Optimization level 3,
@@ -28,7 +30,7 @@ before rounding. Negative values mean slower.
 | Key generation (ms) | 46.36 | 61.87 | +33.5% |
 
 [Exact revisions, features, APIs and reproduction](BENCHMARK_SETUP.md) ·
-[Every confirmation sample](raw-api-measurements.json).
+[Every confirmation sample](data/raw-api-measurements.json).
 
 ## Fastest confirmed builds
 
@@ -196,4 +198,4 @@ compiler target, address-hashing backend and SLP setting.
 | native | tiny-keccak | disabled | 38.39 | 50.96 | +32.8% |
 | native | asm-keccak | enabled | 38.23 | 50.51 | +32.1% |
 
-[Full matrix measurements](raw-api-matrix.json).
+[Full matrix measurements](data/raw-api-matrix.json).

@@ -34,6 +34,10 @@ native_plan() {
 build_native() {
     local plan=$1 start compiler index job id target features flags encoded metadata graph binary description entry ending
     local -a feature_args flags_array command
+    local cc_program=${CC:-cc} cc_path= cc_version="Compiler version unavailable"
+    if cc_path=$(command -v -- "$cc_program"); then
+        cc_version=$("$cc_program" --version 2>&1) || cc_version="Compiler version unavailable"
+    fi
     mkdir -p -- "$BENCH_BUILD"
     local build_lock; exec {build_lock}>"$BENCH_BUILD/build.lock"
     flock -n "$build_lock" || { fail 'Another build is updating this build directory'; return 1; }
@@ -75,10 +79,11 @@ build_native() {
             --argjson build "$description" --argjson graph "$graph" --argjson flags "$(json_array "${flags_array[@]}")" \
             --argjson command "$(json_command "${command[@]}")" --arg cc "${CC-}" --arg cflags "${CFLAGS-}" \
             --arg cxx "${CXX-}" --arg cxxflags "${CXXFLAGS-}" \
+            --arg cc_path "$cc_path" --arg cc_version "$cc_version" \
             '{configuration:$configuration,binary:$binary,binary_sha256:$hash,build:$build,command:$command,
               resolved_cargo_features:$graph,rustflags:$flags,
               profile:{optimization:3,lto:"thin",codegen_units:1,incremental:false},
-              cflags:{CC:$cc,CFLAGS:$cflags,CXX:$cxx,CXXFLAGS:$cxxflags}}')
+              cflags:{CC:$cc,CFLAGS:$cflags,CC_PATH:$cc_path,CC_VERSION:$cc_version,CXX:$cxx,CXXFLAGS:$cxxflags}}')
         index=$(jq --arg id "$id" --argjson entry "$entry" '.jobs[$id]=$entry' <<<"$index")
         atomic_json "$BENCH_BUILD/builds.json" '.' <<<"$index"
     done < <(jq -c '.jobs[]' <<<"$plan")

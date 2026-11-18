@@ -244,4 +244,44 @@ bash "$TEST_DIR/prover-driver" true >>"$TEST_DIR/prover.out"
 [[ $(wc -l <"$MOCK_PROVER_CALLS") == 12 ]]
 jq -e '.complete==true and (.completed|length)==4' "$PROVER_TEST_SESSION/session.json" >/dev/null
 ok 'Modified cached inputs rejected; interrupted cache preparation can resume'
+
+# Compare preset orchestration: planning never builds; resume/report never rebuild.
+compare_root="$TEST_DIR/comparison fixture"
+mkdir -p -- "$compare_root/benchmarks"
+cp -- "$HERE/compare.sh" "$compare_root/benchmarks/compare.sh"
+cat >"$compare_root/benchmarks/run.sh" <<'COMPARE_RUNNER'
+#!/usr/bin/env bash
+set -euo pipefail
+jq -cn --arg cc "${CC-}" --args '{args:$ARGS.positional,cc:$cc}' -- "$@" >>"$COMPARE_CALLS"
+COMPARE_RUNNER
+cat >"$compare_root/compiler tool" <<'COMPARE_COMPILER'
+#!/usr/bin/env bash
+printf 'synthetic compiler 1.0\n'
+COMPARE_COMPILER
+chmod +x -- "$compare_root/compiler tool"
+export COMPARE_CALLS="$TEST_DIR/compare-calls.jsonl"
+compare_script="$compare_root/benchmarks/compare.sh"
+bash "$compare_script" native plan --cc "$compare_root/compiler tool"
+jq -se 'length==1 and .[0].args[0]=="plan" and (.[0].args|index("direct,ecrecover")!=null)' "$COMPARE_CALLS" >/dev/null
+: >"$COMPARE_CALLS"
+bash "$compare_script" backends --cc "$compare_root/compiler tool" --samples 88 --session 'results/a session' >"$TEST_DIR/compare.out"
+jq -se 'map(.args[0])==["build","run","report"] and
+  (.[0].args|index("portable,assembly")!=null) and
+  (.[1].args|index("libsecp256k1,k256")!=null) and
+  (.[1].args|index("results/a session")!=null) and
+  (.[1].args|index("88")!=null)' "$COMPARE_CALLS" >/dev/null
+: >"$COMPARE_CALLS"
+bash "$compare_script" native --cc "$compare_root/compiler tool" --session 'results/a session' --resume >"$TEST_DIR/compare-resume.out"
+jq -se 'map(.args[0])==["run","report"] and (.[0].args|index("--resume")!=null)' "$COMPARE_CALLS" >/dev/null
+: >"$COMPARE_CALLS"
+bash "$compare_script" native report --session 'results/a session'
+jq -se 'map(.args[0])==["report"]' "$COMPARE_CALLS" >/dev/null
+expect_failure bash "$compare_script" unknown plan
+expect_failure bash "$compare_script" native report
+expect_failure bash "$compare_script" native --resume
+expect_failure bash "$compare_script" native --bootstrap invalid
+expect_failure bash "$compare_script" native --bootstrap 99
+[[ $(wc -l <"$COMPARE_CALLS") == 1 ]]
+ok 'Comparison presets preserve arguments, gate execution and avoid rebuilding on resume/report'
+
 printf 'All %d shell setup checks passed; no cryptographic benchmarks ran.\n' "$checks"

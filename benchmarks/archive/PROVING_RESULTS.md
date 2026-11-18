@@ -1,5 +1,7 @@
 # leanVM proving results
 
+Historical campaign. For the maintained summary, see [current Rust results](../README.md).
+
 Unmodified upstream `leanvm-cli`, compiled with `target-cpu=native` on the same
 AMD Ryzen 9 8940HX. Rust 1.97.1; LLVM 22.1.6; Linux GNU target under WSL2.
 Optimization level 3, Thin LTO, one codegen unit. The CLI builds both prover
@@ -84,4 +86,4 @@ small differences do not establish statistical significance.
 
 Peak RSS is the parent process lifetime peak; it excludes child-process memory.
 [Setup and exact API boundaries](BENCHMARK_SETUP.md) ·
-[Every proving sample and stock CLI report](proving-measurements.json).
+[Every proving sample and stock CLI report](data/proving-measurements.json).

@@ -1,5 +1,7 @@
 # SIMD confirmation results
 
+Historical campaign. For the maintained summary, see [current Rust results](../README.md).
+
 Historical experiment: the local SIMD column is a separate implementation using
 leanVM primitives, not unmodified upstream leanVM. The current stock-library
 comparison is in [RAW_RESULTS.md](RAW_RESULTS.md).
@@ -12,7 +14,7 @@ Median time per operation from 132 samples per configuration (3 passes). Adapter
 
 Verification starts from encoded signatures; signing and key generation include serialization. Small differences need confirmation across repeat runs.
 
-The Keccak column selects lean-sphincs' Alloy backend. Verification also uses paired SSE2 FORS hashing in SSE2 and SSE4.2 builds. leanVM uses its own CPU-selected scalar and SIMD paths. Compiler flags apply to both implementations within each row. See the [measurement method and raw data](SUITE.md#published-measurements).
+The Keccak column selects lean-sphincs' Alloy backend. Verification also uses paired SSE2 FORS hashing in SSE2 and SSE4.2 builds. leanVM uses its own CPU-selected scalar and SIMD paths. Compiler flags apply to both implementations within each row. See the [measurement method and raw data](../SUITE.md#published-measurements).
 
 leanVM: [native Rust leanSPHINCS implementation](https://github.com/leanEthereum/leanVM/tree/4937c851eafb9e93bc7436eebe9e6dc8ae4c227a/crates/lean_sphincs).
 
@@ -41,4 +43,4 @@ The batched column is a local experimental adapter over leanVM's public internal
 
 Two preselected builds; 44 samples per pass, three passes.
 
-[Raw batch times](simd-confirmation.json). [Measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/75268418b47f99042c9176a0e8efaa080138a454).
+[Raw batch times](data/simd-confirmation.json). [Measured source snapshot](https://github.com/Soubhik-10/lean-sphincs/tree/75268418b47f99042c9176a0e8efaa080138a454).

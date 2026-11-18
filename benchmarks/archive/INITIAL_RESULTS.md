@@ -1,5 +1,7 @@
 # Benchmark measurements
 
+Historical campaign. For the maintained summary, see [current Rust results](../README.md).
+
 Measured 15 November 2026.
 
 - CPU: AMD Ryzen 9 8940HX (16 cores / 32 threads).
@@ -30,7 +32,7 @@ benchmark does not read or build any neighboring checkout.
 The percentiles describe batch-average ns/op, not individual-call latency.
 The assembly ecrecover run had some slower samples; its median remained close
 to the default-backend median. Raw, chronological samples are retained in
-[portable.json](benchmarks/portable.json) and [asm-keccak.json](benchmarks/asm-keccak.json).
+[portable.json](data/portable.json) and [asm-keccak.json](data/asm-keccak.json).
 
 Valid verification rotates all three positive EthLib cases. Late rejection
 changes the last authentication-path byte, so all chain encodings remain valid
@@ -75,7 +77,7 @@ revision:
 - `src/lib.rs`: `1ab0d77b319dcee12d8e15e05e7ef2fa8bc1012f225fea1245680aa0011ad00a`.
 - `src/verifier.rs`: `a16716885d5f4e89df076df68c55a3fa8b3e9c39825fd677e7abb0be81972095`.
 
-Reproduction commands and methodology are in [the harness README](benchmarks/evm2/README.md).
+Reproduction commands and methodology are in [the harness README](../evm2/README.md).
 
 ## Paired FORS hashing
 

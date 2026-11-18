@@ -1,5 +1,7 @@
 # Benchmark setup
 
+Historical campaign. For the maintained summary, see [current Rust results](../README.md).
+
 ## Source revisions
 
 | Component | Source used for these measurements |
@@ -216,10 +218,10 @@ LEANVM_NUM_THREADS=16 build/prover-$REV/bin/leanvm \
 Prepare the matching signer caches outside the measured processes and use the
 same CPU allocation for both variants. Every exact measured CLI argument list,
 binary hash, lockfile hash, cache hash, proving sample and stock report is in
-[proving-measurements.json](proving-measurements.json).
+[proving-measurements.json](data/proving-measurements.json).
 
-[Native matrix samples](raw-api-matrix.json) ·
-[Native confirmation samples](raw-api-measurements.json) ·
+[Native matrix samples](data/raw-api-matrix.json) ·
+[Native confirmation samples](data/raw-api-measurements.json) ·
 [Native tables](RAW_RESULTS.md) · [Proving tables](PROVING_RESULTS.md).
 
 Percent faster means `(baseline time / compared time − 1) × 100%`, calculated

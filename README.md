@@ -81,39 +81,34 @@ all three operations. The [differential test runner](testing/README.md) and
 ## Benchmarks
 
 AMD Ryzen 9 8940HX, Windows x86-64 MSVC, Rust 1.97.1. Both libraries use
-`target-cpu=native`; lean-sphincs enables `asm-keccak`. Medians include all
-132 samples from three processes over eleven shared seed/message pairs.
+release optimization and native CPU features; our build enables `asm-keccak`.
+Each row uses three processes and 132 samples over eleven shared fixtures.
 
 | Operation | lean-sphincs | leanVM | Speedup |
 | --- | ---: | ---: | ---: |
-| Verification (µs) | 36.71 | 120.64 | 3.29x |
+| Verification (µs) | 36.91 | 119.28 | 3.23x |
 | Signing (ms) | 88.25 | 118.68 | 1.34x |
 | Key generation (ms) | 46.34 | 61.49 | 1.33x |
 
-A [parameter and optimization audit](benchmarks/OPTIMIZATION_AUDIT.md) confirms
-identical hash inputs and isolates the verification speedup with batching and
-hash-backend controls.
+Verification comes from the batching audit; signing/key generation from the
+native API confirmation. Each row compares matched builds. The audit confirms
+identical hash inputs and isolates a 2.37x gain from batching within one signature.
 
-A separate recovery-backend audit uses 32 ECDSA inputs, three processes and
-132 samples per configuration on the same CPU:
-
-| Timed Rust configuration | Our verify (µs) | evm2 ecrecover (µs) | Verify / ecrecover |
+| Recovery audit configuration | Our verify (µs) | evm2 ecrecover (µs) | Ratio |
 | --- | ---: | ---: | ---: |
 | Assembly Keccak + Clang C/libsecp256k1 | 36.84 | 25.63 | 1.44x |
 | RustCrypto Keccak + Rust k256 | 40.66 | 50.65 | 0.80x |
 
-The C recovery compiler materially changes the comparison; the earlier MSVC-C
-control took 38.35 µs. These are native CPU timings, excluding transaction-data
-costs, and do not determine consensus gas prices.
+These native CPU timings exclude transaction work and do not determine gas prices.
+[Results and setup](benchmarks/README.md) · [Batching, gains and tradeoffs](benchmarks/BATCHING.md) ·
+[Shell benchmark commands](benchmarks/SUITE.md#compare-ours-leanvm-and-ecrecover).
 
-[Ecrecover comparison, gas references and raw samples](benchmarks/ECRECOVER_RESULTS.md) ·
-[Full native matrix](benchmarks/RAW_RESULTS.md) ·
-[Upstream proving comparison](benchmarks/PROVING_RESULTS.md) ·
-[Reproduction commands](benchmarks/SUITE.md).
+```sh
+bash benchmarks/compare.sh native
+bash benchmarks/compare.sh backends
+```
 
-CodSpeed tracks regressions in key generation, signing, verification, rejection,
-hashing and evm2 ecrecover with SSE2 and AVX2 builds. Its CPU simulation results
-are separate from the native wall-clock measurements above.
+CodSpeed separately tracks regressions with SSE2 and AVX2 builds.
 
 ## License
 

@@ -5,7 +5,7 @@
     "raw": {
       "samples": 44,
       "sample_ms": 10,
-      "warmup_ms": 100,
+      "warmup_ms": 300,
       "passes": 3,
       "extra_cases": 8,
       "groups": ["direct"],

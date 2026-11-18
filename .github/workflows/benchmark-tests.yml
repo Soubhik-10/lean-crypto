@@ -2,10 +2,10 @@ name: Benchmark adapter checks
 
 on:
   pull_request:
-    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   push:
     branches: [main]
-    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   workflow_dispatch:
 
 permissions:

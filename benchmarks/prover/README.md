@@ -86,7 +86,7 @@ bash benchmarks/prover/run.sh run --execute --session benchmarks/results/my-prov
 
 ```sh
 bash benchmarks/prover/run.sh report --session benchmarks/results/my-prover-run
-bash benchmarks/prover/run.sh report --measurements benchmarks/proving-measurements.json
+bash benchmarks/prover/run.sh report --measurements benchmarks/archive/data/proving-measurements.json
 ```
 
 Reporting never executes a prover. It writes complete variant/revision tables,
@@ -95,6 +95,6 @@ All samples and slower comparisons are retained. Proving values are means of the
 printed passes; verification is the stock reported mean. Peak RSS includes the
 parent's lifetime and excludes recursive child-process memory.
 
-Published [results](../PROVING_RESULTS.md) and [setup details](../BENCHMARK_SETUP.md)
+Published [results](../archive/PROVING_RESULTS.md) and [setup details](../archive/BENCHMARK_SETUP.md)
 retain the original measured builds. The shell port does not revise those data.
 Run synthetic setup checks with `bash benchmarks/suite/test_setup.sh`.

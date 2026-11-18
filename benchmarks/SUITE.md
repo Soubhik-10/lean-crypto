@@ -14,6 +14,63 @@ distribution's package manager; install Rust with rustup.
 Run commands from the repository root. Paths containing spaces are supported.
 The scripts do not change power settings or CPU frequency policy.
 
+## Compare ours, leanVM and ecrecover
+
+Run these from the existing repository. The focused entrypoint builds, measures
+and reports automatically. Linux/WSL native results form a new campaign; the
+published Windows measurements retain their original setup.
+
+```sh
+# Inspect jobs without building or measuring.
+bash benchmarks/compare.sh native plan
+
+# Our key generation/signing/verification, stock leanVM APIs and real evm2 recovery.
+bash benchmarks/compare.sh native --session benchmarks/results/native-comparison
+
+# Add RustCrypto/assembly hashing and C-backed/k256 recovery controls.
+bash benchmarks/compare.sh backends --session benchmarks/results/backend-comparison
+
+# Isolate the hashing kernels; no signature/proof timings in the results.
+bash benchmarks/compare.sh hashes --session benchmarks/results/hash-comparison
+```
+
+The native/backends presets use 11 shared PQ fixtures, 44 batch samples per
+process, three fresh processes per configuration, 300 ms warmup and 20 ms batch
+targets. Kernels are interleaved in randomized order. The hashes preset uses
+30 samples and 500 ms warmup. Setup validates the fixtures before timing.
+The `direct` group calls unmodified native APIs; the local experimental
+batching adapter is excluded. Each k256 job measures recovery only; matching
+PQ measurements are supplied by the same-hashing C-provider configuration.
+
+The runner chooses the first allowed logical CPU unless `--cpu` is supplied.
+Set `--cc` to an installed C compiler executable to make compiler comparisons
+explicit. Each preset/compiler gets a separate build directory; source and
+binary fingerprints guard runs and resume.
+
+```sh
+# Select CPU 8 only if it is in this process's allowed allocation.
+bash benchmarks/compare.sh native --cpu 8 --cc clang \
+  --session benchmarks/results/native-clang
+
+# Override the workload length; direct sample counts must be multiples of 11.
+bash benchmarks/compare.sh native --samples 88 --passes 3 --sample-ms 50 \
+  --session benchmarks/results/native-long
+
+# Build without starting measurements.
+bash benchmarks/compare.sh native build --cc clang
+
+# Resume skips rebuilding and validates the existing session/binaries.
+bash benchmarks/compare.sh native --session benchmarks/results/native-comparison --resume
+
+# Regenerate reports without executing any benchmark.
+bash benchmarks/compare.sh native report --session benchmarks/results/native-comparison
+```
+
+Keep the same preset, compiler and workload overrides when resuming. A fresh
+run requires a new session path. Output includes `README-benchmarks.md`,
+`summary.json`, `summary.csv`, normalized `measurements.json`, complete raw
+reports and setup fingerprints. No result is written into the repository README.
+
 ## Native signature and evm2 matrix
 
 Planning probes CPU/OS instruction support without generating keys, signatures
@@ -99,8 +156,7 @@ must report `experimental_adapter: false`. The separate `batched` group enables
 the local experimental adapter and is clearly distinguished in generated reports.
 It is not stock leanVM performance.
 
-See [BENCHMARK_SETUP.md](BENCHMARK_SETUP.md) for exact published revisions,
-features, API boundaries, and the evm2 recovery-provider definitions.
+See [published setup](README.md#setup) for revisions, API boundaries and recovery-provider definitions.
 
 ## tiny-keccak compiler workaround
 
@@ -141,8 +197,8 @@ Reporting never compiles or executes a benchmark:
 
 ```sh
 bash benchmarks/run.sh report --session benchmarks/results/my-run
-bash benchmarks/run.sh report --measurements benchmarks/raw-api-measurements.json
-bash benchmarks/prover/run.sh report --measurements benchmarks/proving-measurements.json
+bash benchmarks/run.sh report --measurements benchmarks/archive/data/raw-api-measurements.json
+bash benchmarks/prover/run.sh report --measurements benchmarks/archive/data/proving-measurements.json
 ```
 
 Generated `summary.json`, `summary.csv` and `README-benchmarks.md` stay under the
@@ -173,24 +229,15 @@ Only `run --execute` generates signatures or proofs, including cache preparation
 
 ## Published measurements
 
-The [current native confirmation](raw-api-measurements.json) retains 4,884 batch
-timings from seven builds; the [full matrix](raw-api-matrix.json) retains 5,280.
-[RAW_RESULTS.md](RAW_RESULTS.md) lists every matched row and winning build.
-[proving-measurements.json](proving-measurements.json) retains all 24 CLI jobs and
-120 proving passes; [PROVING_RESULTS.md](PROVING_RESULTS.md) includes slower rows,
-verification time, proof size and parent-process peak RSS.
+[Current Rust results](README.md) link to the retained datasets and setup.
+[Historical reports](archive/README.md) contain older native matrices, local
+adapter experiments and upstream proving campaigns. The [data index](data/INDEX.md)
+lists current evidence without mixing campaigns.
 
-These published native measurements used Windows MSVC; the published proving
-measurements used Linux GNU under WSL2. The later shell port changes orchestration,
-not those measurements. Fresh Linux native runs use the GNU toolchain and form a
-separate campaign. Historical source hashes remain unchanged in the raw JSON;
-the recorded Git snapshots retain the older orchestration for audit.
-
-[raw-api-screening.json](raw-api-screening.json), [measurements.json](measurements.json),
-[simd-sweep.json](simd-sweep.json) and [simd-confirmation.json](simd-confirmation.json)
-are historical datasets with their own source revisions and boundaries. They are
-not pooled into the current confirmation. The local SIMD experiment is distinct
-from the unmodified raw API comparison.
+Published native results used Windows MSVC; proving used Linux GNU under WSL2.
+The shell runner changes orchestration, not those measurements. New Linux
+native runs form a separate campaign. Historical source hashes and recorded
+build paths remain unchanged inside the raw files.
 
 ## Setup validation
 
