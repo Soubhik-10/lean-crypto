@@ -7,8 +7,8 @@ publish = false
 
 [dependencies]
 lean-sphincs = { path = "../.." }
-reference-keccak = { package = "keccak256", git = "https://github.com/leanEthereum/leanVM", rev = "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a" }
-reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a" }
+reference-keccak = { package = "keccak256", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
+reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
 evm2 = { git = "https://github.com/alloy-rs/evm2", rev = "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1", default-features = false, features = ["std"] }
 secp256k1 = { version = "0.33.1", features = ["recovery"] }

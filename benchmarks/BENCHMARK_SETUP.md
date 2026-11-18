@@ -11,7 +11,7 @@
 | Alloy types and hashing | [`70a63bd609da78dcf03e593ae772fec883ce7768`](https://github.com/alloy-rs/core/tree/70a63bd609da78dcf03e593ae772fec883ce7768) |
 | EthLib parameter set and fixtures | [`03547dd83f298a63e6dcceff0a0b75f6142490aa`](https://github.com/ethereum/EthLib/tree/03547dd83f298a63e6dcceff0a0b75f6142490aa/EthLib/Cryptography/Sphincs) |
 
-The current leanVM revision is the upstream main commit checked for this campaign.
+The current leanVM revision is the upstream main commit checked for the published campaign.
 It is 20 commits ahead of the previous pin. Both already include
 [PR #758](https://github.com/leanEthereum/leanVM/pull/758), which introduced the
 separate stable and experimental Rust provers. This is a comparison between two
@@ -26,15 +26,15 @@ The measured lean-sphincs library and Rust benchmark sources match the linked
 source commit. Locally, both leanVM Git dependencies in the benchmark manifest
 and lockfile were repinned to the current revision, and benchmark documentation
 was edited. The raw datasets retain the exact measured source hashes and these
-dependency overrides. This results publication does not include the local runner
-setup changes.
+dependency overrides. The shell runner records new source and platform snapshots
+for future campaigns; the historical datasets retain their original provenance.
 
 ## Hardware and compiler
 
 CPU: AMD Ryzen 9 8940HX, 16 cores and 32 hardware threads.
 
 Compiler: Rust 1.97.1, LLVM 22.1.6; optimization level 3, Thin LTO, one codegen
-unit. Native signatures and evm2 use `x86_64-pc-windows-msvc`. Proving uses
+unit. The published native signatures and evm2 use `x86_64-pc-windows-msvc`. Proving uses
 `x86_64-unknown-linux-gnu` under Ubuntu on WSL2, because the stock CLI uses Unix
 memory reporting and jemalloc. These are separate measurement categories.
 
@@ -185,15 +185,15 @@ aggregate prover, so there is no invented proving result for this crate.
 
 ## Reproduction and raw data
 
-For the native matrix, use the existing harness at the library source revision
-above. Set **both** `reference-sphincs` and `reference-keccak` Git revisions in
-`benchmarks/evm2/Cargo.toml` to the current leanVM revision, then update only
-those Git packages in the benchmark lockfile. No sibling checkout is required.
+The Linux shell runner uses the same Rust benchmark kernels and the current
+pinned dependencies. New Linux native runs use the GNU target and form a
+separate campaign from the published Windows MSVC measurements. The historical
+source snapshot and exact overrides above retain the original build provenance.
+No sibling checkout is required.
 
 ```sh
-cargo update --manifest-path benchmarks/evm2/Cargo.toml -p lean_sphincs -p keccak256
-python benchmarks/run.py build --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover
-python benchmarks/run.py run --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover --passes 1
+bash benchmarks/run.sh build --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover
+bash benchmarks/run.sh run --profile raw --targets baseline,v2,v3,v4,native --hashing portable,tiny,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover --passes 1
 ```
 
 On Linux, build each unmodified CLI revision using its own Cargo target directory

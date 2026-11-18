@@ -11,9 +11,9 @@ fn main() {
     #[cfg(target_arch = "x86_64")]
     {
         // CPUID is present on x86-64. Read the extended leaf only when advertised.
-        let extended = unsafe { std::arch::x86_64::__cpuid(0x80000000) }.eax;
+        let extended = std::arch::x86_64::__cpuid(0x80000000).eax;
         let lahf_sahf = extended >= 0x80000001
-            && unsafe { std::arch::x86_64::__cpuid(0x80000001) }.ecx & 1 != 0;
+            && std::arch::x86_64::__cpuid(0x80000001).ecx & 1 != 0;
         print!("\"lahf_sahf\":{},", lahf_sahf);
         flag!("sse2");
         flag!("sse3");
@@ -35,6 +35,9 @@ fn main() {
         flag!("avx512cd");
         flag!("avx512dq");
         flag!("avx512vl");
+        flag!("gfni");
+        flag!("pclmulqdq");
+        flag!("vpclmulqdq");
     }
     println!("\"probe_complete\":true}}}}");
 }

@@ -2030,7 +2030,7 @@ dependencies = [
 [[package]]
 name = "keccak256"
 version = "0.1.0"
-source = "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a"
+source = "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b"
 
 [[package]]
 name = "konst"
@@ -2080,7 +2080,7 @@ dependencies = [
 [[package]]
 name = "lean_sphincs"
 version = "0.1.0"
-source = "git+https://github.com/leanEthereum/leanVM?rev=4937c851eafb9e93bc7436eebe9e6dc8ae4c227a#4937c851eafb9e93bc7436eebe9e6dc8ae4c227a"
+source = "git+https://github.com/leanEthereum/leanVM?rev=6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b#6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b"
 dependencies = [
  "keccak256",
 ]

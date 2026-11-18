@@ -1,0 +1,33 @@
+{
+  "toolchain": "1.97.1",
+  "repository": "https://github.com/leanEthereum/leanVM",
+  "pull_request": "https://github.com/leanEthereum/leanVM/pull/758",
+  "pr_merge": "d1c9175ff0522809685a9cfc27a70ab70cf29f53",
+  "revisions": {
+    "previous": "4937c851eafb9e93bc7436eebe9e6dc8ae4c227a",
+    "current": "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b"
+  },
+  "provers": ["stable", "experimental"],
+  "targets": {
+    "native": ["-C", "target-cpu=native"],
+    "avx2": ["-C", "target-cpu=x86-64-v3"],
+    "avx2-gfni": ["-C", "target-cpu=x86-64-v3", "-C", "target-feature=+gfni,+pclmulqdq,+vpclmulqdq"],
+    "avx512": ["-C", "target-cpu=x86-64-v4"]
+  },
+  "presets": {
+    "quick": {"threads": [1, 16], "repeat": 5, "workloads": ["sphincs-16", "xmss-128", "recursion-sphincs-2x16"]},
+    "full": {"threads": [1, 2, 4, 8, 16], "repeat": 11, "workloads": ["sphincs-16", "sphincs-128", "xmss-128", "xmss-1000", "mixed-64", "recursion-sphincs-2x16", "recursion-xmss-8x128"]}
+  },
+  "workloads": {
+    "sphincs-16": ["aggregate", "--sphincs", "16"],
+    "sphincs-128": ["aggregate", "--sphincs", "128"],
+    "xmss-128": ["aggregate", "--xmss", "128"],
+    "xmss-1000": ["aggregate", "--xmss", "1000"],
+    "mixed-64": ["aggregate", "--xmss", "32", "--sphincs", "32"],
+    "recursion-sphincs-2x16": ["recursion", "--n", "2", "--xmss-per-leaf", "0", "--sphincs-per-leaf", "16"],
+    "recursion-xmss-8x128": ["recursion", "--n", "8", "--xmss-per-leaf", "128"]
+  },
+  "log_inverse_rate": 1,
+  "cooldown_seconds": 2,
+  "shuffle_seed": 758
+}

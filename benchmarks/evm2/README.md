@@ -1,5 +1,13 @@
 # evm2 comparison harness
 
+The native-API harness pins leanVM to
+`6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b`.
+The [upstream update setup](../prover/README.md) records the reviewed changes,
+Linux shell commands and the separate stable/experimental proving comparison.
+Published result files retain their original revision and measurements.
+The [Linux suite](../SUITE.md) provides `plan`, `build`, `run` and `report`
+commands through `bash benchmarks/run.sh`, using jq and awk for reporting.
+
 This separate Cargo package calls
 `evm2::precompiles::crypto().secp256k1_ecrecover` from the pinned Git dependency
 `alloy-rs/evm2` at `e681662b6d9ec59edafd112f7c8d64f49f1e6dd1`.

@@ -2,10 +2,10 @@ name: Benchmark adapter checks
 
 on:
   pull_request:
-    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.py', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   push:
     branches: [main]
-    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.py', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['src/**', 'tests/vectors/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   workflow_dispatch:
 
 permissions:
@@ -27,8 +27,15 @@ jobs:
         with: { persist-credentials: false }
       - name: Install Rust
         run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - name: Install shell tooling
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends jq
+      - name: Check shell setup
+        run: |
+          shopt -s nullglob
+          for script in scripts/*.sh benchmarks/*.sh benchmarks/suite/*.sh benchmarks/prover/*.sh; do bash -n "$script"; done
+          bash benchmarks/suite/test_setup.sh
+          bash benchmarks/run.sh plan --targets native --hashing portable --recovery k256 --groups ecrecover > /dev/null
       - name: Check adapters and report analysis
         run: |
           cargo +1.97.1 clippy --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --bench matrix --test batched --no-default-features -- -D warnings
           cargo +1.97.1 test --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --test batched --no-default-features -- --test-threads=1
-          python3 -m unittest discover -s benchmarks/suite -p test_setup.py
