@@ -90,6 +90,10 @@ AMD Ryzen 9 8940HX, Windows x86-64 MSVC, Rust 1.97.1. Both libraries use
 | Signing (ms) | 88.25 | 118.68 | 1.34x |
 | Key generation (ms) | 46.34 | 61.49 | 1.33x |
 
+A [parameter and optimization audit](benchmarks/OPTIMIZATION_AUDIT.md) confirms
+identical hash inputs and isolates the verification speedup with batching and
+hash-backend controls.
+
 A separate recovery-backend audit uses 32 ECDSA inputs, three processes and
 132 samples per configuration on the same CPU:
 

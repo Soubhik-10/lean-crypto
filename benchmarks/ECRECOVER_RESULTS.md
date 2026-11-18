@@ -96,6 +96,9 @@ each process; the full data also retains signing and key-generation samples.
 
 [All six reports, 1,848 samples, corpus, setup, build/source hashes and launch metadata](leanvm-ecrecover-2026-11-18.json).
 
+The [parameter and optimization audit](OPTIMIZATION_AUDIT.md) compares every
+logical hash input and isolates batching and hash-backend effects in fresh runs.
+
 ## Backend and compiler audit
 
 The earlier near-equality result is specific to the MSVC C build. Rebuilding
