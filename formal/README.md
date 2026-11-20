@@ -29,7 +29,7 @@ Our Rust signer hashes the public-seed derivation before the PRF-key derivation,
 * `search_none_iff`, `search_some_spec` and `search_counter_no_wrap`: bounded counter search fails exactly when every attempted encoding fails; success gives the least accepted counter in range, and at the actual `2^32` production limit that counter cannot wrap a 32-bit word.
 * `search_eq_otsSignFrom`: that bounded search followed by chain opening equals the pinned statement's entire WOTS signer for every attempt budget and start counter, including failure. It does not assume signing succeeds. Whole-signature failure propagation, streaming tree construction and byte serialization are not new universal proofs here.
 
-`Implementation/Axioms.lean` inspects every theorem in the new namespace and rejects dependencies beyond `propext`, `Classical.choice` and `Quot.sound`. An inventory check prevents an empty proof import from passing. Upstream's escape scanner also checks all of our Lean files. Kernel-skipping options, proof holes and native-decision proof shortcuts are forbidden.
+`Implementation/Axioms.lean` inspects every theorem in the new namespace and rejects dependencies beyond `propext`, `Classical.choice` and `Quot.sound`. The inventory requires each of the eight documented declarations by name and verifies that it is a theorem; generated equation or auxiliary lemmas cannot replace a missing required theorem. Upstream's escape scanner also checks all of our Lean files. Kernel-skipping options, proof holes and native-decision proof shortcuts are forbidden.
 
 ## Conformance corpus and strict comparisons
 

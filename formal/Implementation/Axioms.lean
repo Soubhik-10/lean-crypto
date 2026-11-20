@@ -3,11 +3,25 @@ import Lean.Util.CollectAxioms
 
 open Lean Elab Command
 
--- Check every new theorem, including generated helper theorems, rather than a short list
--- that could silently omit a later proof. Kernel checking remains enabled separately.
+-- Require the documented public theorems individually: generated helper lemmas
+-- cannot stand in for a missing proof. Kernel checking remains enabled separately.
 run_cmd do
   let env ← getEnv
-  let mut checked : Nat := 0
+  let required : Array Name := #[
+    `Implementation.indexBefore_eq,
+    `Implementation.layer_indices,
+    `Implementation.scheduledEnds_eq_walkChain,
+    `Implementation.scheduledEnds_eq_recoverChain,
+    `Implementation.search_none_iff,
+    `Implementation.search_some_spec,
+    `Implementation.search_counter_no_wrap,
+    `Implementation.search_eq_otsSignFrom]
+  for name in required do
+    let some info := env.find? name
+      | throwError "missing required implementation theorem {name}"
+    unless info.isTheorem do
+      throwError "required implementation declaration is not a theorem: {name}"
+  -- Keep checking every theorem, including all generated helpers and future additions.
   for (name, info) in env.constants.toList do
     if (`Implementation).isPrefixOf name && info.isTheorem then
       let dependencies ← collectAxioms name
@@ -15,6 +29,3 @@ run_cmd do
         unless #[`propext, `Classical.choice, `Quot.sound].contains dependency do
           throwError "unexpected dependency {dependency} in {name}"
       logInfo m!"checked {name}: {dependencies}"
-      checked := checked + 1
-  unless checked ≥ 8 do
-    throwError "implementation proof inventory is incomplete: {checked}"
