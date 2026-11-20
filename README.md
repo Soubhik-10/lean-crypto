@@ -106,10 +106,21 @@ key and message mutations, and malformed lengths. Comparisons run separately
 for SSE2/AVX2 and RustCrypto/`asm-keccak`. CI saves the corpus, seed, results,
 upstream revision and axiom report for replay. Missing cases fail the job.
 
-These checks combine a machine-checked proof about the model with differential
-test evidence about this Rust implementation. They do not prove that every Rust
-execution refines the model, or establish constant-time behavior or side-channel
-resistance. [Formal CI details and local reproduction](formal/README.md).
+The repository also kernel-checks [additional Lean equivalences](formal/Implementation/Algorithms.lean)
+for the verifier's index loop, WOTS recovery schedule and bounded least-counter
+search, including signing failure at the actual 32-bit counter limit. These are
+relationships between Lean algorithm descriptions; they do not prove the compiled
+Rust program correct. Component tests compare real production functions with the
+same pinned Lean specification and check counter/codeword/tree boundaries and
+AVX2 scalar tails. Both real Lean executables must reject deliberately wrong
+expected results in every matrix job.
+
+The evidence has three levels: security theorems about the Lean specification,
+proved relationships between Lean descriptions, and finite Rust-to-Lean
+conformance tests. The new functional equivalences do not transfer oracle-query
+security bounds to Rust's different hash-call order. Rust/backend semantics,
+compilers and test parsers remain trusted; constant time and side channels are
+outside these proofs. [Proof inventory, limits and reproduction](formal/README.md).
 
 The [Rust workflow](.github/workflows/rust.yml) additionally checks formatting,
 strict library Clippy, documentation, unused dependencies, the declared Rust 1.90

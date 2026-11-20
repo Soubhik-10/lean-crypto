@@ -119,8 +119,7 @@ fn sign_with_limit(
     );
     let mut offset = NODE_BYTES + FORS_BYTES;
     for (layer, height) in LAYER_HEIGHTS.into_iter().enumerate() {
-        let leaf = (index & ((1 << height) - 1)) as u32;
-        index >>= height;
+        let leaf = crate::params::take_layer(&mut index, height);
         address.set_tree(layer as u32, index);
         let layer_bytes = WOTS_BYTES + height as usize * NODE_BYTES;
         let output = &mut signature[offset..offset + layer_bytes];

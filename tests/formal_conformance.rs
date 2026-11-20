@@ -199,6 +199,15 @@ fn export_lean_conformance_cases() {
             0, 15, 16, 191, 4239, 4240, 4243, 4244, 5267, 5268, 5395, 5396, 5399, 5400, 6423, 6424,
             6551, 6552, 6555, 6556, 7579, 7580, 7739,
         ];
+        // Every serialized node/field boundary, not only selected byte offsets.
+        for boundary in (16..=4240).step_by(16) {
+            offsets.extend([boundary - 1, boundary]);
+        }
+        for (counter, height) in [(4240, 8), (5396, 8), (6552, 10)] {
+            for boundary in (counter + 4..counter + 4 + (64 + height) * 16).step_by(16) {
+                offsets.extend([boundary - 1, boundary]);
+            }
+        }
         for _ in 0..32 {
             offsets.push(random_bytes(&mut state)[0] as usize * 31 % SIGNATURE_BYTES);
         }
@@ -232,7 +241,33 @@ fn export_lean_conformance_cases() {
                 signature.as_slice(),
             );
         }
-        for length in [0, 1, 15, 16, SIGNATURE_BYTES / 2, SIGNATURE_BYTES - 1] {
+        for length in [
+            0,
+            1,
+            15,
+            16,
+            175,
+            176,
+            4239,
+            4240,
+            4243,
+            4244,
+            5267,
+            5268,
+            5395,
+            5396,
+            5399,
+            5400,
+            6423,
+            6424,
+            6551,
+            6552,
+            6555,
+            6556,
+            7579,
+            7580,
+            SIGNATURE_BYTES - 1,
+        ] {
             corpus.verification(
                 &format!("generated-{index}-truncated-{length}"),
                 &key_hex,

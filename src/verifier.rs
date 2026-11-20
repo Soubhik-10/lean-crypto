@@ -25,8 +25,7 @@ pub(super) fn recover_root(public_key: &B256, message: &B256, signature: &[u8]) 
     let mut node = recover_fors(&mut address, &mut reader, &digest, u32::from(digest[33]))?;
 
     for (layer, height) in LAYER_HEIGHTS.into_iter().enumerate() {
-        let leaf = (index & ((1 << height) - 1)) as u32;
-        index >>= height;
+        let leaf = crate::params::take_layer(&mut index, height);
         address.set_tree(layer as u32, index);
         node = recover_wots(&mut address, &mut reader, leaf, node)?;
         address.set_domain(HYPERTREE, 0);

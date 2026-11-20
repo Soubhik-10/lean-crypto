@@ -19,7 +19,7 @@ defaults:
 
 jobs:
   proofs:
-    name: Kernel-check the pinned SPHINCS proofs
+    name: Kernel-check SPHINCS and implementation proofs
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     steps:
@@ -56,7 +56,7 @@ jobs:
               config = (reference / package / 'lakefile.toml').read_text()
               assert 'skipKernelTC' not in config and 'debug.' not in config
           PY
-          python3 -I "$reference/tools/escape-scan.py" "$reference/Statement" "$reference/common" "$reference/lean_sphincs"
+          python3 -I "$reference/tools/escape-scan.py" "$reference/Statement" "$reference/common" "$reference/lean_sphincs" formal/Implementation.lean formal/Implementation
       - name: Restore the pinned proof build
         id: lake-cache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
@@ -66,7 +66,7 @@ jobs:
             !formal/.cache/leanVM/formal/lean_sphincs/.lake/packages/mathlib/.lake
             formal/.cache/leanVM/formal/common/.lake/build
             formal/.cache/leanVM/formal/Statement/.lake/build
-          key: sphincs-proofs-1-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream.outputs.revision }}
+          key: sphincs-proofs-2-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream.outputs.revision }}-${{ hashFiles('formal/Implementation.lean', 'formal/Implementation/**/*.lean', 'scripts/prepare_formal.py') }}
       - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
         with:
           lake-package-directory: formal/.cache/leanVM/formal/lean_sphincs
@@ -76,11 +76,13 @@ jobs:
           lint: false
           use-github-cache: false
           use-mathlib-cache: true
-      - name: Build the proofs and the executable Lean model
+      - name: Install this repository's implementation proof targets
+        run: python3 -I scripts/prepare_formal.py
+      - name: Build the proofs and the executable Lean models
         working-directory: formal/.cache/leanVM/formal/lean_sphincs
         run: |
           set -o pipefail
-          python3 -I ../lake-build.py . Sphincs FORS FORS.Axioms signature-kat 2>&1 | tee "$RUNNER_TEMP/lean-build.log"
+          python3 -I ../lake-build.py . Sphincs FORS FORS.Axioms signature-kat Implementation Implementation.Axioms implementation-kat 2>&1 | tee "$RUNNER_TEMP/lean-build.log"
       - name: Check the end theorems' axiom footprint
         working-directory: formal/.cache/leanVM/formal/lean_sphincs
         run: |
@@ -91,6 +93,11 @@ jobs:
           for theorem in $theorems; do
             grep -qF "'$theorem' depends on axioms: [propext, Classical.choice, Quot.sound]" "$RUNNER_TEMP/axioms.txt"
           done
+      - name: Independently check every implementation theorem's dependencies
+        working-directory: formal/.cache/leanVM/formal/lean_sphincs
+        run: |
+          set -o pipefail
+          lake env lean -DwarningAsError=true Implementation/Axioms.lean | tee "$RUNNER_TEMP/implementation-axioms.txt"
       - name: Save the pinned proof build
         if: github.ref == 'refs/heads/main' && steps.lake-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
@@ -106,7 +113,9 @@ jobs:
         with:
           name: lean-sphincs-model
           include-hidden-files: true
-          path: formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/signature-kat
+          path: |
+            formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/signature-kat
+            formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/implementation-kat
           if-no-files-found: error
           retention-days: 7
       - name: Save proof logs and provenance
@@ -114,8 +123,13 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: lean-sphincs-proof-evidence
+          include-hidden-files: true
           path: |
             formal/upstream.json
+            formal/Implementation.lean
+            formal/Implementation/
+            formal/.cache/implementation-sources.json
+            ${{ runner.temp }}/implementation-axioms.txt
             ${{ runner.temp }}/lean-build.log
             ${{ runner.temp }}/axioms.txt
           if-no-files-found: warn
@@ -155,7 +169,7 @@ jobs:
             echo 'The AVX2 comparison requires an AVX2-capable runner.' >&2
             exit 1
           fi
-          chmod +x formal/.cache/bin/signature-kat
+          chmod +x formal/.cache/bin/signature-kat formal/.cache/bin/implementation-kat
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
           shared-key: core-${{ matrix.cpu.name }}-${{ matrix.backend.name }}
@@ -163,10 +177,12 @@ jobs:
         run: |
           export FORMAL_SEED=${GITHUB_SHA:0:16}
           cargo test --release --locked --features "$FEATURES" --test formal_conformance -- --ignored --nocapture
+          cargo test --release --locked --features "$FEATURES" --lib wots::formal::export_lean_components -- --ignored --exact --nocapture
       - name: Compare every result with the Lean model
         run: |
           python3 -m unittest discover -s scripts -p test_run_formal.py
-          python3 scripts/run_formal.py formal/.cache/bin/signature-kat "$FORMAL_CASES_DIR" --log formal/.cache/comparison.log
+          python3 scripts/run_formal.py formal/.cache/bin/signature-kat "$FORMAL_CASES_DIR" --component-binary formal/.cache/bin/implementation-kat --log formal/.cache/comparison.log
+          python3 scripts/check_formal_rejection.py formal/.cache/bin/signature-kat "$FORMAL_CASES_DIR" --component-binary formal/.cache/bin/implementation-kat --log-directory formal/.cache/rejection
       - name: Save the replayable corpus and comparison log
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
@@ -175,7 +191,8 @@ jobs:
           include-hidden-files: true
           path: |
             formal/.cache/cases/
-            formal/.cache/comparison.log
+            formal/.cache/comparison*.log
+            formal/.cache/rejection/
             formal/upstream.json
           if-no-files-found: warn
           retention-days: 30
