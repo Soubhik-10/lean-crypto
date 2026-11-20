@@ -1,0 +1,181 @@
+name: Lean proofs and Rust conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: formal-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  proofs:
+    name: Kernel-check the pinned SPHINCS proofs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Read the upstream pin
+        id: upstream
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          pin = json.load(open('formal/upstream.json', encoding='utf-8'))
+          assert pin['repository'] == 'leanEthereum/leanVM'
+          assert re.fullmatch('[0-9a-f]{40}', pin['revision'])
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('revision=' + pin['revision'], file=output)
+          PY
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: leanEthereum/leanVM
+          ref: ${{ steps.upstream.outputs.revision }}
+          path: formal/.cache/leanVM
+          sparse-checkout: formal
+          persist-credentials: false
+      - name: Check the toolchain pin and forbid proof escapes
+        run: |
+          reference=formal/.cache/leanVM/formal
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          pin = json.loads(Path('formal/upstream.json').read_text())
+          reference = Path('formal/.cache/leanVM/formal')
+          for package in ('Statement', 'common', 'lean_sphincs'):
+              assert (reference / package / 'lean-toolchain').read_text().strip() == pin['toolchain']
+              config = (reference / package / 'lakefile.toml').read_text()
+              assert 'skipKernelTC' not in config and 'debug.' not in config
+          PY
+          python3 -I "$reference/tools/escape-scan.py" "$reference/Statement" "$reference/common" "$reference/lean_sphincs"
+      - name: Restore the pinned proof build
+        id: lake-cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            formal/.cache/leanVM/formal/lean_sphincs/.lake
+            !formal/.cache/leanVM/formal/lean_sphincs/.lake/packages/mathlib/.lake
+            formal/.cache/leanVM/formal/common/.lake/build
+            formal/.cache/leanVM/formal/Statement/.lake/build
+          key: sphincs-proofs-1-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream.outputs.revision }}
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        with:
+          lake-package-directory: formal/.cache/leanVM/formal/lean_sphincs
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: false
+          use-mathlib-cache: true
+      - name: Build the proofs and the executable Lean model
+        working-directory: formal/.cache/leanVM/formal/lean_sphincs
+        run: |
+          set -o pipefail
+          python3 -I ../lake-build.py . Sphincs FORS FORS.Axioms signature-kat 2>&1 | tee "$RUNNER_TEMP/lean-build.log"
+      - name: Check the end theorems' axiom footprint
+        working-directory: formal/.cache/leanVM/formal/lean_sphincs
+        run: |
+          set -o pipefail
+          theorems='Sphincs.leanSphincsStronglyUnforgeable FORS.Lifetimes.h26_layered_adversary FORS.h26_layered'
+          { echo 'import Sphincs'; for theorem in $theorems; do echo "#print axioms $theorem"; done; } > "$RUNNER_TEMP/axioms.lean"
+          lake env lean "$RUNNER_TEMP/axioms.lean" | tee "$RUNNER_TEMP/axioms.txt"
+          for theorem in $theorems; do
+            grep -qF "'$theorem' depends on axioms: [propext, Classical.choice, Quot.sound]" "$RUNNER_TEMP/axioms.txt"
+          done
+      - name: Save the pinned proof build
+        if: github.ref == 'refs/heads/main' && steps.lake-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            formal/.cache/leanVM/formal/lean_sphincs/.lake
+            !formal/.cache/leanVM/formal/lean_sphincs/.lake/packages/mathlib/.lake
+            formal/.cache/leanVM/formal/common/.lake/build
+            formal/.cache/leanVM/formal/Statement/.lake/build
+          key: ${{ steps.lake-cache.outputs.cache-primary-key }}
+      - name: Save the checked Lean model executable
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: lean-sphincs-model
+          include-hidden-files: true
+          path: formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/signature-kat
+          if-no-files-found: error
+          retention-days: 7
+      - name: Save proof logs and provenance
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: lean-sphincs-proof-evidence
+          path: |
+            formal/upstream.json
+            ${{ runner.temp }}/lean-build.log
+            ${{ runner.temp }}/axioms.txt
+          if-no-files-found: warn
+          retention-days: 30
+
+  conformance:
+    name: Rust versus Lean (${{ matrix.cpu.name }}, ${{ matrix.backend.name }})
+    needs: proofs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        cpu:
+          - { name: SSE2, flags: '-C target-cpu=x86-64' }
+          - { name: AVX2, flags: '-C target-cpu=x86-64-v3' }
+        backend:
+          - { name: RustCrypto, features: '' }
+          - { name: assembly, features: asm-keccak }
+    env:
+      RUSTUP_TOOLCHAIN: 1.97.1
+      RUSTFLAGS: ${{ matrix.cpu.flags }}
+      FEATURES: ${{ matrix.backend.features }}
+      CPU: ${{ matrix.cpu.name }}
+      FORMAL_CASES_DIR: ${{ github.workspace }}/formal/.cache/cases
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: lean-sphincs-model
+          path: formal/.cache/bin
+      - name: Install Rust and check the runner
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal
+          if [[ "$CPU" == AVX2 ]] && ! grep -qw avx2 /proc/cpuinfo; then
+            echo 'The AVX2 comparison requires an AVX2-capable runner.' >&2
+            exit 1
+          fi
+          chmod +x formal/.cache/bin/signature-kat
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          shared-key: core-${{ matrix.cpu.name }}-${{ matrix.backend.name }}
+      - name: Export results from this Rust implementation
+        run: |
+          export FORMAL_SEED=${GITHUB_SHA:0:16}
+          cargo test --release --locked --features "$FEATURES" --test formal_conformance -- --ignored --nocapture
+      - name: Compare every result with the Lean model
+        run: |
+          python3 -m unittest discover -s scripts -p test_run_formal.py
+          python3 scripts/run_formal.py formal/.cache/bin/signature-kat "$FORMAL_CASES_DIR" --log formal/.cache/comparison.log
+      - name: Save the replayable corpus and comparison log
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: lean-conformance-${{ matrix.cpu.name }}-${{ matrix.backend.name }}
+          include-hidden-files: true
+          path: |
+            formal/.cache/cases/
+            formal/.cache/comparison.log
+            formal/upstream.json
+          if-no-files-found: warn
+          retention-days: 30

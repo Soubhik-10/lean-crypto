@@ -1,0 +1,128 @@
+name: Rust
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rust-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  RUSTUP_TOOLCHAIN: 1.97.1
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  quality:
+    name: Formatting, documentation and dependencies
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt
+      - name: Check formatting of every package
+        run: |
+          for manifest in Cargo.toml testing/Cargo.toml fuzz/Cargo.toml benchmarks/evm2/Cargo.toml; do
+            cargo fmt --manifest-path "$manifest" --all -- --check
+          done
+      - name: Test the formal comparison gate
+        run: python3 -m unittest discover -s scripts -p test_run_formal.py
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - name: Check documentation
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --locked --no-deps --all-features
+      - name: Check unused dependencies
+        run: |
+          cargo install cargo-machete --version 0.9.2 --locked
+          cargo machete --with-metadata
+
+  test:
+    name: Test and Clippy (${{ matrix.cpu.name }}, ${{ matrix.backend.name }})
+    runs-on: ${{ matrix.cpu.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        cpu:
+          - { name: SSE2, runner: ubuntu-24.04, flags: '-C target-cpu=x86-64' }
+          - { name: AVX2, runner: ubuntu-24.04, flags: '-C target-cpu=x86-64-v3' }
+          - { name: ARM64, runner: ubuntu-24.04-arm, flags: '-C target-cpu=generic' }
+        backend:
+          - { name: RustCrypto, features: '' }
+          - { name: assembly, features: asm-keccak }
+    env:
+      RUSTFLAGS: ${{ matrix.cpu.flags }}
+      FEATURES: ${{ matrix.backend.features }}
+      CPU: ${{ matrix.cpu.name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          shared-key: core-${{ matrix.cpu.name }}-${{ matrix.backend.name }}
+      - name: Check runner instruction support
+        run: |
+          if [[ "$CPU" == AVX2 ]] && ! grep -qw avx2 /proc/cpuinfo; then
+            echo 'The AVX2 tests require an AVX2-capable runner.' >&2
+            exit 1
+          fi
+      - name: Test the library and its public APIs
+        run: cargo test --release --locked --features "$FEATURES"
+      - name: Lint the library and tests
+        run: cargo clippy --release --locked --all-targets --features "$FEATURES" -- -D warnings
+
+  portability:
+    name: Portability (${{ matrix.name }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: macOS, runner: macos-15, flags: '-C target-cpu=apple-m1' }
+          - { name: Windows, runner: windows-2025, flags: '-C target-cpu=x86-64' }
+    env:
+      RUSTFLAGS: ${{ matrix.flags }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust
+        run: rustup toolchain install 1.97.1 --profile minimal --component clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - name: Check all library targets and features
+        run: cargo clippy --release --locked --all-targets --all-features -- -D warnings
+
+  no-std:
+    name: no_std on ARM Cortex-M
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install Rust and the ARM Cortex-M target
+        run: rustup toolchain install 1.97.1 --profile minimal --target thumbv7em-none-eabi
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - run: cargo check --locked --lib --no-default-features --target thumbv7em-none-eabi
+
+  msrv:
+    name: Minimum supported Rust (1.90)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install the declared minimum Rust version
+        run: rustup toolchain install 1.90.0 --profile minimal
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - run: cargo +1.90.0 check --locked --lib --all-features
