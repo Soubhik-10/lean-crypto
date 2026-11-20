@@ -14,3 +14,6 @@
 /fuzz/coverage/
 
 /fuzz/logs/
+
+/formal/.cache/
+/scripts/__pycache__/

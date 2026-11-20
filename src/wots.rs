@@ -161,3 +161,7 @@ pub(crate) fn sign(
     }
     Some(())
 }
+
+#[cfg(all(test, target_arch = "x86_64", target_feature = "sse2"))]
+#[path = "formal_tests.rs"]
+mod formal;

@@ -59,8 +59,10 @@ stack instead of retaining the full tree.
 
 Conformance fixtures are derived from EthLib's CC0-1.0 test data, with source
 revision and raw-file hashes retained in [tests/vectors](tests/vectors/README.md).
-No claim of independent security review, audit, or formal verification is made.
-The scheme and this package remain experimental.
+The scheme and this package remain experimental. The formal CI described below
+checks an upstream Lean model and conformance evidence for this implementation;
+it does not establish a complete formal proof of the Rust source. No independent
+security review or audit is claimed.
 
 ## Validation
 
@@ -77,6 +79,54 @@ byte-for-byte deterministic signatures, round trips, counter-exhaustion errors,
 every-byte mutation checks, malformed encodings, and zero allocations across
 all three operations. The [differential test runner](testing/README.md) and
 [coverage-guided fuzzers](fuzz/README.md) compare this crate with leanVM.
+
+## Formal verification CI
+
+The [formal workflow](.github/workflows/formal.yml) uses the Lean 4 specification
+and security proofs from [leanEthereum/leanVM](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal),
+pinned to `f95bc21a4875e10a733f4b2e56f1d4adb81536eb` in
+[formal/upstream.json](formal/upstream.json). leanVM credits
+[Verified-zkEVM/leanerVM](https://github.com/Verified-zkEVM/leanerVM) as the source
+of its vendored formalization. The SPHINCS specification is
+[`Statement/LeanSphincs.lean`](https://github.com/leanEthereum/leanVM/blob/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal/Statement/LeanSphincs.lean);
+its security proof is in
+[`formal/lean_sphincs`](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal/lean_sphincs).
+
+On pull requests and pushes to `main`, CI rebuilds those proofs with the Lean
+kernel enabled, rejects proof escapes, and checks that the end theorems use only
+`propext`, `Classical.choice` and `Quot.sound`, as upstream CI does. The security
+theorem concerns strong unforgeability of the modeled scheme in the
+random-permutation model, under its stated assumptions and query bounds.
+
+CI also compares this crate directly with the executable Lean model. It exports
+key generation, deterministic signatures and verification results from this
+Rust checkout, then requires the model to agree on every case. The corpus
+includes all 35 pinned vectors, reproducible generated seeds/messages, signature,
+key and message mutations, and malformed lengths. Comparisons run separately
+for SSE2/AVX2 and RustCrypto/`asm-keccak`. CI saves the corpus, seed, results,
+upstream revision and axiom report for replay. Missing cases fail the job.
+
+The repository also kernel-checks [additional Lean equivalences](formal/Implementation/Algorithms.lean)
+for the verifier's index loop, WOTS recovery schedule and bounded least-counter
+search, including signing failure at the actual 32-bit counter limit. These are
+relationships between Lean algorithm descriptions; they do not prove the compiled
+Rust program correct. Component tests compare real production functions with the
+same pinned Lean specification and check counter/codeword/tree boundaries and
+AVX2 scalar tails. Both real Lean executables must reject deliberately wrong
+expected results in every matrix job.
+
+The evidence has three levels: security theorems about the Lean specification,
+proved relationships between Lean descriptions, and finite Rust-to-Lean
+conformance tests. The new functional equivalences do not transfer oracle-query
+security bounds to Rust's different hash-call order. Rust/backend semantics,
+compilers and test parsers remain trusted; constant time and side channels are
+outside these proofs. [Proof inventory, limits and reproduction](formal/README.md).
+
+The [Rust workflow](.github/workflows/rust.yml) additionally checks formatting,
+strict library Clippy, documentation, unused dependencies, the declared Rust 1.90
+minimum, `no_std` ARM Cortex-M compilation, SSE2/AVX2/ARM64 tests and macOS/Windows
+compilation. Existing CodSpeed benchmarks, differential tests and fuzzing remain
+separate checks.
 
 ## Benchmarks
 

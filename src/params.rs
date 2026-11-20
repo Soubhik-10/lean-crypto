@@ -12,3 +12,11 @@ pub(crate) const FORS_OPENING_BYTES: usize = NODE_BYTES * (FORS_HEIGHT as usize 
 pub(crate) const FORS_BYTES: usize = FORS_TREES * FORS_OPENING_BYTES;
 pub(crate) const WOTS_BYTES: usize = 4 + WOTS_CHAINS * NODE_BYTES;
 pub(crate) const SEED_TAG: &[u8; 11] = b"leanSPHINCS";
+
+// Shared by signing, verification and the test-only boundary exporter.
+#[inline(always)]
+pub(crate) fn take_layer(index: &mut u64, height: u32) -> u32 {
+    let leaf = (*index & ((1 << height) - 1)) as u32;
+    *index >>= height;
+    leaf
+}

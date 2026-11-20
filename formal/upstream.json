@@ -1,0 +1,5 @@
+{
+  "repository": "leanEthereum/leanVM",
+  "revision": "f95bc21a4875e10a733f4b2e56f1d4adb81536eb",
+  "toolchain": "leanprover/lean4:v4.36.0"
+}
