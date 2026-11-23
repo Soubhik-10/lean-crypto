@@ -105,6 +105,10 @@ The port keeps arithmetic kernels, protocol constants and check order. Changes
 are limited to `core`/`alloc`, crate-private visibility, the existing Alloy Keccak
 interface for streamed program/statement hashing, Rust 1.90-compatible slice
 conversion, and removal of prover reporting, unchecked replay and the unrelated standalone Keccak-proof API.
+Merkle decoding retains each phase's computed root: unpruning already hashes the
+shared tree, so authentication compares that root with the transcript commitment
+instead of hashing every overlapping path again. Roots are derived from the
+proof bytes, never supplied as trusted commitments; query and shape checks remain.
 The reference Keccak permutation and one-shot Merkle hash kernel are retained; replacing the
 short-message kernel with another backend measured slower on the validation host.
 Program hashing streams words through a 1 KiB buffer rather than allocating a
@@ -124,8 +128,11 @@ recursive merge and pruning, both signature schemes, and a real DA commitment.
 They also check program identity, encoding round trips, truncation, trailing
 bytes, hostile size announcements, mutations, and changed/unsorted/duplicate
 claims. Original arithmetic, hash and polynomial-check tests are retained.
-The existing workspace CI includes this crate automatically; there is no separate
-aggregation workflow.
+The workspace CI includes this crate. The [Lean workflow](../../.github/workflows/formal.yml)
+also kernel-checks the pinned VM/wire theorems and compares this port with the
+executable Lean model on generated native proofs and structured/wire mutations,
+for both hashing configurations. See [formal validation](../../formal/README.md#aggregate-verifier)
+for the exact scope and reproduction commands.
 
 ```sh
 cargo test -p lean-verifier --release --locked
@@ -142,17 +149,25 @@ preparation and proof generation are outside the timing loop. It alternates the
 implementations and reports the median of five batches of 30 calls. Use identical
 compiler/CPU flags and an otherwise idle machine when comparing results.
 
-A validation run on Windows x86_64, Intel Core i5-1340P, Rust 1.97.1,
-`RUSTFLAGS="-C target-cpu=native"`, with the workspace thin-LTO bench profile:
+A run on Windows x86_64, AMD Ryzen 9 8940HX, Rust 1.97.1,
+`RUSTFLAGS="-C target-cpu=native"`, thin LTO, default hashing, pinned to logical CPU 8:
 
-| Case | Default: local / reference (ms) | `asm-keccak`: local / reference (ms) |
-| --- | --- | --- |
-| Leaf verification | 10.521 / 10.521 | 10.230 / 10.236 |
-| Leaf decoding + verification | 12.084 / 12.249 | 11.840 / 12.042 |
-| Recursive verification | 16.545 / 16.592 | 16.292 / 16.527 |
-| Recursive decoding + verification | 18.196 / 18.175 | 17.970 / 18.113 |
+| Case | Local before (ms) | Local after (ms) | Pinned reference in after run (ms) |
+| --- | ---: | ---: | ---: |
+| Leaf verification | 18.860 | 13.156 | 18.918 |
+| Leaf decoding + verification | 23.401 | 17.767 | 23.603 |
+| Recursive verification | 26.344 | 20.386 | 26.927 |
+| Recursive decoding + verification | 31.720 | 25.735 | 32.165 |
 
-These small differences indicate approximate parity on this machine, not a
-portable speedup. `asm-keccak` affects the Alloy streaming hashes; the VM's
-reference Merkle and transcript kernels remain the same. Existing signing and
-proving paths are unchanged.
+Retaining computed Merkle roots reduced end-to-end decoding + verification time
+by 24% for leaf proofs and 19% for recursive proofs versus the previous port on
+this host. The matched reference comparison is about 25% and 20%, respectively.
+Verification-only results assume an already decoded proof and exclude the work
+performed by the decoder. These are host-specific measurements, not portable
+guarantees. `asm-keccak` affects the Alloy streaming hashes; the VM's reference
+Merkle and transcript kernels remain the same. Signing and proving are unchanged.
+
+An `asm-keccak` repeat measured decoding + verification at 21.647 / 28.071 ms
+(local/reference) for leaf proofs and 31.266 / 37.586 ms for recursive proofs:
+23% and 17% lower, respectively. Absolute times varied between runs; compare
+the paired measurements within each run.

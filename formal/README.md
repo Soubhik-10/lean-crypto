@@ -79,6 +79,65 @@ python3 scripts/check_formal_rejection.py formal/.cache/leanVM/formal/lean_sphin
 
 Also reproduce the workflow's independent upstream axiom check for a complete gate. The initial corpus directory must be empty. Use `-C target-cpu=x86-64-v3` on AVX2 hardware and/or `--features asm-keccak` on **both** Cargo commands for the other configurations; select a fresh output directory. Replay downloaded corpora with both binaries from the same proof artifact.
 
+## Aggregate verifier
+
+`lean-verifier` uses a separate immutable VM reference, recorded in
+[`reference.json`](../crates/lean-verifier/reference.json), with Lean 4.35.0.
+It does not use the signature proof package's newer pin. The existing formal
+workflow adds two gates:
+
+* Kernel-check `LeanVM.knowledgeSoundness_holds`, `LeanVM.completeness_holds`,
+  `LeanVM.Wire.roundTrip` and `LeanVM.Wire.oneEncoding`, plus the executable
+  verifier and wire models. `VerifierAxioms.lean` requires those four theorems
+  and rejects transitive dependencies beyond the three foundational axioms.
+  Source digests, profile revision, toolchains and forbidden proof escapes are
+  checked before building. No kernel-skipping development options are used.
+* Generate the pinned native prover's small-program corpus across rates 1–4.
+  Compare both honest transports and 256 deterministic verification cases per
+  fixture, then run the upstream wire driver's mutations on every phase,
+  including the committed golden vector, duplicate/reordered queries, boundary
+  sizes, altered leaves/siblings, truncations and trailing bytes. Both default
+  and assembly hashing builds compile the actual port's VM source into a
+  development-only bridge. Panics, crashes, timeouts, missing results and any
+  verdict/byte mismatch fail the gate; two failing processes cannot count as
+  agreement.
+
+The generic small-program bridge is not a public verifier API. The library's
+fixed aggregation-program identity, full aggregate statement, recursion, pruning,
+signature claims and DA binding are exercised by its Rust reference conformance
+tests. The Lean proofs concern the pinned mathematical protocol; the differential
+checks are finite evidence about this Rust port, including its computed-root
+optimization. This is not a universal proof of the Rust implementation.
+
+Run the hosted verifier jobs without rebuilding the signature proof package:
+
+```sh
+gh workflow run formal.yml --repo Soubhik-10/lean-crypto --ref YOUR_BRANCH -f verifier_only=true
+```
+
+To replay with a checkout at the exact verifier pin and the two checked Linux
+model executables downloaded from the matching workflow run:
+
+```sh
+reference=/path/to/pinned/leanVM
+models=/path/to/lean-verifier-models
+fixtures="$PWD/formal/.cache/verifier-fixtures"
+python3 -I scripts/check_verifier_reference.py "$reference"
+bash "$reference/formal/lean_vm/scripts/export-verifier-fixtures-rust.sh" "$fixtures"
+RUSTFLAGS="-C target-cpu=x86-64-v3" cargo build -p lean-verifier --release --locked --example conformance
+chmod +x "$models/leanvm-verify" "$models/wire-diff"
+python3 -I scripts/check_verifier_conformance.py "$reference" "$fixtures" target/release/examples/conformance \
+  --models "$models" --output formal/.cache/verifier-results --jobs 2
+```
+
+The replay driver requires Linux/POSIX process resource limits. Use an AVX2-capable
+host for the flags above. Add `--features asm-keccak` when building the bridge to
+repeat with assembly streaming hashes. Lean builds run on GitHub; replaying the
+saved executables does not require installing Lean locally. Proof logs, axiom
+reports, the generated corpus, conformance verdicts and failing-case bytes are
+retained as CI artifacts. Reuse that saved corpus to replay the exact inputs
+instead of regenerating it.
+
 ## Remaining trusted dependencies and limits
 
 The Lean kernel, foundational axioms and upstream definitions are trusted for proof checking. Execution/conformance additionally trusts Lean's compiler/runtime, both comparison drivers and parsers, Rust/rustc/LLVM, Alloy/RustCrypto or assembly Keccak, `wide`'s SIMD semantics, CPU behavior and CI infrastructure. Our mathematical schedule theorem does not verify the SIMD permutation. No new proof covers concrete Keccak's cryptographic security, constant time, dependency memory safety, compiler correctness or side-channel behavior. The upstream query-accounting assumptions and signature limit remain part of its theorem; the Rust API does not count a key's signing requests.

@@ -363,5 +363,6 @@ jobs:
           include-hidden-files: true
           path: |
             formal/.cache/verifier-results
+            formal/.cache/verifier-fixtures
             ${{ runner.temp }}/verifier-conformance.log
           retention-days: 30

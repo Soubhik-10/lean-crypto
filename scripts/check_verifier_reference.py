@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import tomllib
 from pathlib import Path
@@ -21,8 +22,15 @@ def main():
     for name, expected in pin["files"].items():
         assert hashlib.sha256((reference / name).read_bytes()).hexdigest() == expected, name
     workspace = tomllib.loads((ROOT / "Cargo.toml").read_text())
-    assert workspace["workspace"]["dependencies"]["lean_vm"]["rev"] == actual
-    assert actual in (ROOT / "crates/lean-verifier/src/profile.rs").read_text()
+    native = workspace["workspace"]["dependencies"]["lean_vm"]
+    assert native["rev"] == actual and native["git"] == pin["repository"]
+    crate = tomllib.loads((ROOT / "crates/lean-verifier/Cargo.toml").read_text())
+    for name in ("reference-aggregation", "reference-verifier"):
+        dependency = crate["dev-dependencies"][name]
+        assert dependency["rev"] == actual and dependency["git"] == pin["repository"], name
+    profile = (ROOT / "crates/lean-verifier/src/profile.rs").read_text()
+    revision = re.search(r'pub const REFERENCE_REVISION: &str\s*=\s*"([0-9a-f]+)";', profile)
+    assert revision and revision[1] == actual, "profile reference revision"
     for name in ("Statement", "common", "lean_vm", "lean_xmss", "lean_sphincs", "lean_da"):
         directory = reference / "formal" / name
         assert (directory / "lean-toolchain").read_text().strip() == TOOLCHAIN, name

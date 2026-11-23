@@ -69,6 +69,11 @@ def main():
             assert row[4] == "accept", row
     wire = load(reference / "formal/lean_vm/scripts/wire-diff.py", "verifier_wire")
     wire.LEAN_EXE, wire.RUST_EXE = models / "wire-diff", rust
+    # The upstream wire driver tolerates process failures while collecting results.
+    # Require successful processes and exactly one result per command on both sides.
+    def strict_batch(exe, commands, memory_gb, strict=False):
+        return proofio.batch(exe, commands, memory_gb, strict=True)
+    wire.batch = strict_batch
     invoke(wire, [fixtures, "--jobs", args.jobs, "--all-phases", "--random", 16,
                   "--seed", 1, "--memory-gb", 10,
                   "--keep", output / "wire-failures", "--log", output / "wire.tsv"])
