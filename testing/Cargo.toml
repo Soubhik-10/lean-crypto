@@ -6,7 +6,7 @@ rust-version = "1.97"
 publish = false
 
 [dependencies]
-lean-sphincs = { path = ".." }
+lean-sphincs = { path = "../crates/lean-sphincs" }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
 reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "f7ba4999ae523b94c8d0969b32762c3effea4cbd" }
 rand_chacha = "=0.9.0"

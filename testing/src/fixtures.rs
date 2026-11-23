@@ -19,9 +19,10 @@ struct Vector {
 pub fn fixtures() -> &'static [Fixture] {
     static FIXTURES: OnceLock<Vec<Fixture>> = OnceLock::new();
     FIXTURES.get_or_init(|| {
-        let cases: Vec<Vector> =
-            serde_json::from_str(include_str!("../../tests/vectors/ethlib.json"))
-                .expect("pinned fixtures");
+        let cases: Vec<Vector> = serde_json::from_str(include_str!(
+            "../../crates/lean-sphincs/tests/vectors/ethlib.json"
+        ))
+        .expect("pinned fixtures");
         let cases: Vec<_> = cases
             .into_iter()
             .filter(|case| case.expected == Some(true))

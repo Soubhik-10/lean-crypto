@@ -176,8 +176,8 @@ jobs:
       - name: Export results from this Rust implementation
         run: |
           export FORMAL_SEED=${GITHUB_SHA:0:16}
-          cargo test --release --locked --features "$FEATURES" --test formal_conformance -- --ignored --nocapture
-          cargo test --release --locked --features "$FEATURES" --lib wots::formal::export_lean_components -- --ignored --exact --nocapture
+          cargo test -p lean-sphincs --release --locked --features "$FEATURES" --test formal_conformance -- --ignored --nocapture
+          cargo test -p lean-sphincs --release --locked --features "$FEATURES" --lib wots::formal::export_lean_components -- --ignored --exact --nocapture
       - name: Compare every result with the Lean model
         run: |
           python3 -m unittest discover -s scripts -p test_run_formal.py

@@ -34,8 +34,10 @@ fn check(seed: B256, message: B256) {
 
 #[test]
 fn specification_signatures_are_unchanged() {
-    let vectors: serde_json::Value =
-        serde_json::from_str(include_str!("../../tests/vectors/sign.json")).unwrap();
+    let vectors: serde_json::Value = serde_json::from_str(include_str!(
+        "../../crates/lean-sphincs/tests/vectors/sign.json"
+    ))
+    .unwrap();
     for case in vectors.as_array().unwrap() {
         if let Some(expected) = case["expected"].as_str() {
             let seed = case["seed"].as_str().unwrap().parse().unwrap();

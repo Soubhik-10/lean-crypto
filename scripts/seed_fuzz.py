@@ -23,7 +23,7 @@ def main():
     def decode(value):
         return bytes.fromhex(value.removeprefix("0x"))
 
-    vectors = json.loads((ROOT / "tests/vectors/ethlib.json").read_text(encoding="utf-8"))
+    vectors = json.loads((ROOT / "crates/lean-sphincs/tests/vectors/ethlib.json").read_text(encoding="utf-8"))
     for index, case in enumerate(v for v in vectors if v["expected"] is True):
         key, message, signature = (decode(case[name]) for name in ("public_key", "message", "signature"))
         assert (len(key), len(message), len(signature)) == (32, 32, 7740)
@@ -38,7 +38,7 @@ def main():
         for kind in range(1, 8):
             put("mutate_valid", f"edit-{index}-{kind}", bytes([index, kind, 0, 0, 255]))
 
-    signs = json.loads((ROOT / "tests/vectors/sign.json").read_text(encoding="utf-8"))
+    signs = json.loads((ROOT / "crates/lean-sphincs/tests/vectors/sign.json").read_text(encoding="utf-8"))
     for index, case in enumerate(v for v in signs if v["expected"] is not None):
         if index == 0 or args.full_signing_corpus:
             put("sign_differential", f"known-{index}", decode(case["seed"]) + decode(case["message"]))

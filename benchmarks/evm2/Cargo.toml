@@ -6,7 +6,7 @@ rust-version = "1.96"
 publish = false
 
 [dependencies]
-lean-sphincs = { path = "../.." }
+lean-sphincs = { path = "../../crates/lean-sphincs" }
 reference-keccak = { package = "keccak256", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
 reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }

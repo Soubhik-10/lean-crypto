@@ -1,34 +1,26 @@
-[package]
-name = "lean-sphincs"
-version = "0.1.0"
+[workspace]
+members = ["crates/*"]
+exclude = ["testing", "fuzz", "benchmarks/evm2"]
+resolver = "3"
+
+[workspace.package]
 edition = "2024"
 rust-version = "1.90"
-description = "LeanSPHINCS key generation, signing and verification with Alloy types"
 license = "MIT OR Apache-2.0"
-readme = "README.md"
 repository = "https://github.com/Soubhik-10/lean-sphincs"
-keywords = ["ethereum", "post-quantum", "sphincs", "cryptography", "no-std"]
-categories = ["cryptography", "no-std"]
 
-[dependencies]
+[workspace.dependencies]
+lean-sphincs = { path = "crates/lean-sphincs", version = "0.1.0", default-features = false }
 alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
-
-[target.'cfg(target_arch = "x86_64")'.dependencies]
 wide = { version = "0.7.33", default-features = false }
-
-[dev-dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
-[features]
-default = []
-asm-keccak = ["alloy-primitives/asm-keccak"]
-
-[lints.rust]
+[workspace.lints.rust]
 missing_docs = "warn"
 unreachable_pub = "warn"
 
-[lints.clippy]
+[workspace.lints.clippy]
 uninlined_format_args = "warn"
 redundant_clone = "warn"
 

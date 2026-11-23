@@ -41,7 +41,7 @@ fn main() {
     );
     let mut files = Vec::new();
     for directory in [
-        root.join("src"),
+        root.join("crates/lean-sphincs/src"),
         manifest.join("src"),
         root.join("fuzz/fuzz_targets"),
     ] {
@@ -50,6 +50,7 @@ fn main() {
     for file in [
         "Cargo.toml",
         "Cargo.lock",
+        "crates/lean-sphincs/Cargo.toml",
         "testing/Cargo.toml",
         "testing/Cargo.lock",
         "testing/build.rs",

@@ -1,0 +1,28 @@
+[package]
+name = "lean-sphincs"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "LeanSPHINCS key generation, signing and verification with Alloy types"
+license.workspace = true
+readme = "README.md"
+repository.workspace = true
+keywords = ["ethereum", "post-quantum", "sphincs", "cryptography", "no-std"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+alloy-primitives.workspace = true
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+wide.workspace = true
+
+[dev-dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[features]
+default = []
+asm-keccak = ["alloy-primitives/asm-keccak"]
+
+[lints]
+workspace = true

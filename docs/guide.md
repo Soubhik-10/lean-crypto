@@ -271,7 +271,7 @@ paths together on SSE2 and four on AVX2. SIMD lets one instruction advance
 several independent hash computations within the same thread.
 
 AVX2 also batches independent WOTS+C chain steps. It buffers a small window of
-chains and feeds the finished values to the hasher in signature order. [FORS implementation](../src/fors.rs) · [WOTS+C implementation](../src/wots.rs)
+chains and feeds the finished values to the hasher in signature order. [FORS implementation](../crates/lean-sphincs/src/fors.rs) · [WOTS+C implementation](../crates/lean-sphincs/src/wots.rs)
 
 ## Build signing trees once
 
