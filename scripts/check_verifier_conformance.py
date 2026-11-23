@@ -52,7 +52,7 @@ def main():
         result = subprocess.run([str(models / "leanvm-verify"), *map(str, command)],
                                 capture_output=True, text=True, timeout=300, check=True,
                                 preexec_fn=proofio.limit(10))
-        assert "verification succeeded" in result.stdout, result.stdout
+        assert result.stdout.strip() == "verification succeeded", result.stdout
     print(f"Accepted {len(commands)} honest wire/structured cases in Rust and Lean", flush=True)
     fuzz = load(reference / "formal/lean_vm/scripts/fuzz-verifier.py", "verifier_fuzz")
     log = output / "verifier.tsv"
