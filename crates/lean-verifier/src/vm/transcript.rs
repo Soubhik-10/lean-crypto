@@ -14,6 +14,9 @@ use crate::vm::{VerifierError, require};
 pub(crate) struct Proof {
     pub(crate) stream: Vec<E>,
     pub(crate) merkle_openings: Vec<Vec<MerklePath>>,
+    // Derived from the decoded paths, never read as a trusted root from the wire.
+    // Public callers cannot construct or mutate this private proof representation.
+    pub(crate) merkle_roots: Vec<Option<Digest>>,
 }
 
 const DS_OBSERVE: u64 = 1;
@@ -202,7 +205,8 @@ impl<'a> Transcript<'a> {
             VerifierError::MerkleOpeningPosition,
         )?;
         require(
-            !self.checked() || paths.iter().all(|path| path.root() == root),
+            !self.checked()
+                || self.proof.merkle_roots.get(self.opening_offset - 1) == Some(&Some(root)),
             VerifierError::MerkleRootMismatch,
         )?;
         Ok(paths.iter().map(|path| &path.leaf[..]).collect())

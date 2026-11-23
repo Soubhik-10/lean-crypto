@@ -13,7 +13,7 @@ mod field;
 mod hash;
 pub(crate) mod keccak;
 pub(crate) mod layout;
-mod merkle;
+pub(crate) mod merkle;
 mod multilinear;
 mod ring_switch;
 mod transcript;

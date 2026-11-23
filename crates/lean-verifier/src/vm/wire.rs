@@ -5,6 +5,7 @@ use alloc::{vec, vec::Vec};
 use alloc::collections::BTreeMap;
 
 use crate::vm::field::{E, K};
+use crate::vm::hash::Digest;
 use crate::vm::merkle::{MerklePath, hash_leaf, hash_pair};
 use crate::vm::transcript::Proof;
 
@@ -59,12 +60,17 @@ impl Proof {
         let phases = input
             .u32()
             .filter(|&phases| phases as usize <= MAX_PHASES)?;
-        let merkle_openings = (0..phases)
-            .map(|_| read_phase(&mut input))
-            .collect::<Option<_>>()?;
+        let mut merkle_openings = Vec::with_capacity(phases as usize);
+        let mut merkle_roots = Vec::with_capacity(phases as usize);
+        for _ in 0..phases {
+            let (paths, root) = read_phase(&mut input)?;
+            merkle_openings.push(paths);
+            merkle_roots.push(Some(root));
+        }
         input.0.is_empty().then_some(Self {
             stream,
             merkle_openings,
+            merkle_roots,
         })
     }
 }
@@ -115,8 +121,8 @@ fn write_phase(out: &mut Vec<u8>, paths: &[MerklePath]) {
 }
 
 /// Unprune a phase's octopus back into its paths, hashing the nodes they share. Nothing is authenticated here, the
-/// verifier checks every path; what is refused is anything but the one encoding of a phase within the bounds.
-fn read_phase(input: &mut Reader) -> Option<Vec<MerklePath>> {
+/// verifier authenticates the computed root; what is refused is anything but the one encoding of a phase within the bounds.
+fn read_phase(input: &mut Reader) -> Option<(Vec<MerklePath>, Digest)> {
     let count = input.u32().filter(|&count| count as usize <= MAX_QUERIES)?;
     let queries: Vec<u64> = (0..count)
         .map(|_| input.u32().map(u64::from))
@@ -189,7 +195,12 @@ fn read_phase(input: &mut Reader) -> Option<Vec<MerklePath>> {
             .expect("a query is a position")]
         .clone()
     };
-    Some(queries.iter().map(path).collect())
+    let paths: Vec<_> = queries.iter().map(path).collect();
+    let root = Digest(*nodes.get(&0)?);
+    // Unpruning already hashes the shared tree. Retaining its root avoids hashing
+    // every overlapping path again during authentication against the transcript.
+    debug_assert!(paths.iter().all(|path| path.root() == root));
+    Some((paths, root))
 }
 
 fn write_u32(out: &mut Vec<u8>, value: usize) {
@@ -249,6 +260,7 @@ mod tests {
         let proof = Proof {
             stream: vec![E::new(1, 2)],
             merkle_openings: vec![vec![path(3), path(1), path(3)]],
+            merkle_roots: vec![Some(hash_pair(&parents[0], &parents[1]))],
         };
         let bytes = proof.to_bytes();
         // The stream, then the phase: its queries, three sizes, two rows of two words, and two siblings.
@@ -258,5 +270,75 @@ mod tests {
         );
         assert_eq!(Proof::from_bytes(&bytes), Some(proof));
         assert_eq!(Proof::from_bytes(&[&bytes[..], &[0]].concat()), None);
+    }
+    #[test]
+    fn decoded_roots_match_every_path_in_shared_trees() {
+        for height in 0..=8 {
+            for width in [0, 1, 4, MAX_LEAF_WORDS] {
+                let count = 1usize << height;
+                let rows: Vec<Vec<K>> = (0..count)
+                    .map(|i| {
+                        (0..width)
+                            .map(|j| {
+                                K(if j < width / 2 {
+                                    0
+                                } else {
+                                    (i * width + j + 1) as u64
+                                })
+                            })
+                            .collect()
+                    })
+                    .collect();
+                let mut levels = vec![rows.iter().map(|row| hash_leaf(row).0).collect::<Vec<_>>()];
+                for level in 0..height {
+                    levels.push(
+                        levels[level]
+                            .chunks_exact(2)
+                            .map(|pair| hash_pair(&pair[0], &pair[1]).0)
+                            .collect(),
+                    );
+                }
+                let root = Digest(levels[height][0]);
+                // Overlapping paths, duplicates and unsorted queries, including height zero.
+                let queries = [count - 1, 0, count / 2, count - 1, count / 3];
+                let phase = queries
+                    .into_iter()
+                    .map(|i| MerklePath {
+                        leaf_index: i as u64,
+                        leaf: rows[i].clone(),
+                        siblings: (0..height)
+                            .map(|level| levels[level][(i >> level) ^ 1])
+                            .collect(),
+                    })
+                    .collect();
+                let proof = Proof {
+                    stream: vec![],
+                    merkle_openings: vec![phase],
+                    merkle_roots: vec![Some(root)],
+                };
+                let bytes = proof.to_bytes();
+                let decoded = Proof::from_bytes(&bytes).unwrap();
+                assert_eq!(decoded, proof);
+                assert!(
+                    decoded.merkle_openings[0]
+                        .iter()
+                        .all(|path| path.root() == root)
+                );
+                // Tampering with a carried sibling or leaf changes the computed root;
+                // it must not retain an authenticated root from the original proof.
+                if width > 0 {
+                    let mut tampered = bytes.clone();
+                    *tampered.last_mut().unwrap() ^= 1;
+                    if let Some(other) = Proof::from_bytes(&tampered) {
+                        assert_ne!(other.merkle_roots[0], Some(root));
+                        assert!(
+                            other.merkle_openings[0]
+                                .iter()
+                                .all(|path| Some(path.root()) == other.merkle_roots[0])
+                        );
+                    }
+                }
+            }
+        }
     }
 }
