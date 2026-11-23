@@ -79,6 +79,11 @@ jobs:
           fi
       - name: Test the library and its public APIs
         run: cargo test --workspace --release --locked --features "$FEATURES"
+      - name: Check experimental prover across the workspace
+        if: matrix.cpu.name == 'AVX2' && matrix.backend.name == 'assembly'
+        run: |
+          cargo test --workspace --release --locked --no-default-features --features experimental-prover,asm-keccak
+          cargo clippy --workspace --release --locked --all-targets --no-default-features --features experimental-prover,asm-keccak -- -D warnings
       - name: Lint the library and tests
         run: cargo clippy --workspace --release --locked --all-targets --features "$FEATURES" -- -D warnings
 
