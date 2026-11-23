@@ -374,6 +374,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "lean-verifier"
+version = "0.1.0"
+dependencies = [
+ "aggregation",
+ "alloy-primitives",
+ "lean-sphincs",
+ "lean_vm",
+ "verifier",
+]
+
+[[package]]
 name = "lean_da"
 version = "0.1.0"
 source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"

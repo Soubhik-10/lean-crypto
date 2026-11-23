@@ -1,0 +1,31 @@
+[package]
+name = "lean-verifier"
+version = "0.1.0"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+description = "Native no_std aggregate-proof verification for the pinned leanVM protocol"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+alloy-primitives.workspace = true
+
+[dev-dependencies]
+lean_vm.workspace = true
+reference-aggregation = { package = "aggregation", git = "https://github.com/Rimeeeeee/leanVM", rev = "84780fb42667bc288c0e567c125b7e10479fb568" }
+reference-verifier = { package = "verifier", git = "https://github.com/Rimeeeeee/leanVM", rev = "84780fb42667bc288c0e567c125b7e10479fb568" }
+lean-sphincs.workspace = true
+
+[features]
+default = []
+asm-keccak = ["alloy-primitives/asm-keccak"]
+
+[[bench]]
+name = "verify"
+harness = false
+
+[lints]
+workspace = true
