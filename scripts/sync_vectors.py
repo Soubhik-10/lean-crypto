@@ -21,7 +21,7 @@ def fetch(url):
 
 
 def main():
-    destination = ROOT / "tests" / "vectors"
+    destination = ROOT / "crates" / "lean-sphincs" / "tests" / "vectors"
     destination.mkdir(parents=True, exist_ok=True)
     checksums = []
     for operation, schema in SCHEMAS.items():

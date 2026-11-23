@@ -55,8 +55,10 @@ struct Fixtures {
 fn fixtures() -> &'static Fixtures {
     static FIXTURES: OnceLock<Fixtures> = OnceLock::new();
     FIXTURES.get_or_init(|| {
-        let vectors: serde_json::Value =
-            serde_json::from_str(include_str!("../../tests/vectors/sign.json")).unwrap();
+        let vectors: serde_json::Value = serde_json::from_str(include_str!(
+            "../../crates/lean-sphincs/tests/vectors/sign.json"
+        ))
+        .unwrap();
         let cases: Vec<_> = vectors
             .as_array()
             .unwrap()

@@ -35,7 +35,7 @@ Our Rust signer hashes the public-seed derivation before the PRF-key derivation,
 
 The public-API exporter calls the real `key_gen`, `sign` and `verify`. It retains all 35 pinned cases and reproducible generated keys/messages. Mutations cover both sides of every serialized node boundary, each layer's counter/chain/path boundaries, key/message changes, truncation at field boundaries and trailing data. `FORMAL_CASES` accepts 1..16 generated pairs; `FORMAL_SEED` is a nonzero hexadecimal u64. CI derives the seed from the tested commit, so every backend receives identical inputs.
 
-The ignored unit-test exporter in `src/formal_tests.rs` is compiled only for tests, alongside the production modules. It directly calls production digest, decoder, WOTS recovery/signing, FORS recovery and Merkle climbing code. It adds:
+The ignored unit-test exporter in `crates/lean-sphincs/src/formal_tests.rs` is compiled only for tests, alongside the production modules. It directly calls production digest, decoder, WOTS recovery/signing, FORS recovery and Merkle climbing code. It adds:
 
 * index boundaries around 8, 16 and 26 bits; codeword sums 127/128/129 and every digit position;
 * layer counter values 0/1/255/256/65535/65536/`u32::MAX`, least-counter success and failure budgets 0/1/first/first+1/`2^32`;
@@ -66,8 +66,8 @@ cd ../../../../..
 export RUSTFLAGS='-C target-cpu=x86-64'
 export FORMAL_CASES_DIR="$PWD/formal/.cache/local-cases"
 export FORMAL_SEED=31e62d70b58a940f
-cargo +1.97.1 test --release --locked --test formal_conformance -- --ignored --nocapture
-cargo +1.97.1 test --release --locked --lib wots::formal::export_lean_components -- --ignored --exact --nocapture
+cargo +1.97.1 test -p lean-sphincs --release --locked --test formal_conformance -- --ignored --nocapture
+cargo +1.97.1 test -p lean-sphincs --release --locked --lib wots::formal::export_lean_components -- --ignored --exact --nocapture
 python3 -m unittest discover -s scripts -p test_run_formal.py
 python3 scripts/run_formal.py formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/signature-kat \
   "$FORMAL_CASES_DIR" --component-binary formal/.cache/leanVM/formal/lean_sphincs/.lake/build/bin/implementation-kat \

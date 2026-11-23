@@ -40,8 +40,10 @@ pub struct Fixtures {
 
 impl Fixtures {
     pub fn new(extra_cases: usize) -> Self {
-        let vectors: Vec<Vector> =
-            serde_json::from_str(include_str!("../../../tests/vectors/sign.json")).unwrap();
+        let vectors: Vec<Vector> = serde_json::from_str(include_str!(
+            "../../../crates/lean-sphincs/tests/vectors/sign.json"
+        ))
+        .unwrap();
         let mut inputs = Vec::new();
         for vector in vectors.into_iter().filter(|v| v.expected.is_some()) {
             let message = vector.message.parse().unwrap();

@@ -69,7 +69,7 @@ source_snapshot() {
         hash=$(digest "$BENCH_ROOT/$name")
         files=$(jq -c --arg name "$name" --arg hash "$hash" '.+{($name):$hash}' <<<"$files")
     done < <(git -C "$BENCH_ROOT" ls-files -z --cached --others --exclude-standard -- \
-        Cargo.toml Cargo.lock src tests/vectors benchmarks/evm2 benchmarks/suite benchmarks/run.sh benchmarks/compare.sh benchmarks/prover)
+        Cargo.toml Cargo.lock crates/lean-sphincs benchmarks/evm2 benchmarks/suite benchmarks/run.sh benchmarks/compare.sh benchmarks/prover)
     hash=$(printf '%s' "$(jq -cS . <<<"$files")" | sha256sum | cut -d ' ' -f 1)
     jq -n --arg revision "$revision" --arg changes "$changes" --arg hash "$hash" --argjson files "$files" \
         '{revision:$revision,tracked_changes:($changes!=""),source_sha256:$hash,files:$files}'

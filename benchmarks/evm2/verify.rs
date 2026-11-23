@@ -1,4 +1,4 @@
-#[path = "../../tests/common/mod.rs"]
+#[path = "../../crates/lean-sphincs/tests/common/mod.rs"]
 mod common;
 mod reference;
 

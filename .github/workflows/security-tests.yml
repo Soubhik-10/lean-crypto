@@ -2,10 +2,10 @@ name: Differential tests and fuzzing
 
 on:
   pull_request:
-    paths: ['src/**', 'tests/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
+    paths: ['crates/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
   push:
     branches: [main]
-    paths: ['src/**', 'tests/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
+    paths: ['crates/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_fuzz.py', '.github/workflows/security-tests.yml']
   schedule:
     - cron: '29 2 * * *'
   workflow_dispatch:

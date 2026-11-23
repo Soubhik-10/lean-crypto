@@ -59,7 +59,7 @@ jobs:
             exit 1
           fi
       - name: Validate signatures
-        run: cargo test --manifest-path ../../Cargo.toml --release --locked --features "$FEATURES"
+        run: cargo test -p lean-sphincs --manifest-path ../../Cargo.toml --release --locked --features "$FEATURES"
       - name: Install cargo-codspeed
         run: cargo install cargo-codspeed --git https://github.com/CodSpeedHQ/codspeed-rust --rev aa1bc87957a9c69f09c40fc2de1cf2355a96b7aa --locked
       - name: Build benchmarks
