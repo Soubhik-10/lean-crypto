@@ -1,0 +1,30 @@
+[package]
+name = "lean-aggregation"
+version = "0.1.0"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+description = "leanSPHINCS aggregation with Alloy types and the pinned leanVM backend"
+license.workspace = true
+readme = "README.md"
+repository.workspace = true
+keywords = ["ethereum", "post-quantum", "sphincs", "cryptography"]
+categories = ["cryptography"]
+
+[dependencies]
+lean-sphincs.workspace = true
+lean_vm = { workspace = true, optional = true }
+
+[features]
+default = ["std"]
+std = ["dep:lean_vm"]
+asm-keccak = ["lean-sphincs/asm-keccak"]
+experimental-prover = ["std", "lean_vm/experimental_prover"]
+
+[[bench]]
+name = "adapter"
+harness = false
+required-features = ["std"]
+
+[lints]
+workspace = true
