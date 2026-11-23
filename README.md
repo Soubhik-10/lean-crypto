@@ -1,19 +1,23 @@
 # lean-sphincs
 
 A Rust workspace for post-quantum signatures and aggregation, with Alloy types.
-Both crates support `no_std`; aggregation claim lists use `alloc`. The default
-`std` feature enables reference proof generation and verification.
+All three crates support `no_std`; aggregation claims and the independent
+verifier use `alloc`. The `lean-aggregation` default `std` feature enables
+reference proof generation and verification.
 
 | Crate | Description |
 | --- | --- |
 | [lean-sphincs](crates/lean-sphincs) | leanSPHINCS key generation, deterministic signing and verification without heap allocation |
 | [lean-aggregation](crates/lean-aggregation) | leanSPHINCS proof aggregation and verification through the pinned leanVM backend |
+| [lean-verifier](crates/lean-verifier) | Independent, reference-derived `no_std` verification of the pinned leanVM aggregate protocol |
 
 See the [crate README](crates/lean-sphincs/README.md) for its API,
 parameters, features and validation guarantees.
 
-The `no_std` workspace supports Rust 1.90. Reference proof generation and
-verification require `std` and Rust 1.97.1 for the pinned backend.
+The `no_std` workspace supports Rust 1.90. The `lean-aggregation` reference
+backend requires `std` and Rust 1.97.1. The independent `lean-verifier` needs
+prepared, fingerprint-checked program data; see its [README](crates/lean-verifier/README.md)
+for setup, compatibility and validation limits.
 
 ## Development
 

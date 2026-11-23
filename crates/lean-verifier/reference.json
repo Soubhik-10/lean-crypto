@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/Rimeeeeee/leanVM",
+  "revision": "84780fb42667bc288c0e567c125b7e10479fb568",
+  "files": {
+    "crates/verifier/src/bus.rs": "18a4720c035094361cc6622ecae3c39204e5173ef3414d9cb4951c359f4e74ae",
+    "crates/verifier/src/bytecode.rs": "ffe5d1facbc419376788a2d97fcc496ee06cf73befad072dac7b30614e0a5a73",
+    "crates/verifier/src/da.rs": "b994410030229e05ffa540a011815171a561ee8e6cbd518693f6aa99bb7a3c40",
+    "crates/verifier/src/field.rs": "763e6c35e086f64eb7a3aed24c3f12f44dfbc4e0722baec65eb27fb6670ae5e4",
+    "crates/verifier/src/hash.rs": "c277f6a003acd68235efae8425009051970c10a2ff71badfbd9cdae8d2848486",
+    "crates/verifier/src/keccak.rs": "529924eeb04ff095358a2dbc1ee5d70d836200b4e389cf736139ca2ea375be6c",
+    "crates/verifier/src/layout.rs": "4a1e400645dd7c735636fe8b5dcef3d4901597ff4f430bbd6cdae3b481ee67a8",
+    "crates/verifier/src/lib.rs": "ee7f91edb671d711169003760d2a65ccd0d12e417bee08d97700824dc6d8ead4",
+    "crates/verifier/src/merkle.rs": "02403bf41c1159523ad2f2a600a811f2eeafea06ce3da8601b999b5f33c41a64",
+    "crates/verifier/src/multilinear.rs": "33ad341afaa76a234495c49dfca25eb8259ef34d6642babf3214240e4d469255",
+    "crates/verifier/src/ring_switch.rs": "850e6a970a66b4bb57d6c94bbe0a6298ee86a2eb47f77e21e4f581bce568315d",
+    "crates/verifier/src/transcript.rs": "f9961452b7fa2a73a063624fb6ee12d9f88f6132a328d2ed58a19c78d5f65ca7",
+    "crates/verifier/src/whir.rs": "bc397921cd5da4d35b6a2acce2cc69bf0b3494fb1fa62a3848b900a78e911e17",
+    "crates/verifier/src/wire.rs": "d5cf8e1d01a17904b739a55a7786224e5def82fda66b1f84c58016dd03aa2e5b",
+    "crates/aggregation/src/proof.rs": "94fecc0896d7011469d2f4217730d65a042d20f30c347de192dcf72d1d924206",
+    "crates/aggregation/src/deferred.rs": "669751c304e7a2e0464420e62246942628084e7a20aa4fae8d1ab22071872d49",
+    "crates/aggregation/src/statement.rs": "5b1f60716ec775467252bbe3221d2357d0d19dfd1bab0915cad43e9f1c01036b",
+    "crates/aggregation/src/guest.rs": "a35bf551e2e45eb80c3d869a0b2eb7941ba072997961023635667d5038100398"
+  }
+}
