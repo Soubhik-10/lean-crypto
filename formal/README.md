@@ -92,7 +92,7 @@ workflow adds two gates:
   and rejects transitive dependencies beyond the three foundational axioms.
   Source digests, profile revision, toolchains and forbidden proof escapes are
   checked before building. No kernel-skipping development options are used.
-* Generate the pinned native prover's small-program corpus across rates 1–4.
+* Generate the pinned native prover's small-program corpus across rates 1â€“4.
   Compare both honest transports and 256 deterministic verification cases per
   fixture, then run the upstream wire driver's mutations on every phase,
   including the committed golden vector, duplicate/reordered queries, boundary
