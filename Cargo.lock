@@ -3,6 +3,26 @@
 version = 4
 
 [[package]]
+name = "aggregation"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "claims",
+ "fiat_shamir_prover",
+ "isa",
+ "keccak256",
+ "lean_da",
+ "lean_sphincs",
+ "lean_xmss",
+ "stable_lean_vm_core",
+ "stable_pcs",
+ "stable_primitives",
+ "tracing",
+ "verifier",
+ "zkdsl_compiler",
+]
+
+[[package]]
 name = "alloy-primitives"
 version = "1.7.3"
 source = "git+https://github.com/alloy-rs/core?rev=70a63bd609da78dcf03e593ae772fec883ce7768#70a63bd609da78dcf03e593ae772fec883ce7768"
@@ -85,6 +105,15 @@ dependencies = [
  "cfg-if",
  "cpufeatures 0.3.1",
  "rand_core 0.10.1",
+]
+
+[[package]]
+name = "claims"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "lean_sphincs",
+ "lean_xmss",
 ]
 
 [[package]]
@@ -195,6 +224,73 @@ dependencies = [
 ]
 
 [[package]]
+name = "experimental_keccak_gkr"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "experimental_parallel",
+ "experimental_pcs",
+ "experimental_primitives",
+ "fiat_shamir_prover",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "experimental_lean_vm_core"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "experimental_keccak_gkr",
+ "experimental_parallel",
+ "experimental_pcs",
+ "experimental_primitives",
+ "fiat_shamir_prover",
+ "isa",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "experimental_parallel"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "experimental_pcs"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "experimental_parallel",
+ "experimental_primitives",
+ "fiat_shamir_prover",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "experimental_primitives"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "experimental_parallel",
+ "fiat_shamir_prover",
+ "keccak256",
+]
+
+[[package]]
+name = "fiat_shamir_prover"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "keccak256",
+ "verifier",
+]
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -217,6 +313,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27f864f10dfb56725ce5ce5472bc52252c8f93a4ab86327122cebf62c5f59a17"
 dependencies = [
  "typenum",
+]
+
+[[package]]
+name = "isa"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "verifier",
 ]
 
 [[package]]
@@ -247,6 +351,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "keccak256"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+
+[[package]]
+name = "lean-aggregation"
+version = "0.1.0"
+dependencies = [
+ "lean-sphincs",
+ "lean_vm",
+]
+
+[[package]]
 name = "lean-sphincs"
 version = "0.1.0"
 dependencies = [
@@ -254,6 +371,50 @@ dependencies = [
  "serde",
  "serde_json",
  "wide",
+]
+
+[[package]]
+name = "lean_da"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "keccak256",
+ "stable_pcs",
+ "stable_primitives",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "lean_sphincs"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "keccak256",
+]
+
+[[package]]
+name = "lean_vm"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "aggregation",
+ "claims",
+ "experimental_lean_vm_core",
+ "isa",
+ "lean_da",
+ "lean_sphincs",
+ "lean_xmss",
+ "stable_lean_vm_core",
+ "verifier",
+]
+
+[[package]]
+name = "lean_xmss"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "keccak256",
 ]
 
 [[package]]
@@ -285,10 +446,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "once_cell"
+version = "1.21.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+
+[[package]]
 name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+
+[[package]]
+name = "pin-project-lite"
+version = "0.2.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c938015719552d665fd0553b90d96cd7ff58e83e4c061ca99e6bb78865a72752"
 
 [[package]]
 name = "proc-macro2"
@@ -493,6 +666,62 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 
 [[package]]
+name = "stable_keccak_gkr"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "fiat_shamir_prover",
+ "stable_parallel",
+ "stable_pcs",
+ "stable_primitives",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "stable_lean_vm_core"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "fiat_shamir_prover",
+ "isa",
+ "stable_keccak_gkr",
+ "stable_parallel",
+ "stable_pcs",
+ "stable_primitives",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "stable_parallel"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+
+[[package]]
+name = "stable_pcs"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "fiat_shamir_prover",
+ "stable_parallel",
+ "stable_primitives",
+ "tracing",
+ "verifier",
+]
+
+[[package]]
+name = "stable_primitives"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "fiat_shamir_prover",
+ "isa",
+ "keccak256",
+ "stable_parallel",
+]
+
+[[package]]
 name = "syn"
 version = "2.0.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -512,6 +741,37 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "tracing"
+version = "0.1.44"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100"
+dependencies = [
+ "pin-project-lite",
+ "tracing-attributes",
+ "tracing-core",
+]
+
+[[package]]
+name = "tracing-attributes"
+version = "0.1.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7490cfa5ec963746568740651ac6781f701c9c5ea257c58e057f3ba8cf69e8da"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "tracing-core"
+version = "0.1.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a"
+dependencies = [
+ "once_cell",
 ]
 
 [[package]]
@@ -551,6 +811,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
 
 [[package]]
+name = "verifier"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+
+[[package]]
 name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -571,6 +836,16 @@ name = "zeroize"
 version = "1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879"
+
+[[package]]
+name = "zkdsl_compiler"
+version = "0.1.0"
+source = "git+https://github.com/Rimeeeeee/leanVM?rev=84780fb42667bc288c0e567c125b7e10479fb568#84780fb42667bc288c0e567c125b7e10479fb568"
+dependencies = [
+ "isa",
+ "keccak256",
+ "verifier",
+]
 
 [[package]]
 name = "zmij"

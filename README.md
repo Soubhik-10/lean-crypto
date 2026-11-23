@@ -1,14 +1,17 @@
 # lean-sphincs
 
-A Rust workspace for post-quantum signature crates, with Alloy types and
-`no_std` support.
+A Rust workspace for post-quantum signatures and aggregation, with Alloy types.
+The native signature crate supports `no_std`; aggregation uses `std`.
 
 | Crate | Description |
 | --- | --- |
 | [lean-sphincs](crates/lean-sphincs) | leanSPHINCS key generation, deterministic signing and verification without heap allocation |
+| [lean-aggregation](crates/lean-aggregation) | leanSPHINCS proof aggregation and verification through the pinned leanVM backend |
 
 See the [crate README](crates/lean-sphincs/README.md) for its API,
 parameters, features and validation guarantees.
+
+Aggregation requires Rust 1.97.1; native signatures retain their Rust 1.90 minimum.
 
 ## Development
 
