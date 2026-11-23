@@ -11,6 +11,9 @@ program, transcript and deferred bytecode verification. The reference's leanXMSS
 claim list is empty and its DA commitment is absent. Transaction parsing,
 dependency digests, wrapper transport and consensus policy belong to the caller.
 
+Disable default features for a `no_std + alloc` claim-set API without leanVM.
+The default `std` feature enables reference proof generation and verification.
+
 ## Use
 
 ```rust,no_run
@@ -78,23 +81,39 @@ network's proof-size or dependency-count policy.
 
 ## Features and toolchains
 
-- The default selects the reference stable prover.
-- `experimental-prover` selects the pinned experimental prover, using the same
-  proof protocol. Enable this feature to match the experimental backend used by
-  the EIP-8288 devnet integration.
+- The default `std` feature enables `Aggregate`, `Aggregator`, proof errors,
+  backend limits and `setup`, selecting the reference stable prover.
+- With `default-features = false`, `Claims` and `B256` remain available in
+  `no_std + alloc` environments. leanVM is not built in this mode. An allocator
+  must be provided by applications that construct nonempty claim lists.
+- `experimental-prover` enables `std` and selects the pinned experimental
+  prover, using the same proof protocol. Enable this feature to match the
+  experimental backend used by the EIP-8288 devnet integration.
 - `asm-keccak` forwards to `lean-sphincs` for native signature admission. It
   does not replace the prover's Keccak implementation.
 
+The workspace's Rust 1.90 minimum applies to native signatures and the `no_std`
+claim-set API. Proof generation and aggregate-proof verification require `std`
+and Rust 1.97.1 because the pinned backend uses the standard library. They are
+not available in `no_std` mode; no alternate proof verifier is substituted.
+
+Both configurations expose the same sorted, deduplicated public claim pairs.
+With `std`, claims retain the reference's native representation so proof
+verification does not allocate or convert a second claim list. Feature selection
+is performed at compile time and adds no runtime dispatch to the proof path.
+
 This crate is consumed through Git because it depends on a pinned Git backend.
-It uses `std` and requires Rust 1.97.1 for that backend. The separate
-`lean-sphincs` crate retains its Rust 1.90 minimum, allocation-free API and
-`no_std` support. No native verification optimization is claimed to accelerate
-proving automatically.
+The separate `lean-sphincs` crate retains its allocation-free API and `no_std`
+support. No native verification optimization is claimed to accelerate proving
+by itself.
 
 ## Validation
 
 ```sh
 cargo test -p lean-aggregation --release --locked
+cargo test --workspace --release --locked --no-default-features
+cargo +1.90.0 check --workspace --locked --lib --no-default-features
+cargo check --workspace --locked --lib --no-default-features --target thumbv7em-none-eabi
 cargo test -p lean-aggregation --release --locked --features experimental-prover,asm-keccak
 cargo clippy -p lean-aggregation --release --locked --all-targets --all-features -- -D warnings
 cargo doc -p lean-aggregation --locked --no-deps --all-features
@@ -105,7 +124,10 @@ pinned reference and checks interoperability in both directions. It also covers
 exact claim binding, signature and proof mutations, malformed encodings,
 overlapping children, mixed raw and recursive inputs, recursive pruning without
 original signatures, uncovered claims and the child limit. It runs against
-either prover selected by the feature flag.
+either prover selected by the feature flag. Separate claim-set tests run with
+and without `std`, checking identical ordering across public-key and message
+byte boundaries. CI checks the entire `no_std` workspace on ARM Cortex-M and
+at Rust 1.90, in addition to the default and experimental proof configurations.
 
 The workspace's Lean proofs and Rust-to-Lean signature conformance evidence
 remain scoped to `lean-sphincs`. They do not establish a formal proof of this

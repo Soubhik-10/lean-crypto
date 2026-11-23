@@ -113,7 +113,10 @@ jobs:
       - name: Install Rust and the ARM Cortex-M target
         run: rustup toolchain install 1.97.1 --profile minimal --target thumbv7em-none-eabi
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
-      - run: cargo check -p lean-sphincs --locked --lib --no-default-features --target thumbv7em-none-eabi
+      - name: Test the workspace without std features
+        run: cargo test --workspace --release --locked --no-default-features
+      - name: Check the no_std workspace on ARM Cortex-M
+        run: cargo check --workspace --locked --lib --no-default-features --target thumbv7em-none-eabi
 
   msrv:
     name: Minimum supported Rust (1.90)
@@ -125,4 +128,7 @@ jobs:
       - name: Install the declared minimum Rust version
         run: rustup toolchain install 1.90.0 --profile minimal
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
-      - run: cargo +1.90.0 check -p lean-sphincs --locked --lib --all-features
+      - name: Check the no_std workspace at the minimum Rust version
+        run: cargo +1.90.0 check --workspace --locked --lib --no-default-features
+      - name: Check workspace native hash features at the minimum Rust version
+        run: cargo +1.90.0 check --workspace --locked --lib --no-default-features --features asm-keccak

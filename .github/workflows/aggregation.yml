@@ -30,6 +30,6 @@ jobs:
         run: rustup toolchain install 1.97.1 --profile minimal --component clippy
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: Test reference interoperability and recursive pruning
-        run: cargo test -p lean-aggregation --release --locked --features experimental-prover,asm-keccak
+        run: cargo test -p lean-aggregation --release --locked --no-default-features --features experimental-prover,asm-keccak
       - name: Lint the adapter and its tests and benchmarks
         run: cargo clippy -p lean-aggregation --release --locked --all-targets --all-features -- -D warnings

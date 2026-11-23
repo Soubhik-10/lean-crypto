@@ -1,7 +1,8 @@
 # lean-sphincs
 
 A Rust workspace for post-quantum signatures and aggregation, with Alloy types.
-The native signature crate supports `no_std`; aggregation uses `std`.
+Both crates support `no_std`; aggregation claim lists use `alloc`. The default
+`std` feature enables reference proof generation and verification.
 
 | Crate | Description |
 | --- | --- |
@@ -11,13 +12,16 @@ The native signature crate supports `no_std`; aggregation uses `std`.
 See the [crate README](crates/lean-sphincs/README.md) for its API,
 parameters, features and validation guarantees.
 
-Aggregation requires Rust 1.97.1; native signatures retain their Rust 1.90 minimum.
+The `no_std` workspace supports Rust 1.90. Reference proof generation and
+verification require `std` and Rust 1.97.1 for the pinned backend.
 
 ## Development
 
 ```sh
 cargo test --workspace --release --locked
 cargo test --workspace --release --locked --all-features
+cargo test --workspace --release --locked --no-default-features
+cargo +1.90.0 check --workspace --locked --lib --no-default-features
 cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 cargo doc --workspace --no-deps --all-features --locked
 cargo fmt --all -- --check

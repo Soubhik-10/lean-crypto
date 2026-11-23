@@ -1,5 +1,7 @@
 //! Native signature interoperability, exact coverage and recursive pruning.
 
+#![cfg(feature = "std")]
+
 use lean_aggregation::{
     Aggregate, AggregateError, Aggregator, B256, Claims, MAX_LOG_INV_RATE, MAX_RECURSIONS, setup,
 };
@@ -25,19 +27,6 @@ fn reference_claims(claims: &Claims) -> AggregateClaims {
             .collect(),
         ..Default::default()
     }
-}
-
-#[test]
-fn claims_use_reference_order_and_set_semantics() {
-    let a = (B256::repeat_byte(1), B256::repeat_byte(9));
-    let b = (B256::repeat_byte(2), B256::repeat_byte(0));
-    let c = (a.0, B256::repeat_byte(8));
-    let claims = Claims::new([b, a, c, b]);
-    assert_eq!(claims.len(), 3);
-    assert!(!claims.is_empty());
-    assert_eq!(claims.iter().collect::<Vec<_>>(), [c, a, b]);
-    assert_eq!(claims, Claims::new([a, b, c]));
-    assert!(Claims::default().is_empty());
 }
 
 #[test]
