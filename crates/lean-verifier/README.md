@@ -149,25 +149,42 @@ preparation and proof generation are outside the timing loop. It alternates the
 implementations and reports the median of five batches of 30 calls. Use identical
 compiler/CPU flags and an otherwise idle machine when comparing results.
 
-A run on Windows x86_64, AMD Ryzen 9 8940HX, Rust 1.97.1,
-`RUSTFLAGS="-C target-cpu=native"`, thin LTO, default hashing, pinned to logical CPU 8:
+Measured 23 November 2026 on an AMD Ryzen 9 8940HX, Linux/WSL2 x86_64,
+Rust 1.97.1, native CPU flags, thin LTO, one codegen unit and logical CPU 8:
 
-| Case | Local before (ms) | Local after (ms) | Pinned reference in after run (ms) |
-| --- | ---: | ---: | ---: |
-| Leaf verification | 18.860 | 13.156 | 18.918 |
-| Leaf decoding + verification | 23.401 | 17.767 | 23.603 |
-| Recursive verification | 26.344 | 20.386 | 26.927 |
-| Recursive decoding + verification | 31.720 | 25.735 | 32.165 |
+| Case | Default: local / reference (ms) | `asm-keccak`: local / reference (ms) |
+| --- | ---: | ---: |
+| Leaf verification | 8.256 / 11.979 | 8.117 / 11.778 |
+| Leaf decoding + verification | 10.425 / 14.318 | 10.432 / 14.256 |
+| Recursive verification | 12.412 / 17.236 | 12.250 / 17.064 |
+| Recursive decoding + verification | 14.828 / 19.876 | 14.951 / 20.017 |
 
-Retaining computed Merkle roots reduced end-to-end decoding + verification time
-by 24% for leaf proofs and 19% for recursive proofs versus the previous port on
-this host. The matched reference comparison is about 25% and 20%, respectively.
-Verification-only results assume an already decoded proof and exclude the work
-performed by the decoder. These are host-specific measurements, not portable
-guarantees. `asm-keccak` affects the Alloy streaming hashes; the VM's reference
-Merkle and transcript kernels remain the same. Signing and proving are unchanged.
+Each build runs three fresh processes, five rounds per process and 30 paired
+calls per round: 450 retained samples per implementation/workload/backend.
+The table shows medians of the 15 round means. End-to-end time is about 27%
+lower for leaf proofs and 24–25% lower for recursive proofs versus the pinned
+reference, using median paired round ratios. These are host-specific results.
+The leaf aggregates two leanSPHINCS signatures; the recursive proof merges it
+and retains one claim. Both use log-inverse-rate 1.
 
-An `asm-keccak` repeat measured decoding + verification at 21.647 / 28.071 ms
-(local/reference) for leaf proofs and 31.266 / 37.586 ms for recursive proofs:
-23% and 17% lower, respectively. Absolute times varied between runs; compare
-the paired measurements within each run.
+`asm-keccak` affects the Alloy streaming hashes; the VM's reference Merkle and
+transcript kernels remain the same. Signing and proving are unchanged. Frequency,
+temperature and the SMT sibling are not controlled; compare paired runs rather
+than absolute timings from other hosts or earlier Windows campaigns.
+
+```sh
+# Build, pin, measure both hashing configurations and retain raw paired timings.
+bash benchmarks/compare.sh verifier --cpu 8 --session benchmarks/results/verifier-run
+
+# Inspect the plan or compile without generating any proofs.
+bash benchmarks/compare.sh verifier plan
+bash benchmarks/compare.sh verifier build
+
+# Recompute the report without executing benchmark binaries.
+bash benchmarks/compare.sh verifier report --session benchmarks/results/verifier-run
+```
+
+The preset requires Linux/WSL and the [signature suite's tools](../../benchmarks/SUITE.md#requirements).
+It records source and binary hashes, compiler/flags, resolved Cargo features,
+machine settings, proof sizes/fingerprints and every raw timing pair. Global
+Keccak caching is forbidden. [Retained campaign](../../benchmarks/data/verifier-2026-11-23.json).

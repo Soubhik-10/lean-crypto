@@ -2,10 +2,10 @@ name: Benchmark adapter checks
 
 on:
   pull_request:
-    paths: ['crates/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['crates/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/verifier.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   push:
     branches: [main]
-    paths: ['crates/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
+    paths: ['crates/**', 'benchmarks/evm2/**', 'benchmarks/suite/**', 'benchmarks/run.sh', 'benchmarks/compare.sh', 'benchmarks/verifier.sh', 'benchmarks/prover/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/benchmark-tests.yml']
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,12 @@ jobs:
           for script in scripts/*.sh benchmarks/*.sh benchmarks/suite/*.sh benchmarks/prover/*.sh; do bash -n "$script"; done
           bash benchmarks/suite/test_setup.sh
           bash benchmarks/run.sh plan --targets native --hashing portable --recovery k256 --groups ecrecover > /dev/null
+          bash benchmarks/compare.sh verifier plan > /dev/null
       - name: Check adapters and report analysis
         run: |
           cargo +1.97.1 clippy --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --bench matrix --test batched --no-default-features -- -D warnings
           cargo +1.97.1 test --locked --profile bench --manifest-path benchmarks/evm2/Cargo.toml --test batched --no-default-features -- --test-threads=1
+      - name: Check the aggregate verifier benchmark end to end
+        if: matrix.cpu == 'native'
+        shell: bash
+        run: bash benchmarks/compare.sh verifier --hashing portable --passes 1 --rounds 1 --iterations 1 --session "$RUNNER_TEMP/verifier-smoke"

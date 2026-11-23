@@ -19,6 +19,35 @@ backend requires `std` and Rust 1.97.1. The independent `lean-verifier` needs
 prepared, fingerprint-checked program data; see its [README](crates/lean-verifier/README.md)
 for setup, compatibility and validation limits.
 
+## Benchmarks
+
+AMD Ryzen 9 8940HX, Linux/WSL2, Rust 1.97.1, native CPU flags,
+`asm-keccak`, thin LTO, one codegen unit and logical CPU 8; measured 23 November 2026.
+
+| Workload | This workspace | Pinned leanVM reference | Speedup |
+| --- | ---: | ---: | ---: |
+| leanSPHINCS verification | 38.56 µs | 128.86 µs | 3.34x |
+| leanSPHINCS signing | 93.23 ms | 127.25 ms | 1.36x |
+| leanSPHINCS key generation | 48.68 ms | 66.28 ms | 1.36x |
+| Aggregate leaf: decode + verify | 10.432 ms | 14.256 ms | 1.37x |
+| Aggregate recursive: decode + verify | 14.951 ms | 20.017 ms | 1.34x |
+
+Both campaigns use three fresh processes. Signature results retain 132 samples
+per operation over 11 shared fixtures; aggregate results retain 450 paired calls
+per workload/backend, summarized as medians of round means. The aggregate leaf
+contains two signatures; its recursive parent retains one claim, at log-inverse-rate 1.
+Preparation and proving are outside the timer. Native evm2 ecrecover measured
+26.69 µs in the signature campaign. These are host-specific CPU timings.
+
+```sh
+bash benchmarks/compare.sh native --cpu 8 --cc clang --session benchmarks/results/signatures
+bash benchmarks/compare.sh verifier --cpu 8 --session benchmarks/results/verifier
+```
+
+[Full setup and raw results](benchmarks/README.md),
+[verifier default/assembly results](crates/lean-verifier/README.md#validation-and-benchmarks),
+and [benchmark commands](benchmarks/SUITE.md).
+
 ## Development
 
 ```sh

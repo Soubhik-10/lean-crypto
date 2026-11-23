@@ -5,6 +5,8 @@ records its own source revisions, build details and sampling boundaries.
 
 | Dataset | Evidence |
 | --- | --- |
+| [Fresh native APIs](native-2026-11-23.json) | Linux/WSL lean-sphincs/leanVM/evm2 campaign; all 132 samples per operation and exact setup |
+| [Aggregate verifier](verifier-2026-11-23.json) | CPU-pinned default/assembly runs, all paired samples and source/build/proof fingerprints |
 | [Native API confirmation](ecrecover-2026-11-18.json) | Rust API/recovery campaigns and their original controls |
 | [Recovery backends](ecrecover-backend-audit-2026-11-18.json) | C compiler controls, k256 and 32 ECDSA fixtures |
 | [leanVM versus evm2](leanvm-ecrecover-2026-11-18.json) | Six fresh processes and every retained sample |

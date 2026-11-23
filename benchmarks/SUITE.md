@@ -71,6 +71,40 @@ run requires a new session path. Output includes `README-benchmarks.md`,
 `summary.json`, `summary.csv`, normalized `measurements.json`, complete raw
 reports and setup fingerprints. No result is written into the repository README.
 
+## Aggregate verifier
+
+The verifier preset uses the same CPU-allocation, process-launch and machine/source
+fingerprint helpers. It compares the independent `lean-verifier` with its pinned
+native leanVM verifier on the same leaf and recursive aggregate proofs, including
+deferred evaluation, both with and without decoding. All setup and proving are
+outside the timer. Default and assembly streaming hashes are separate builds.
+
+```sh
+bash benchmarks/compare.sh verifier plan
+bash benchmarks/compare.sh verifier build
+bash benchmarks/compare.sh verifier --cpu 8 --session benchmarks/results/verifier-run
+bash benchmarks/compare.sh verifier report --session benchmarks/results/verifier-run
+
+# Optional longer workload; three fresh processes per hashing build remain the default.
+bash benchmarks/compare.sh verifier --cpu 8 --rounds 9 --iterations 60 \
+  --session benchmarks/results/verifier-long
+```
+
+The default is three fresh processes, five sampling rounds each and 30 calls
+per round. Calls alternate implementation order, and hashing-build order rotates
+between processes. Reports use medians of per-round means and paired round ratios;
+every individual timing is retained. The leaf contains two leanSPHINCS signatures,
+and its recursive parent retains one claim; both use log-inverse-rate 1. Verification
+alone assumes decoded proofs; decoding + verification includes unpruning and its
+hashes. Program preparation and reference proving are excluded from both.
+
+Select `--hashing portable` or `--hashing assembly` for one build. `--target-cpu`
+defaults to `native`; CPU selection must lie inside the current allocation.
+A new run requires a fresh `--session`. Metadata records the exact source and
+binary fingerprints, dependency features, Rust/C compiler, flags, CPU and sampling
+settings. The report rejects missing/duplicate processes and incomplete samples.
+See the [crate results](../crates/lean-verifier/README.md#validation-and-benchmarks).
+
 ## Native signature and evm2 matrix
 
 Planning probes CPU/OS instruction support without generating keys, signatures

@@ -132,35 +132,32 @@ separate checks.
 
 ## Benchmarks
 
-AMD Ryzen 9 8940HX, Windows x86-64 MSVC, Rust 1.97.1. Both libraries use
-release optimization and native CPU features; our build enables `asm-keccak`.
-Each row uses three processes and 132 samples over eleven shared fixtures.
+Measured 23 November 2026 on an AMD Ryzen 9 8940HX, Linux/WSL2 x86_64,
+Rust 1.97.1, native CPU flags, `asm-keccak`, thin LTO, one codegen unit,
+and logical CPU 8:
 
-| Operation | lean-sphincs | leanVM | Speedup |
+| Native API | lean-sphincs | Unmodified pinned leanVM | Speedup |
 | --- | ---: | ---: | ---: |
-| Verification (µs) | 36.91 | 119.28 | 3.23x |
-| Signing (ms) | 88.25 | 118.68 | 1.34x |
-| Key generation (ms) | 46.34 | 61.49 | 1.33x |
+| Verification | 38.56 µs | 128.86 µs | 3.34x |
+| Signing | 93.23 ms | 127.25 ms | 1.36x |
+| Key generation | 48.68 ms | 66.28 ms | 1.36x |
 
-Verification comes from the batching audit; signing/key generation from the
-native API confirmation. Each row compares matched builds. The audit confirms
-identical hash inputs and isolates a 2.37x gain from batching within one signature.
-
-| Recovery audit configuration | Our verify (µs) | evm2 ecrecover (µs) | Ratio |
-| --- | ---: | ---: | ---: |
-| Assembly Keccak + Clang C/libsecp256k1 | 36.84 | 25.63 | 1.44x |
-| RustCrypto Keccak + Rust k256 | 40.66 | 50.65 | 0.80x |
-
-These native CPU timings exclude transaction work and do not determine gas prices.
-[Results and setup](../../benchmarks/README.md) · [Batching, gains and tradeoffs](../../benchmarks/BATCHING.md) ·
-[Shell benchmark commands](../../benchmarks/SUITE.md#compare-ours-leanvm-and-ecrecover).
+Three fresh processes retain 132 samples per operation over 11 shared fixtures.
+Public keys and complete deterministic signatures must match before timing.
+Both libraries use native optimizations; the reference uses its CPU-selected
+Keccak kernel. This crate verifies encoded signature bytes, while the reference
+receives already parsed inputs. No samples are removed. These are native API
+measurements; setup and correctness checks are untimed.
 
 ```sh
-bash benchmarks/compare.sh native
-bash benchmarks/compare.sh backends
+bash benchmarks/compare.sh native --cpu 8 --cc clang --session benchmarks/results/signatures
 ```
 
-CodSpeed separately tracks regressions with SSE2 and AVX2 builds.
+Requires Linux/WSL and the [listed tools](../../benchmarks/SUITE.md#requirements).
+[Raw samples and setup](../../benchmarks/data/native-2026-11-23.json),
+[sampling commands](../../benchmarks/SUITE.md#compare-ours-leanvm-and-ecrecover),
+and [batching explanation](../../benchmarks/BATCHING.md). Frequency, temperature
+and the SMT sibling are not controlled; results are specific to this host.
 
 ## License
 

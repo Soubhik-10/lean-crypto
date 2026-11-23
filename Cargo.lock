@@ -381,6 +381,8 @@ dependencies = [
  "alloy-primitives",
  "lean-sphincs",
  "lean_vm",
+ "serde",
+ "serde_json",
  "verifier",
 ]
 

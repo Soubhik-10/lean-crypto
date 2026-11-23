@@ -6,11 +6,12 @@ ROOT=$(cd -- "$HERE/.." && pwd -P)
 
 usage() {
     cat <<'HELP'
-Usage: bash benchmarks/compare.sh [native|backends|hashes] [plan|build|run|report] [options]
+Usage: bash benchmarks/compare.sh [native|backends|hashes|verifier] [plan|build|run|report] [options]
 Default: native run (builds, measures, then reports).
   native    Our native APIs, unmodified leanVM and C-backed evm2 ecrecover
   backends  Also compare RustCrypto/assembly hashing and evm2 k256 recovery
   hashes    Isolated Alloy/upstream hash kernels across input sizes
+  verifier  Aggregate proof verification versus the pinned leanVM verifier
   --session PATH      Output directory; required for report or --resume
   --cpu N             Pin to an allowed logical CPU (default: first allowed)
   --cc PROGRAM        C compiler executable (default: CC or cc)
@@ -29,6 +30,7 @@ HELP
 preset=native; action=run
 if (($#)) && [[ $1 != --* ]]; then preset=$1; shift; fi
 if (($#)) && [[ $1 != --* ]]; then action=$1; shift; fi
+if [[ $preset == verifier ]]; then exec bash "$HERE/verifier.sh" "$action" "$@"; fi
 case "$preset" in
     native) options=(--profile raw --targets native --hashing assembly --recovery libsecp256k1 --groups direct,ecrecover --samples 44 --passes 3 --sample-ms 20);;
     backends) options=(--profile raw --targets native --hashing portable,assembly --recovery libsecp256k1,k256 --groups direct,ecrecover --samples 44 --passes 3 --sample-ms 20);;
