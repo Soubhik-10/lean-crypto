@@ -1,0 +1,83 @@
+name: Aggregate fuzzing
+
+on:
+  pull_request:
+    paths: ['crates/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_aggregate_fuzz.sh', '.github/workflows/aggregate-fuzz.yml']
+  push:
+    branches: [main]
+    paths: ['crates/**', 'testing/**', 'fuzz/**', 'Cargo.toml', 'Cargo.lock', 'scripts/seed_aggregate_fuzz.sh', '.github/workflows/aggregate-fuzz.yml']
+  schedule:
+    - cron: '47 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aggregate-fuzz-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  fuzz:
+    name: Aggregate (${{ matrix.backend }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        backend: [portable, assembly]
+    env:
+      RUSTFLAGS: '-C target-cpu=x86-64'
+      BACKEND: ${{ matrix.backend }}
+      EVENT_NAME: ${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang
+          rustup toolchain install 1.97.1 --profile minimal --component clippy
+          rustup toolchain install nightly-2026-10-20 --profile minimal
+          cargo +1.97.1 install cargo-fuzz --version 0.13.2 --locked
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          workspaces: |
+            . -> target
+            testing -> target
+            fuzz -> target
+          shared-key: aggregate-fuzz-${{ matrix.backend }}
+      - name: Check fuzz harness
+        run: |
+          features=aggregate
+          if [[ $BACKEND == assembly ]]; then features+=,asm-keccak; fi
+          cargo +1.97.1 clippy --locked --manifest-path testing/Cargo.toml --all-targets --features "$features" -- -D warnings
+          cargo +1.97.1 test --release --locked --manifest-path testing/Cargo.toml --lib --features "$features"
+      - name: Generate and verify honest and hostile seeds
+        run: bash scripts/seed_aggregate_fuzz.sh
+      - name: Fuzz decoding and complete verification
+        run: |
+          features=aggregate
+          if [[ $BACKEND == assembly ]]; then features+=,asm-keccak; fi
+          seconds=180
+          if [[ $EVENT_NAME == schedule ]]; then seconds=900; fi
+          mkdir -p fuzz/logs
+          for target in aggregate_decode aggregate_verify; do
+            cargo +nightly-2026-10-20 fuzz run "$target" --features "$features" -- \
+              -max_len=2097152 -max_total_time="$seconds" -timeout=30 -rss_limit_mb=4096 \
+              2>&1 | tee "fuzz/logs/$target.log"
+          done
+      - name: Save logs and failures
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: aggregate-fuzz-${{ matrix.backend }}
+          path: |
+            fuzz/logs/
+            fuzz/artifacts/
+          if-no-files-found: ignore
+          retention-days: 30

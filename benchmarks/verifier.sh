@@ -50,10 +50,13 @@ plan=$(jq -n --arg toolchain "$toolchain" --arg target_cpu "$target_cpu" --arg h
     '{toolchain:$toolchain,target_cpu:$target_cpu,hashing:($hashing|split(",")),cpu:$cpu,passes:$passes,rounds:$rounds,iterations:$iterations}')
 if [[ $action == plan ]]; then printf '%s\n' "$plan"; exit 0; fi
 
-report() {
+report() (
     [[ -n $session && -f $session/metadata.json ]] || { fail 'Report requires a completed session'; return 1; }
     local -a raw=("$session"/pass-*.json)
     [[ -f ${raw[0]} ]] || { fail 'No raw measurements'; return 1; }
+    local temporary
+    temporary=$(mktemp -d "$session/.report.XXXXXXXX")
+    trap 'rm -f -- "$temporary/measurements.json" "$temporary/README-benchmarks.md"; rmdir -- "$temporary"' EXIT
     jq -es '
       def median: sort | length as $n | (.[(($n-1)/2|floor)]+.[$n/2|floor])/2;
       .[0] as $meta | .[1:] as $runs |
@@ -73,16 +76,18 @@ report() {
         backend:.[0].backend,name:.[0].name,blocks:length,
         local_ms:(map(.local_ns)|median/1000000), reference_ms:(map(.reference_ns)|median/1000000),
         paired_time_reduction_percent:(map(100*(1-.local_ns/.reference_ns))|median)}))}
-    ' "$session/metadata.json" "${raw[@]}" >"$session/measurements.json"
+    ' "$session/metadata.json" "${raw[@]}" >"$temporary/measurements.json"
     {
         printf '# Aggregate verifier benchmark\n\n'
-        jq -r '.metadata.machine_before|"CPU: \(.model_name); \(.platform); logical CPU \(.logical_cpu)."' "$session/measurements.json"
+        jq -r '.metadata.machine_before|"CPU: \(.model_name); \(.platform); logical CPU \(.logical_cpu)."' "$temporary/measurements.json"
         printf '\n| Hashing | Case | Local (ms) | Reference (ms) | Paired time reduction |\n| --- | --- | ---: | ---: | ---: |\n'
-        jq -r '.summary[]|"| \(.backend) | \(.name) | \(.local_ms*1000|round|./1000) | \(.reference_ms*1000|round|./1000) | \(.paired_time_reduction_percent*10|round|./10)% |"' "$session/measurements.json"
+        jq -r '.summary[]|"| \(.backend) | \(.name) | \(.local_ms*1000|round|./1000) | \(.reference_ms*1000|round|./1000) | \(.paired_time_reduction_percent*10|round|./10)% |"' "$temporary/measurements.json"
         printf '\nMedian of per-round means across fresh processes. Each call uses the same proof and claims in both implementations; call order alternates.\n'
-    } >"$session/README-benchmarks.md"
+    } >"$temporary/README-benchmarks.md"
+    mv -f -- "$temporary/measurements.json" "$session/measurements.json"
+    mv -f -- "$temporary/README-benchmarks.md" "$session/README-benchmarks.md"
     cat "$session/README-benchmarks.md"
-}
+)
 if [[ $action == report ]]; then report; exit 0; fi
 mkdir -p -- "$BENCH_BUILD"
 exec {build_lock}>"$BENCH_BUILD/build.lock"

@@ -297,12 +297,41 @@ jq -n '{schema_version:1,reference_revision:"fixture",rounds:1,iterations:1,hash
  cases:(["leaf verify","leaf decode + verify","recursive verify","recursive decode + verify"]|map({name:.,samples:[{round:0,iteration:0,local_ns:100,reference_ns:200}]}))}' >"$verifier_dir/pass-01-portable.json"
 bash "$HERE/compare.sh" verifier report --session "$verifier_dir" >"$verifier_dir/report.out"
 jq -e '(.summary|length)==4 and all(.summary[];.local_ms==0.0001 and .reference_ms==0.0002 and .paired_time_reduction_percent==50)' "$verifier_dir/measurements.json" >/dev/null
+cp "$verifier_dir/measurements.json" "$verifier_dir/measurements.saved"
+cp "$verifier_dir/README-benchmarks.md" "$verifier_dir/report.saved"
+preserved_verifier_report() {
+    cmp "$verifier_dir/measurements.saved" "$verifier_dir/measurements.json"
+    cmp "$verifier_dir/report.saved" "$verifier_dir/README-benchmarks.md"
+    [[ -z $(find "$verifier_dir" -maxdepth 1 -name '.report.*' -print) ]]
+}
+mv "$verifier_dir/pass-01-portable.json" "$verifier_dir/pass.saved"
+expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
+preserved_verifier_report
+mv "$verifier_dir/pass.saved" "$verifier_dir/pass-01-portable.json"
 cp "$verifier_dir/pass-01-portable.json" "$verifier_dir/pass-02-portable.json"
 jq '.plan.passes=2' "$verifier_dir/metadata.json" >"$verifier_dir/meta.next"
 mv "$verifier_dir/meta.next" "$verifier_dir/metadata.json"
+mv "$verifier_dir/pass-02-portable.json" "$verifier_dir/pass-02.saved"
 expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
+preserved_verifier_report
+mv "$verifier_dir/pass-02.saved" "$verifier_dir/pass-02-portable.json"
+expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
+preserved_verifier_report
 jq '.process_pass=2|.cases[0].samples=[]' "$verifier_dir/pass-01-portable.json" >"$verifier_dir/pass-02-portable.json"
 expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
-ok 'Verifier plans and report-only replay reject missing/duplicate processes and incomplete paired samples'
+preserved_verifier_report
+printf '{invalid JSON\n' >"$verifier_dir/pass-02-portable.json"
+expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
+preserved_verifier_report
+jq '.process_pass=2' "$verifier_dir/pass-01-portable.json" >"$verifier_dir/pass-02-portable.json"
+jq '.machine_before=1' "$verifier_dir/metadata.json" >"$verifier_dir/meta.next"
+mv "$verifier_dir/meta.next" "$verifier_dir/metadata.json"
+expect_failure bash "$HERE/compare.sh" verifier report --session "$verifier_dir"
+preserved_verifier_report
+jq '.machine_before={model_name:"Synthetic CPU",platform:"test",logical_cpu:0}' "$verifier_dir/metadata.json" >"$verifier_dir/meta.next"
+mv "$verifier_dir/meta.next" "$verifier_dir/metadata.json"
+bash "$HERE/compare.sh" verifier report --session "$verifier_dir" >"$verifier_dir/report.out"
+jq -e 'all(.summary[];.blocks==2)' "$verifier_dir/measurements.json" >/dev/null
+ok 'Verifier report failures preserve existing summaries and clean temporary output'
 
 printf 'All %d shell setup checks passed; no cryptographic benchmarks ran.\n' "$checks"

@@ -1,0 +1,13 @@
+[package]
+name = "public-types-check"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+alloy-primitives = { version = "1.7.3", default-features = false }
+lean-sphincs = { path = "../../crates/lean-sphincs" }
+lean-verifier = { path = "../../crates/lean-verifier" }
+lean-aggregation = { path = "../../crates/lean-aggregation", default-features = false }
+
+[workspace]

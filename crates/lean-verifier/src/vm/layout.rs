@@ -638,19 +638,28 @@ fn stack(kappas: &[usize]) -> (BTreeMap<usize, u64>, usize) {
     )
 }
 
+pub(crate) fn validate_announced_sizes(
+    bytecode: &Bytecode,
+    log_memory: u64,
+    table_rows: &[u64],
+) -> Result<(), VerifierError> {
+    let log_bytecode = log2_strict(bytecode.len() as u64)?;
+    require(
+        (MIN_LOG_MEMORY as u64..=MAX_LOG_MEMORY as u64).contains(&log_memory)
+            && table_rows.len() == N_TABLES
+            && table_rows.iter().all(|&rows| rows <= 1 << MAX_TABLE_LOG)
+            && (BUS_BITS..=MAX_LOG_BYTECODE + BUS_BITS).contains(&log_bytecode),
+        VerifierError::AnnouncedTableSizes,
+    )
+}
+
 pub(crate) fn build_layout<'a>(
     bytecode: &'a Bytecode,
     log_memory: u64,
     table_rows: &[u64],
 ) -> Result<Layout<'a>, VerifierError> {
-    let log_bytecode = log2_strict(bytecode.len() as u64)?;
-    require(
-        (MIN_LOG_MEMORY as u64..=MAX_LOG_MEMORY as u64).contains(&log_memory)
-            && table_rows.iter().all(|&rows| rows <= 1 << MAX_TABLE_LOG)
-            && (BUS_BITS..=MAX_LOG_BYTECODE + BUS_BITS).contains(&log_bytecode),
-        VerifierError::AnnouncedTableSizes,
-    )?;
-    let log_bytecode = log_bytecode - BUS_BITS;
+    validate_announced_sizes(bytecode, log_memory, table_rows)?;
+    let log_bytecode = log2_strict(bytecode.len() as u64)? - BUS_BITS;
     let log_memory = log_memory as usize;
     // A table's height is the least power of two holding its rows.
     let table_log_heights: Vec<usize> = table_rows

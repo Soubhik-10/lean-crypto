@@ -30,12 +30,14 @@ jobs:
         run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt
       - name: Check formatting of every package
         run: |
-          for manifest in Cargo.toml testing/Cargo.toml fuzz/Cargo.toml benchmarks/evm2/Cargo.toml; do
+          for manifest in Cargo.toml testing/Cargo.toml testing/public-types/Cargo.toml fuzz/Cargo.toml benchmarks/evm2/Cargo.toml; do
             cargo fmt --manifest-path "$manifest" --all -- --check
           done
       - name: Test the formal comparison gate
         run: python3 -m unittest discover -s scripts -p test_run_formal.py
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - name: Check registry public types without dependency patches
+        run: cargo check --locked --manifest-path testing/public-types/Cargo.toml --target-dir target/public-types
       - name: Check documentation
         env:
           RUSTDOCFLAGS: -D warnings
