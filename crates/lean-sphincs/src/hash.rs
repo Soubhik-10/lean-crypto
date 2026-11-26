@@ -97,29 +97,57 @@ impl HashContext {
 
 #[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
 impl HashContext {
+    pub(crate) fn set_positions(
+        addresses: &mut [Self; VERIFY_BATCH_WIDTH],
+        height: u32,
+        positions: [u32; VERIFY_BATCH_WIDTH],
+    ) {
+        let mut lane = 0;
+        while lane < VERIFY_BATCH_WIDTH {
+            addresses[lane].set_position(height, positions[lane]);
+            lane += 1;
+        }
+    }
+
     pub(crate) fn hash_nodes(
         addresses: &mut [Self; VERIFY_BATCH_WIDTH],
-        values: [&[u8; NODE_BYTES]; VERIFY_BATCH_WIDTH],
+        values: [B128; VERIFY_BATCH_WIDTH],
     ) -> [B128; VERIFY_BATCH_WIDTH] {
-        let mut values = values.into_iter();
-        batch::hash(
-            addresses
-                .each_mut()
-                .map(|address| address.node_input(values.next().expect("one node per address"))),
-        )
+        let mut inputs = [[0; NODE_INPUT_BYTES]; VERIFY_BATCH_WIDTH];
+        let mut lane = 0;
+        while lane < VERIFY_BATCH_WIDTH {
+            inputs[lane] = *addresses[lane].node_input(&values[lane].0);
+            lane += 1;
+        }
+        batch::hash(inputs)
     }
 
     pub(crate) fn hash_parents(
         addresses: &mut [Self; VERIFY_BATCH_WIDTH],
         values: &[B128; VERIFY_BATCH_WIDTH],
-        siblings: [&[u8; NODE_BYTES]; VERIFY_BATCH_WIDTH],
+        siblings: [B128; VERIFY_BATCH_WIDTH],
         positions: [u32; VERIFY_BATCH_WIDTH],
     ) -> [B128; VERIFY_BATCH_WIDTH] {
-        let mut inputs = values.iter().zip(siblings).zip(positions);
-        batch::hash(addresses.each_mut().map(|address| {
-            let ((value, sibling), position) = inputs.next().expect("one pair per address");
-            address.parent_input(value, sibling, position & 1 != 0)
-        }))
+        let mut inputs = [[0; PARENT_INPUT_BYTES]; VERIFY_BATCH_WIDTH];
+        let mut lane = 0;
+        while lane < VERIFY_BATCH_WIDTH {
+            inputs[lane] = *addresses[lane].parent_input(
+                &values[lane],
+                &siblings[lane].0,
+                positions[lane] & 1 != 0,
+            );
+            lane += 1;
+        }
+        batch::hash(inputs)
+    }
+}
+
+#[cfg(all(target_arch = "x86_64", target_feature = "sse2"))]
+pub(crate) fn append_nodes<const N: usize>(hasher: &mut Keccak256, nodes: &[B128; N]) {
+    let mut i = 0;
+    while i < N {
+        hasher.update(nodes[i]);
+        i += 1;
     }
 }
 

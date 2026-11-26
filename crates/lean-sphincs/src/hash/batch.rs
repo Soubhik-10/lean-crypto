@@ -17,7 +17,9 @@ const RATE_LANES: usize = 17; // 136-byte rate for Keccak-256.
 const ROUNDS: usize = 24;
 
 // FIPS 202 section 3.2.5, using the same LFSR continuously across rounds.
-const ROUND_CONSTANTS: [u64; ROUNDS] = {
+const ROUND_CONSTANTS: [u64; ROUNDS] = round_constants();
+
+const fn round_constants() -> [u64; ROUNDS] {
     let mut constants = [0; ROUNDS];
     let mut lfsr = 1u8;
     let mut round = 0;
@@ -32,10 +34,12 @@ const ROUND_CONSTANTS: [u64; ROUNDS] = {
         round += 1;
     }
     constants
-};
+}
 
 // FIPS 202 section 3.2.2, with lanes laid out as x + 5 * y.
-const ROTATIONS: [u32; STATE_LANES] = {
+const ROTATIONS: [u32; STATE_LANES] = rotations();
+
+const fn rotations() -> [u32; STATE_LANES] {
     let mut rotations = [0; STATE_LANES];
     let (mut x, mut y) = (1, 0);
     let mut t = 0;
@@ -45,19 +49,21 @@ const ROTATIONS: [u32; STATE_LANES] = {
         t += 1;
     }
     rotations
-};
+}
 
-pub(super) fn hash<const N: usize>(inputs: [&[u8; N]; WIDTH]) -> [B128; WIDTH] {
+pub(super) fn hash<const N: usize>(inputs: [[u8; N]; WIDTH]) -> [B128; WIDTH] {
     const { assert!(N.is_multiple_of(8) && N / 8 < RATE_LANES) };
 
     // Each SIMD word holds the same lane from independent sponge states.
-    let chunks = inputs.map(|input| input.as_chunks::<8>().0);
-    let mut state = [Word::new([0; WIDTH]); STATE_LANES];
-    for (i, lane) in state[..N / 8].iter_mut().enumerate() {
-        *lane = Word::new(core::array::from_fn(|input| {
-            u64::from_le_bytes(chunks[input][i])
-        }));
-    }
+    let mut state: [Word; STATE_LANES] = core::array::from_fn(|i| {
+        if i < N / 8 {
+            Word::new(core::array::from_fn(|input| {
+                u64::from_le_bytes(inputs[input].as_chunks::<8>().0[i])
+            }))
+        } else {
+            Word::new([0; WIDTH])
+        }
+    });
     // Whole-lane inputs fit in one block. EthLib H uses Keccak's 0x01 suffix.
     state[N / 8] = Word::new([0x01; WIDTH]);
     state[RATE_LANES - 1] |= Word::new([1 << 63; WIDTH]);
@@ -83,7 +89,9 @@ fn rotate<const N: u32>(word: Word) -> Word {
 }
 
 fn permute(state: &mut [Word; STATE_LANES]) {
-    for constant in ROUND_CONSTANTS {
+    let mut round = 0;
+    while round < ROUNDS {
+        let constant = ROUND_CONSTANTS[round];
         let parity: [_; 5] = core::array::from_fn(|x| {
             state[x] ^ state[x + 5] ^ state[x + 10] ^ state[x + 15] ^ state[x + 20]
         });
@@ -104,17 +112,13 @@ fn permute(state: &mut [Word; STATE_LANES]) {
             lane!(4), lane!(5), lane!(11), lane!(17), lane!(23),
             lane!(2), lane!(8), lane!(14), lane!(15), lane!(21),
         ];
-        for (row, input_row) in state
-            .as_chunks_mut::<5>()
-            .0
-            .iter_mut()
-            .zip(rotated.as_chunks::<5>().0)
-        {
-            for x in 0..5 {
-                row[x] = input_row[x] ^ (!input_row[(x + 1) % 5] & input_row[(x + 2) % 5]);
-            }
-        }
+        *state = core::array::from_fn(|i| {
+            let row = i / 5 * 5;
+            let x = i % 5;
+            rotated[i] ^ (!rotated[row + (x + 1) % 5] & rotated[row + (x + 2) % 5])
+        });
         state[0] ^= Word::new([constant; WIDTH]);
+        round += 1;
     }
 }
 
@@ -127,7 +131,7 @@ mod tests {
     fn check<const N: usize>(inputs: [&[u8; N]; WIDTH]) {
         let expected =
             inputs.map(|input| B128::from_slice(&keccak256_uncached(input)[..NODE_BYTES]));
-        assert_eq!(hash(inputs), expected);
+        assert_eq!(hash(inputs.map(|input| *input)), expected);
     }
 
     #[test]

@@ -1,0 +1,14 @@
+{
+  "aeneas": {
+    "repository": "AeneasVerif/aeneas",
+    "revision": "fb44cb400eb6bfe7dce97422ebe8fa748b7e4f9b"
+  },
+  "charon": {
+    "repository": "AeneasVerif/charon",
+    "revision": "695be3d6292e988eedd8afcb7a709146a0ff4f01",
+    "version": "0.1.324"
+  },
+  "rust_toolchain": "nightly-2026-09-17",
+  "lean_toolchain": "leanprover/lean4:v4.36.0",
+  "ocaml": "5.3.0"
+}
