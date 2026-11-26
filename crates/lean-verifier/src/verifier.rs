@@ -45,6 +45,7 @@ impl Verifier {
         if !claims.is_sorted() {
             return Err(VerifyError::Claims);
         }
+        vm::preflight(&self.bytecode, &proof.execution).map_err(|_| VerifyError::Proof)?;
         // Every tag slot of the pinned program is zero, including the first word.
         let value = if proof.point.iter().all(|value| *value == vm::E::new(0, 0)) {
             vm::E::new(0, 0)

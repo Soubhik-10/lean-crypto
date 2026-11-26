@@ -22,42 +22,150 @@ fn signature(
     )
 }
 
-fn measure(f: &mut impl FnMut()) -> f64 {
-    let start = Instant::now();
-    f();
-    start.elapsed().as_secs_f64()
+#[derive(serde::Serialize)]
+struct Sample {
+    round: usize,
+    iteration: usize,
+    local_first: bool,
+    local_ns: u64,
+    reference_ns: u64,
 }
 
-fn compare(name: &str, mut ours: impl FnMut(), mut reference: impl FnMut()) {
-    ours();
-    reference();
-    let mut local = Vec::new();
-    let mut upstream = Vec::new();
-    for round in 0..5 {
-        let (mut a, mut b) = (0.0, 0.0);
-        for iteration in 0..30 {
-            if (round + iteration) % 2 == 0 {
-                a += measure(&mut ours);
-                b += measure(&mut reference);
-            } else {
-                b += measure(&mut reference);
-                a += measure(&mut ours);
+#[derive(serde::Serialize)]
+struct Case {
+    name: String,
+    proof_bytes: usize,
+    proof_keccak256: String,
+    retained_sphincs_claims: usize,
+    samples: Vec<Sample>,
+}
+
+struct Config {
+    json: bool,
+    rounds: usize,
+    iterations: usize,
+}
+
+impl Config {
+    fn parse() -> Self {
+        let mut config = Self {
+            json: false,
+            rounds: 5,
+            iterations: 30,
+        };
+        let mut args = std::env::args().skip(1);
+        while let Some(arg) = args.next() {
+            match arg.as_str() {
+                "--json" => config.json = true,
+                "--bench" => {} // Cargo's custom-harness marker.
+                "--rounds" => {
+                    config.rounds = args
+                        .next()
+                        .expect("round count")
+                        .parse()
+                        .expect("integer rounds")
+                }
+                "--iterations" => {
+                    config.iterations = args
+                        .next()
+                        .expect("iteration count")
+                        .parse()
+                        .expect("integer iterations")
+                }
+                "--help" | "-h" => {
+                    println!("verify [--json] [--rounds N] [--iterations N]");
+                    std::process::exit(0);
+                }
+                _ => panic!("unknown option: {arg}"),
             }
         }
-        local.push(a / 30.0);
-        upstream.push(b / 30.0);
+        assert!((1..=99).contains(&config.rounds), "rounds must be 1..99");
+        assert!(
+            (1..=10_000).contains(&config.iterations),
+            "iterations must be 1..10000"
+        );
+        config
     }
-    local.sort_by(f64::total_cmp);
-    upstream.sort_by(f64::total_cmp);
-    println!(
-        "{name}: local={:.3} ms reference={:.3} ms ratio={:.4}",
-        local[2] * 1e3,
-        upstream[2] * 1e3,
-        local[2] / upstream[2]
-    );
 }
 
-fn run_case(name: &str, verifier: &Verifier, expected: ReferenceClaims, reference: ReferenceProof) {
+fn measure(f: &mut impl FnMut()) -> u64 {
+    let start = Instant::now();
+    f();
+    start
+        .elapsed()
+        .as_nanos()
+        .try_into()
+        .expect("duration fits u64")
+}
+
+fn median(mut values: Vec<f64>) -> f64 {
+    values.sort_by(f64::total_cmp);
+    let n = values.len();
+    (values[(n - 1) / 2] + values[n / 2]) / 2.0
+}
+
+fn compare(
+    config: &Config,
+    name: &str,
+    mut ours: impl FnMut(),
+    mut reference: impl FnMut(),
+) -> Vec<Sample> {
+    ours();
+    reference();
+    let mut samples = Vec::with_capacity(config.rounds * config.iterations);
+    for round in 0..config.rounds {
+        for iteration in 0..config.iterations {
+            let local_first = (round + iteration) % 2 == 0;
+            let (local_ns, reference_ns) = if local_first {
+                (measure(&mut ours), measure(&mut reference))
+            } else {
+                let reference_ns = measure(&mut reference);
+                (measure(&mut ours), reference_ns)
+            };
+            samples.push(Sample {
+                round,
+                iteration,
+                local_first,
+                local_ns,
+                reference_ns,
+            });
+        }
+    }
+    if !config.json {
+        let local = median(
+            samples
+                .chunks(config.iterations)
+                .map(|round| {
+                    round.iter().map(|s| s.local_ns as f64).sum::<f64>() / config.iterations as f64
+                })
+                .collect(),
+        );
+        let upstream = median(
+            samples
+                .chunks(config.iterations)
+                .map(|round| {
+                    round.iter().map(|s| s.reference_ns as f64).sum::<f64>()
+                        / config.iterations as f64
+                })
+                .collect(),
+        );
+        println!(
+            "{name}: local={:.3} ms reference={:.3} ms ratio={:.4}",
+            local / 1e6,
+            upstream / 1e6,
+            local / upstream
+        );
+    }
+    samples
+}
+
+fn run_case(
+    config: &Config,
+    name: &str,
+    verifier: &Verifier,
+    expected: ReferenceClaims,
+    reference: ReferenceProof,
+) -> Vec<Case> {
     let claims = AggregateClaims {
         lean_sphincs: expected
             .lean_sphincs
@@ -70,7 +178,8 @@ fn run_case(name: &str, verifier: &Verifier, expected: ReferenceClaims, referenc
     let proof = AggregateProof::from_bytes(&bytes).unwrap();
     assert_eq!(verifier.verify(&claims, &proof), Ok(()));
     assert!(reference.verify(&expected));
-    compare(
+    let verify = compare(
+        config,
         &format!("{name} verify"),
         || {
             assert_eq!(
@@ -80,7 +189,8 @@ fn run_case(name: &str, verifier: &Verifier, expected: ReferenceClaims, referenc
         },
         || assert!(black_box(&reference).verify(black_box(&expected))),
     );
-    compare(
+    let decode = compare(
+        config,
         &format!("{name} decode + verify"),
         || {
             let proof = AggregateProof::from_bytes(black_box(&bytes)).unwrap();
@@ -91,9 +201,23 @@ fn run_case(name: &str, verifier: &Verifier, expected: ReferenceClaims, referenc
             assert!(proof.verify(black_box(&expected)));
         },
     );
+    [
+        (format!("{name} verify"), verify),
+        (format!("{name} decode + verify"), decode),
+    ]
+    .into_iter()
+    .map(|(name, samples)| Case {
+        name,
+        proof_bytes: bytes.len(),
+        proof_keccak256: alloy_primitives::keccak256(&bytes).to_string(),
+        retained_sphincs_claims: claims.lean_sphincs.len(),
+        samples,
+    })
+    .collect()
 }
 
 fn main() {
+    let config = Config::parse();
     lean_vm::setup(4);
     let verifier =
         Verifier::new(reference_aggregation::unified_guest().stacked_bytecode()).unwrap();
@@ -119,6 +243,22 @@ fn main() {
         1,
     )
     .unwrap();
-    run_case("leaf", &verifier, leaf.0, leaf.1);
-    run_case("recursive", &verifier, root.0, root.1);
+    let mut cases = run_case(&config, "leaf", &verifier, leaf.0, leaf.1);
+    cases.extend(run_case(&config, "recursive", &verifier, root.0, root.1));
+    if config.json {
+        serde_json::to_writer(
+            std::io::stdout().lock(),
+            &serde_json::json!({
+                "schema_version": 1,
+                "reference_revision": lean_verifier::REFERENCE_REVISION,
+                "rounds": config.rounds,
+                "iterations": config.iterations,
+                "log_inverse_rate": 1,
+                "leaf_signature_count": 2,
+                "cases": cases,
+            }),
+        )
+        .expect("write raw benchmark samples");
+        println!();
+    }
 }

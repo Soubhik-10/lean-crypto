@@ -113,6 +113,19 @@ fn aggregate(
 }
 
 #[test]
+fn empty_execution_with_nonzero_deferred_point_is_rejected() {
+    let mut bytes = vec![0; 8 + lean_verifier::BYTECODE_VARIABLES * 16 + 8];
+    bytes[..8].copy_from_slice(&(lean_verifier::BYTECODE_VARIABLES as u64).to_le_bytes());
+    bytes[8] = 1;
+    let proof = AggregateProof::from_bytes(&bytes).unwrap();
+    assert_eq!(proof.to_bytes(), bytes);
+    assert_eq!(
+        verifier().verify(&AggregateClaims::default(), &proof),
+        Err(VerifyError::Proof)
+    );
+}
+
+#[test]
 fn valid_proofs_at_each_supported_rate() {
     for rate in 1..=4 {
         let (expected, proof) = aggregate(vec![signature(21, rate as u8)], rate);

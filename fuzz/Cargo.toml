@@ -13,8 +13,25 @@ lean-sphincs-testing = { path = "../testing" }
 
 [features]
 default = []
+aggregate = ["lean-sphincs-testing/aggregate"]
 asm-keccak = ["lean-sphincs-testing/asm-keccak"]
 tiny-keccak = ["lean-sphincs-testing/tiny-keccak"]
+
+[[bin]]
+name = "aggregate_decode"
+path = "fuzz_targets/aggregate_decode.rs"
+required-features = ["aggregate"]
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "aggregate_verify"
+path = "fuzz_targets/aggregate_verify.rs"
+required-features = ["aggregate"]
+test = false
+doc = false
+bench = false
 
 [[bin]]
 name = "verify_wire"

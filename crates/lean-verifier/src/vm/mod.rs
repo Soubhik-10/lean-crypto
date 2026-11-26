@@ -13,7 +13,7 @@ mod field;
 mod hash;
 pub(crate) mod keccak;
 pub(crate) mod layout;
-mod merkle;
+pub(crate) mod merkle;
 mod multilinear;
 mod ring_switch;
 mod transcript;
@@ -177,6 +177,29 @@ fn read_ood(
     Ok((Box::new(move |x| eq_eval(&z, x)), value))
 }
 
+/// Allocation-free screening before statement hashing and deferred evaluation.
+/// These are necessary conditions only; the complete transcript checks still run.
+pub(crate) fn preflight(bytecode: &Bytecode, proof: &Proof) -> Result<(), VerifierError> {
+    let announced = proof
+        .stream
+        .get(..2 + N_TABLES)
+        .ok_or(VerifierError::StreamExhausted)?;
+    require(
+        announced.iter().all(|value| value.c1 == 0),
+        VerifierError::AnnouncedHighLimb,
+    )?;
+    let table_rows: [u64; N_TABLES] = core::array::from_fn(|i| announced[1 + i].c0);
+    layout::validate_announced_sizes(bytecode, announced[0].c0, &table_rows)?;
+    require(
+        (MIN_LOG_INV_RATE as u64..=MAX_LOG_INV_RATE as u64).contains(&announced[1 + N_TABLES].c0),
+        VerifierError::PcsInverseRate,
+    )?;
+    require(
+        !proof.merkle_openings.is_empty(),
+        VerifierError::MerkleOpeningMissing,
+    )
+}
+
 /// Verify that `proof` shows an execution of `bytecode` (the stacked bytecode multilinear) on the 256-bit `public_input`.
 pub(crate) fn verify_execution(
     bytecode: &Bytecode,
@@ -318,4 +341,94 @@ fn walk(bytecode: &Bytecode, public_input: &[u8; 32], proof: &Proof) -> Result<(
     )?;
     transcript.finish()?;
     Ok(())
+}
+
+#[cfg(test)]
+mod preflight_tests {
+    use super::*;
+
+    fn inputs() -> (Bytecode, Proof) {
+        let mut program = [0; 16];
+        program[3] = 1 << layout::OP_XOR;
+        let bytecode = Bytecode::new(&program, None).unwrap();
+        let mut stream = vec![ZERO; 2 + N_TABLES];
+        stream[0] = E::new(1, 0);
+        stream[1 + N_TABLES] = E::new(1, 0);
+        let proof = Proof {
+            stream,
+            merkle_openings: vec![vec![]],
+            merkle_roots: vec![None],
+        };
+        (bytecode, proof)
+    }
+
+    #[test]
+    fn preflight_rejects_missing_stream_and_openings() {
+        let (bytecode, proof) = inputs();
+        assert_eq!(preflight(&bytecode, &proof), Ok(()));
+        for length in 0..2 + N_TABLES {
+            let mut changed = proof.clone();
+            changed.stream.truncate(length);
+            assert_eq!(
+                preflight(&bytecode, &changed),
+                Err(VerifierError::StreamExhausted)
+            );
+        }
+        let mut changed = proof;
+        changed.merkle_openings.clear();
+        assert_eq!(
+            preflight(&bytecode, &changed),
+            Err(VerifierError::MerkleOpeningMissing)
+        );
+    }
+
+    #[test]
+    fn preflight_bounds_every_announced_header_field() {
+        let (bytecode, proof) = inputs();
+        for i in 0..2 + N_TABLES {
+            let mut changed = proof.clone();
+            changed.stream[i].c1 = 1;
+            assert_eq!(
+                preflight(&bytecode, &changed),
+                Err(VerifierError::AnnouncedHighLimb)
+            );
+        }
+        for memory in [0, 31, u64::MAX] {
+            let mut changed = proof.clone();
+            changed.stream[0].c0 = memory;
+            assert_eq!(
+                preflight(&bytecode, &changed),
+                Err(VerifierError::AnnouncedTableSizes)
+            );
+        }
+        for i in 1..=N_TABLES {
+            for rows in [(1 << 30) + 1, u64::MAX] {
+                let mut changed = proof.clone();
+                changed.stream[i].c0 = rows;
+                assert_eq!(
+                    preflight(&bytecode, &changed),
+                    Err(VerifierError::AnnouncedTableSizes)
+                );
+            }
+        }
+        for rate in [0, 5, u64::MAX] {
+            let mut changed = proof.clone();
+            changed.stream[1 + N_TABLES].c0 = rate;
+            assert_eq!(
+                preflight(&bytecode, &changed),
+                Err(VerifierError::PcsInverseRate)
+            );
+        }
+        for memory in [1, 30] {
+            for rate in 1..=4 {
+                let mut changed = proof.clone();
+                changed.stream[0].c0 = memory;
+                changed.stream[1 + N_TABLES].c0 = rate;
+                for field in &mut changed.stream[1..=N_TABLES] {
+                    field.c0 = 1 << 30;
+                }
+                assert_eq!(preflight(&bytecode, &changed), Ok(()));
+            }
+        }
+    }
 }

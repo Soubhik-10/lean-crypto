@@ -6,6 +6,9 @@ mod fixtures;
 mod mutations;
 mod oracle;
 
+#[cfg(feature = "aggregate")]
+pub mod aggregate;
+
 pub use build_info::build_metadata;
 pub use cases::{Case, CaseStats, check_case, generated_case};
 pub use fixtures::{Fixture, fixtures};

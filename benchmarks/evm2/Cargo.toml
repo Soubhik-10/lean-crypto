@@ -9,7 +9,7 @@ publish = false
 lean-sphincs = { path = "../../crates/lean-sphincs" }
 reference-keccak = { package = "keccak256", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
 reference-sphincs = { package = "lean_sphincs", git = "https://github.com/leanEthereum/leanVM", rev = "6a828ecf5b17d0dde4a38bf21d4e14b81d2d7f3b" }
-alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3", default-features = false }
+alloy-primitives = { version = "1.7.3", default-features = false }
 evm2 = { git = "https://github.com/alloy-rs/evm2", rev = "e681662b6d9ec59edafd112f7c8d64f49f1e6dd1", default-features = false, features = ["std"] }
 secp256k1 = { version = "0.33.1", features = ["recovery"] }
 serde = { version = "1", features = ["derive"] }
@@ -54,7 +54,3 @@ required-features = ["tiny-keccak"]
 [profile.bench]
 lto = "thin"
 codegen-units = 1
-
-# Use the same pinned Alloy types throughout evm2 and the verifier.
-[patch.crates-io]
-alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "70a63bd609da78dcf03e593ae772fec883ce7768", version = "1.7.3" }

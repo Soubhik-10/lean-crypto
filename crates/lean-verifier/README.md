@@ -105,6 +105,10 @@ The port keeps arithmetic kernels, protocol constants and check order. Changes
 are limited to `core`/`alloc`, crate-private visibility, the existing Alloy Keccak
 interface for streamed program/statement hashing, Rust 1.90-compatible slice
 conversion, and removal of prover reporting, unchecked replay and the unrelated standalone Keccak-proof API.
+Merkle decoding retains each phase's computed root: unpruning already hashes the
+shared tree, so authentication compares that root with the transcript commitment
+instead of hashing every overlapping path again. Roots are derived from the
+proof bytes, never supplied as trusted commitments; query and shape checks remain.
 The reference Keccak permutation and one-shot Merkle hash kernel are retained; replacing the
 short-message kernel with another backend measured slower on the validation host.
 Program hashing streams words through a 1 KiB buffer rather than allocating a
@@ -124,8 +128,11 @@ recursive merge and pruning, both signature schemes, and a real DA commitment.
 They also check program identity, encoding round trips, truncation, trailing
 bytes, hostile size announcements, mutations, and changed/unsorted/duplicate
 claims. Original arithmetic, hash and polynomial-check tests are retained.
-The existing workspace CI includes this crate automatically; there is no separate
-aggregation workflow.
+The workspace CI includes this crate. The [Lean workflow](../../.github/workflows/formal.yml)
+also kernel-checks the pinned VM/wire theorems and compares this port with the
+executable Lean model on generated native proofs and structured/wire mutations,
+for both hashing configurations. See [formal validation](../../formal/README.md#aggregate-verifier)
+for the exact scope and reproduction commands.
 
 ```sh
 cargo test -p lean-verifier --release --locked
@@ -142,17 +149,42 @@ preparation and proof generation are outside the timing loop. It alternates the
 implementations and reports the median of five batches of 30 calls. Use identical
 compiler/CPU flags and an otherwise idle machine when comparing results.
 
-A validation run on Windows x86_64, Intel Core i5-1340P, Rust 1.97.1,
-`RUSTFLAGS="-C target-cpu=native"`, with the workspace thin-LTO bench profile:
+Measured 23 November 2026 on an AMD Ryzen 9 8940HX, Linux/WSL2 x86_64,
+Rust 1.97.1, native CPU flags, thin LTO, one codegen unit and logical CPU 8:
 
 | Case | Default: local / reference (ms) | `asm-keccak`: local / reference (ms) |
-| --- | --- | --- |
-| Leaf verification | 10.521 / 10.521 | 10.230 / 10.236 |
-| Leaf decoding + verification | 12.084 / 12.249 | 11.840 / 12.042 |
-| Recursive verification | 16.545 / 16.592 | 16.292 / 16.527 |
-| Recursive decoding + verification | 18.196 / 18.175 | 17.970 / 18.113 |
+| --- | ---: | ---: |
+| Leaf verification | 8.256 / 11.979 | 8.117 / 11.778 |
+| Leaf decoding + verification | 10.425 / 14.318 | 10.432 / 14.256 |
+| Recursive verification | 12.412 / 17.236 | 12.250 / 17.064 |
+| Recursive decoding + verification | 14.828 / 19.876 | 14.951 / 20.017 |
 
-These small differences indicate approximate parity on this machine, not a
-portable speedup. `asm-keccak` affects the Alloy streaming hashes; the VM's
-reference Merkle and transcript kernels remain the same. Existing signing and
-proving paths are unchanged.
+Each build runs three fresh processes, five rounds per process and 30 paired
+calls per round: 450 retained samples per implementation/workload/backend.
+The table shows medians of the 15 round means. End-to-end time is about 27%
+lower for leaf proofs and 24–25% lower for recursive proofs versus the pinned
+reference, using median paired round ratios. These are host-specific results.
+The leaf aggregates two leanSPHINCS signatures; the recursive proof merges it
+and retains one claim. Both use log-inverse-rate 1.
+
+`asm-keccak` affects the Alloy streaming hashes; the VM's reference Merkle and
+transcript kernels remain the same. Signing and proving are unchanged. Frequency,
+temperature and the SMT sibling are not controlled; compare paired runs rather
+than absolute timings from other hosts or earlier Windows campaigns.
+
+```sh
+# Build, pin, measure both hashing configurations and retain raw paired timings.
+bash benchmarks/compare.sh verifier --cpu 8 --session benchmarks/results/verifier-run
+
+# Inspect the plan or compile without generating any proofs.
+bash benchmarks/compare.sh verifier plan
+bash benchmarks/compare.sh verifier build
+
+# Recompute the report without executing benchmark binaries.
+bash benchmarks/compare.sh verifier report --session benchmarks/results/verifier-run
+```
+
+The preset requires Linux/WSL and the [signature suite's tools](../../benchmarks/SUITE.md#requirements).
+It records source and binary hashes, compiler/flags, resolved Cargo features,
+machine settings, proof sizes/fingerprints and every raw timing pair. Global
+Keccak caching is forbidden. [Retained campaign](../../benchmarks/data/verifier-2026-11-23.json).

@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      verifier_only:
+        description: Run only the aggregate verifier checks
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -19,6 +24,7 @@ defaults:
 
 jobs:
   proofs:
+    if: github.event_name != 'workflow_dispatch' || !inputs.verifier_only
     name: Kernel-check SPHINCS and implementation proofs
     runs-on: ubuntu-24.04
     timeout-minutes: 360
@@ -195,4 +201,168 @@ jobs:
             formal/.cache/rejection/
             formal/upstream.json
           if-no-files-found: warn
+          retention-days: 30
+
+  verifier-proofs:
+    name: Kernel-check pinned VM and wire proofs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      RUSTUP_TOOLCHAIN: 1.97.1
+      RUSTFLAGS: '-C target-cpu=x86-64-v3'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Read the verifier reference pin
+        id: reference
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          pin = json.load(open('crates/lean-verifier/reference.json'))
+          assert pin['repository'] == 'https://github.com/Rimeeeeee/leanVM'
+          assert re.fullmatch('[0-9a-f]{40}', pin['revision'])
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('revision=' + pin['revision'], file=output)
+          PY
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: leanEthereum/leanVM
+          ref: ${{ steps.reference.outputs.revision }}
+          path: formal/.cache/verifier-reference
+          persist-credentials: false
+      - name: Export the pinned guest constants required by the VM model
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal
+          grep -qw avx2 /proc/cpuinfo
+          reference="$GITHUB_WORKSPACE/formal/.cache/verifier-reference"
+          cargo run --release --locked --manifest-path "$reference/formal/lean_vm/scripts/guest-export/Cargo.toml" -- "$reference/formal/lean_vm"
+      - name: Validate native sources, toolchains and proof escapes
+        run: |
+          reference=formal/.cache/verifier-reference
+          python3 -I scripts/check_verifier_reference.py "$reference"
+          python3 -I "$reference/formal/tools/escape-scan.py" "$reference/formal/Statement" "$reference/formal/common" "$reference/formal/lean_vm" "$reference/formal/lean_sphincs" "$reference/formal/lean_xmss" "$reference/formal/lean_da" formal/VerifierAxioms.lean
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        id: verifier-cache
+        with:
+          path: |
+            formal/.cache/verifier-reference/formal/lean_vm/.lake
+            !formal/.cache/verifier-reference/formal/lean_vm/.lake/packages/mathlib/.lake
+            formal/.cache/verifier-reference/formal/common/.lake/build
+            formal/.cache/verifier-reference/formal/Statement/.lake/build
+            formal/.cache/verifier-reference/formal/lean_sphincs/.lake/build
+            formal/.cache/verifier-reference/formal/lean_xmss/.lake/build
+            formal/.cache/verifier-reference/formal/lean_da/.lake/build
+          key: verifier-proofs-1-${{ runner.os }}-${{ runner.arch }}-${{ steps.reference.outputs.revision }}
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        with:
+          lake-package-directory: formal/.cache/verifier-reference/formal/lean_vm
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: false
+          use-mathlib-cache: true
+      - name: Build VM end theorems, wire proofs and executable models
+        working-directory: formal/.cache/verifier-reference/formal/lean_vm
+        run: |
+          set -o pipefail
+          python3 -I ../lake-build.py . LeanVM.Protocol.KnowledgeSoundness LeanVM.Prover.End LeanVM.Wire.OneEncoding leanvm-verify wire-diff --jobs 2 --mem 10 --cap 14 2>&1 | tee "$RUNNER_TEMP/verifier-lean-build.log"
+      - name: Check all end-theorem dependencies
+        working-directory: formal/.cache/verifier-reference/formal/lean_vm
+        run: |
+          set -o pipefail
+          lake env lean -DwarningAsError=true "$GITHUB_WORKSPACE/formal/VerifierAxioms.lean" | tee "$RUNNER_TEMP/verifier-axioms.txt"
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: github.event_name != 'pull_request' && steps.verifier-cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            formal/.cache/verifier-reference/formal/lean_vm/.lake
+            !formal/.cache/verifier-reference/formal/lean_vm/.lake/packages/mathlib/.lake
+            formal/.cache/verifier-reference/formal/common/.lake/build
+            formal/.cache/verifier-reference/formal/Statement/.lake/build
+            formal/.cache/verifier-reference/formal/lean_sphincs/.lake/build
+            formal/.cache/verifier-reference/formal/lean_xmss/.lake/build
+            formal/.cache/verifier-reference/formal/lean_da/.lake/build
+          key: ${{ steps.verifier-cache.outputs.cache-primary-key }}
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: lean-verifier-models
+          path: |
+            formal/.cache/verifier-reference/formal/lean_vm/.lake/build/bin/leanvm-verify
+            formal/.cache/verifier-reference/formal/lean_vm/.lake/build/bin/wire-diff
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: lean-verifier-proof-evidence
+          path: |
+            crates/lean-verifier/reference.json
+            formal/VerifierAxioms.lean
+            ${{ runner.temp }}/verifier-lean-build.log
+            ${{ runner.temp }}/verifier-axioms.txt
+          retention-days: 30
+
+  verifier-conformance:
+    name: Aggregate verifier versus Lean (${{ matrix.backend.name }})
+    needs: verifier-proofs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        backend:
+          - { name: default, features: '' }
+          - { name: assembly, features: asm-keccak }
+    env:
+      RUSTUP_TOOLCHAIN: 1.97.1
+      RUSTFLAGS: '-C target-cpu=x86-64-v3'
+      FEATURES: ${{ matrix.backend.features }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - name: Read the verifier pin
+        id: reference
+        run: |
+          python3 - <<'PY'
+          import json, os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('revision=' + json.load(open('crates/lean-verifier/reference.json'))['revision'], file=output)
+          PY
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: leanEthereum/leanVM
+          ref: ${{ steps.reference.outputs.revision }}
+          path: formal/.cache/verifier-reference
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: lean-verifier-models
+          path: formal/.cache/verifier-models
+      - name: Install Rust and check CPU support
+        run: |
+          rustup toolchain install 1.97.1 --profile minimal
+          grep -qw avx2 /proc/cpuinfo
+          chmod +x formal/.cache/verifier-models/*
+          python3 -I scripts/check_verifier_reference.py formal/.cache/verifier-reference
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          shared-key: verifier-${{ matrix.backend.name }}
+      - name: Build the production-source test bridge
+        run: cargo build -p lean-verifier --release --locked --example conformance --features "$FEATURES"
+      - name: Generate and verify the pinned native proof corpus
+        run: bash formal/.cache/verifier-reference/formal/lean_vm/scripts/export-verifier-fixtures-rust.sh "$GITHUB_WORKSPACE/formal/.cache/verifier-fixtures"
+      - name: Compare verdicts and wire encodings with Lean
+        run: |
+          set -o pipefail
+          python3 -I scripts/check_verifier_conformance.py formal/.cache/verifier-reference formal/.cache/verifier-fixtures target/release/examples/conformance --models formal/.cache/verifier-models --output formal/.cache/verifier-results --jobs 2 2>&1 | tee "$RUNNER_TEMP/verifier-conformance.log"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: lean-verifier-conformance-${{ matrix.backend.name }}
+          include-hidden-files: true
+          path: |
+            formal/.cache/verifier-results
+            formal/.cache/verifier-fixtures
+            ${{ runner.temp }}/verifier-conformance.log
           retention-days: 30
