@@ -16,6 +16,7 @@ on:
       - 'formal/extractor.json'
       - 'formal/lean-toolchain'
       - 'formal/lakefile.toml'
+      - 'formal/lake-manifest.json'
       - 'formal/Batching/**'
       - 'scripts/test_translation.py'
       - 'scripts/*sphincs*.py'
