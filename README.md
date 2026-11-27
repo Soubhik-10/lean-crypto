@@ -19,6 +19,21 @@ backend requires `std` and Rust 1.97.1. The independent `lean-verifier` needs
 prepared, fingerprint-checked program data; see its [README](crates/lean-verifier/README.md)
 for setup, compatibility and validation limits.
 
+## Formal verification
+
+The `lean-sphincs` crate includes Lean proofs relating its extracted Rust source
+to a pinned EthLib specification. The completed five-configuration source audit
+covers key generation, signing and counter exhaustion, decoding/verification,
+serialization, SIMD batching and successful-signature roundtrips for all inputs
+within the documented models.
+
+This is a functional-correctness claim with explicit translation,
+standard-library, hashing and SIMD assumptions. Cryptographic security, constant
+time and compiled machine-code correctness are outside its scope. Read
+[what is verified, the current certified revision, and how to reproduce it](formal/docs/verification.md).
+The [formal overview](formal/README.md) also describes the separate upstream
+security/conformance and aggregate-verifier gates.
+
 ## Benchmarks
 
 AMD Ryzen 9 8940HX, Linux/WSL2, Rust 1.97.1, native CPU flags,

@@ -4,7 +4,10 @@ The four Lean files under this directory extend the pinned Aeneas
 standard-library interface for the SPHINCS `SignError` API. They retain captured
 formatting arguments, formatter options, writer state, partial output on failure,
 and nested pretty-print indentation. Width uses its effective numeric value;
-absent width and zero width have identical rendering behavior for these methods.
+absent width (`None`) and explicit zero width (`Some 0`) have identical rendering
+behavior for these methods. This model identifies their effective widths; it does
+not prove those two Rust `Option` values are equal or interchangeable for arbitrary
+formatting programs.
 The stock interface erases these values and cannot express the required
 observable-output contracts.
 
@@ -20,9 +23,12 @@ importers. A model manifest records both original and replacement source hashes.
 The source gate validates that manifest and both source trees, then recompiles
 all generated SPHINCS bodies unchanged against the observable model. See the
 [complete source-verification workflow](../README.md#production-sphincs-source-verification).
-The combined audit passed in all five configurations.
+The completed `b82f2a78` source audit passed in all five configurations. See the
+[detailed guide](../docs/verification.md#formatting-and-errors) for the current
+verification status and the observable-model boundary.
 
-`RustCrypto.Fmt*`, in namespace `RustCrypto.ErrorFormatting`, proves the extracted
+The modules in [`RustCrypto/Formatting`](../RustCrypto/Formatting), in the
+unchanged namespace `RustCrypto.ErrorFormatting`, prove the extracted
 Display, Debug, Clone, PartialEq, Eq and Error supertrait behavior. Output
 contracts cover all 256 layer values, ordinary and alternate Debug, arbitrary
 supported formatter options/writers, and retained partial output when a writer

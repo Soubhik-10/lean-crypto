@@ -62,9 +62,10 @@ revision and raw-file hashes retained in [tests/vectors](tests/vectors/README.md
 The scheme and this package remain experimental. The older upstream security,
 Lean-model and conformance checks are separate from the
 [production source-verification guide](../../formal/README.md#production-sphincs-source-verification).
-The combined five-configuration source functional-refinement and signing-roundtrip
-audits have passed. No independent
-security review or audit is claimed.
+The completed five-configuration source functional-refinement and signing-roundtrip
+audit is documented with its certified revision and trust boundary in the
+[verification guide](../../formal/docs/verification.md). No independent security
+review or audit is claimed.
 
 ## Validation
 
@@ -84,15 +85,26 @@ every-byte mutation checks, malformed encodings, and zero allocations across
 all three operations. The [differential test runner](../../testing/README.md) and
 [coverage-guided fuzzers](../../fuzz/README.md) compare this crate with leanVM.
 
-## Formal verification CI
+## Formal verification
 
-The separate [source-verification workflow](../../.github/workflows/sphincs-source.yml)
-extracts the actual scalar/SSE2/AVX2 implementations with both hashing backends.
-Its functional contracts cover public key generation, bounded/default signing,
-decoding and verification, successful signing-to-verification roundtrips, and
-observable error behavior. The linked guide records the completed combined audit,
-pins, reproduction steps and explicit standard-library/Alloy/`wide` model boundary.
-These source proofs do not claim cryptographic security or compiled-code correctness.
+Formal verification checks mathematical claims about all inputs, rather than
+sampling executions. This crate's source contracts relate Charon/Aeneas
+translations of the actual Rust bodies to the pinned EthLib specification and a
+bounded signer composed from its signing primitives.
+
+The completed five-configuration audit covers public `key_gen`, `sign` and
+`verify`, the private signing helper for every `u64` attempt limit, exact signature
+serialization, malformed-input rejection, SIMD/scalar tails, observable error
+methods and successful signing-to-verification roundtrips. Public `sign` retains
+its `2^32` attempt limit and may return `CounterExhausted`; success for every
+seed/message is not assumed.
+
+[What “fully verified” means, examples, the certified revision, model assumptions,
+and reproduction](../../formal/docs/verification.md) explains this functional
+claim. The [source-verification workflow](../../.github/workflows/sphincs-source.yml)
+checks all five production configurations. The proofs trust the pinned
+translation and explicit standard-library/Alloy/`wide` models; cryptographic
+hardness, constant time and compiled-code correctness are outside their scope.
 
 The older [formal workflow](../../.github/workflows/formal.yml) uses the Lean 4 specification
 and security proofs from [leanEthereum/leanVM](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal),

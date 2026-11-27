@@ -29,7 +29,7 @@ def lean_hashes(root):
 
 
 def mathlib_imports(source):
-    paths = [*source.rglob("*.lean"), *(ROOT / "formal/RustCrypto").glob("*.lean"),
+    paths = [*source.rglob("*.lean"), *(ROOT / "formal/RustCrypto").rglob("*.lean"),
              *(ROOT / "formal/Runtime").rglob("*.lean")]
     return sorted({module for path in paths if ".lake" not in path.parts
                    for module in IMPORT.findall(path.read_text(encoding="utf-8"))

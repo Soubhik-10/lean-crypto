@@ -75,9 +75,8 @@ def main():
         raise RuntimeError("Aeneas runtime differs from the pinned backend")
     stdlib_model = runtime_models.validate_stdlib_model(runtime, backend)
     proof_files = [ROOT / "formal/Batching/Keccak.lean", ROOT / "formal/Batching/Constants.lean",
-                   *sorted((ROOT / "formal/Runtime").rglob("*.lean")), *sorted((ROOT / "formal/RustCrypto").glob("*.lean")),
-                   ROOT / "formal/RustParser/Models.lean", ROOT / "formal/RustParser.lean",
-                   ROOT / "formal/RustIndex.lean"]
+                   *sorted((ROOT / "formal/Runtime").rglob("*.lean")),
+                   *sorted((ROOT / "formal/RustCrypto").rglob("*.lean"))]
     proof_contents = {p: p.read_bytes() for p in proof_files}
     before = {p.relative_to(ROOT).as_posix(): hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
               for p, data in proof_contents.items()}
@@ -109,7 +108,7 @@ def main():
         label = variant["variant"]
         folder = workspace / label
         logs = output / label
-        for sub in [folder / "LeanSphincs", folder / "RustCrypto", folder / "RustParser", logs]:
+        for sub in [folder / "LeanSphincs", folder / "RustCrypto", logs]:
             sub.mkdir(parents=True, exist_ok=True)
         generated = translated / label
         inputs = {name: (generated / name).read_bytes() for name in ["Types.lean", "Funs.lean", "translation.json"]}
@@ -128,83 +127,109 @@ def main():
             target.write_bytes(proof_contents[file])
         for name in ["TypesExternal", "FunsExternal"]:
             (folder / "LeanSphincs" / (name + ".lean")).write_bytes(
-                proof_contents[ROOT / "formal/RustCrypto" / (name + ".lean")])
-        variant_proofs = ['RustCrypto/ForsScalarBody', 'RustCrypto/ForsScalarLoop', 'RustCrypto/ForsScalarFull', 'RustCrypto/ForsScalarShortBody', 'RustCrypto/ForsScalarShortLoop', 'RustCrypto/ForsScalarTotal'] if label == "scalar" else []
+                proof_contents[ROOT / "formal/RustCrypto/Models" / (name + ".lean")])
+        variant_proofs = ['RustCrypto/Fors/Scalar/Body', 'RustCrypto/Fors/Scalar/Loop', 'RustCrypto/Fors/Scalar/Full', 'RustCrypto/Fors/Scalar/ShortBody', 'RustCrypto/Fors/Scalar/ShortLoop', 'RustCrypto/Fors/Scalar/Total'] if label == "scalar" else []
         if label != "scalar":
-            variant_proofs = ["RustCrypto/AppendNodes", "RustCrypto/SimdRound", "RustCrypto/Constants", "RustCrypto/RoundConstants",
-                              "RustCrypto/Permutation", "RustCrypto/WordBridge",
-                              "RustCrypto/PermutationBridge", "RustCrypto/PermutationLoop",
-                              "RustCrypto/ShortLoad", "RustCrypto/ShortStore",
-                              "RustCrypto/ShortPadding", "RustCrypto/ShortHash",
-                              "RustCrypto/BatchNodes", "RustCrypto/BatchParents", "RustCrypto/BatchPositions",
-                              "RustCrypto/ForsBatchRead", "RustCrypto/ForsBatchFromFn", "RustCrypto/ForsBatchStep", "RustCrypto/ForsBatchWalk", "RustCrypto/ForsBatchSource", "RustCrypto/ForsBatchBridge", "RustCrypto/ForsOpeningBytes", "RustCrypto/ForsBatchLeaf", "RustCrypto/ForsBatchFull",
-                              "RustCrypto/ForsForestClosures", "RustCrypto/ForsForestRead", "RustCrypto/ForsForestModel", "RustCrypto/ForsForestBody", "RustCrypto/ForsForestPrefix", "RustCrypto/ForsForestLoop", "RustCrypto/ForsForestFull", "RustCrypto/ForsForestShort", "RustCrypto/ForsForestTotal", "RustCrypto/LayoutForsSimd"]
+            variant_proofs = ["RustCrypto/Hash/Batch/AppendNodes", "RustCrypto/Hash/Keccak/Rotate", "RustCrypto/Hash/Keccak/Rotations", "RustCrypto/Hash/Keccak/RoundConstants",
+                              "RustCrypto/Hash/Keccak/Permutation", "RustCrypto/Hash/Keccak/WordBridge",
+                              "RustCrypto/Hash/Keccak/Bridge", "RustCrypto/Hash/Keccak/Loop",
+                              "RustCrypto/Hash/Keccak/Short/Load", "RustCrypto/Hash/Keccak/Short/Store",
+                              "RustCrypto/Hash/Keccak/Short/Padding", "RustCrypto/Hash/Keccak/Short/Hash",
+                              "RustCrypto/Hash/Batch/Nodes", "RustCrypto/Hash/Batch/Parents", "RustCrypto/Hash/Batch/Positions",
+                              "RustCrypto/Fors/Batch/Read", "RustCrypto/Fors/Batch/FromFn", "RustCrypto/Fors/Batch/Step", "RustCrypto/Fors/Batch/Walk", "RustCrypto/Fors/Batch/Source", "RustCrypto/Fors/Batch/Bridge", "RustCrypto/Fors/OpeningBytes", "RustCrypto/Fors/Batch/Leaf", "RustCrypto/Fors/Batch/Full",
+                              "RustCrypto/Fors/Forest/Closures", "RustCrypto/Fors/Forest/Read", "RustCrypto/Fors/Forest/Model", "RustCrypto/Fors/Forest/Body", "RustCrypto/Fors/Forest/Prefix", "RustCrypto/Fors/Forest/Loop", "RustCrypto/Fors/Forest/Full", "RustCrypto/Fors/Forest/Short", "RustCrypto/Fors/Forest/Total", "RustCrypto/Serialization/Layout/ForsSimd"]
             if label.startswith("avx2"):
-                for module in ["Permutation", "WordBridge", "PermutationBridge", "PermutationLoop",
-                               "ShortLoad", "ShortStore", "ShortPadding", "ShortHash",
-                               "BatchNodes", "BatchParents", "BatchPositions",
-                               "ForsBatchRead", "ForsBatchFromFn", "ForsBatchStep", "ForsBatchWalk", "ForsBatchSource", "ForsBatchBridge", "ForsOpeningBytes", "ForsBatchLeaf", "ForsBatchFull",
-                               "ForsForestClosures", "ForsForestRead", "ForsForestModel", "ForsForestBody", "ForsForestPrefix", "ForsForestLoop", "ForsForestFull", "ForsForestShort", "ForsForestTotal"]:
+                for module in [
+                    'Hash/Keccak/Permutation',
+                    'Hash/Keccak/WordBridge',
+                    'Hash/Keccak/Bridge',
+                    'Hash/Keccak/Loop',
+                    'Hash/Keccak/Short/Load',
+                    'Hash/Keccak/Short/Store',
+                    'Hash/Keccak/Short/Padding',
+                    'Hash/Keccak/Short/Hash',
+                    'Hash/Batch/Nodes',
+                    'Hash/Batch/Parents',
+                    'Hash/Batch/Positions',
+                    'Fors/Batch/Read',
+                    'Fors/Batch/FromFn',
+                    'Fors/Batch/Step',
+                    'Fors/Batch/Walk',
+                    'Fors/Batch/Source',
+                    'Fors/Batch/Bridge',
+                    'Fors/OpeningBytes',
+                    'Fors/Batch/Leaf',
+                    'Fors/Batch/Full',
+                    'Fors/Forest/Closures',
+                    'Fors/Forest/Read',
+                    'Fors/Forest/Model',
+                    'Fors/Forest/Body',
+                    'Fors/Forest/Prefix',
+                    'Fors/Forest/Loop',
+                    'Fors/Forest/Full',
+                    'Fors/Forest/Short',
+                    'Fors/Forest/Total',
+                ]:
                     proof_path = folder / "RustCrypto" / (module + ".lean")
                     proof_text = proof_path.read_text(encoding="utf-8")
                     proof_text = proof_text.replace("u64x2", "u64x4")
-                    if module == "Permutation":
+                    if module == "Hash/Keccak/Permutation":
                         if proof_text.count("abbrev width := 2") != 1 or proof_text.count("Array U64 2#usize") != 1:
                             raise RuntimeError("SIMD proof specialization sites changed")
                         proof_text = proof_text.replace("abbrev width := 2", "abbrev width := 4")
                         proof_text = proof_text.replace("Array U64 2#usize", "Array U64 4#usize")
-                    if module.startswith("Short"):
+                    if module.startswith("Hash/Keccak/Short/"):
                         proof_text = re.sub(r"(?<![0-9])2#usize", "4#usize", proof_text)
                         proof_text = re.sub(r"Fin 2(?![0-9])", "Fin 4", proof_text)
                         proof_text = re.sub(r"< 2(?![0-9])", "< 4", proof_text)
-                    if module.startswith("Batch"):
+                    if module.startswith("Hash/Batch/"):
                         proof_text = re.sub(r"(?<![0-9])2#usize", "4#usize", proof_text)
                         for lhs, rhs in [("< 2", "< 4"), ("≤ 2", "≤ 4"),
                                          ("= 2 :=", "= 4 :="), ("2-state", "4-state")]:
                             proof_text = proof_text.replace(lhs, rhs)
-                    if module.startswith("ForsBatch") or module == "ForsOpeningBytes":
+                    if module.startswith("Fors/Batch/") or module == "Fors/OpeningBytes":
                         proof_text = re.sub(r"(?<![0-9])2#usize", "4#usize", proof_text)
                         proof_text = re.sub(r"Fin 2(?![0-9])", "Fin 4", proof_text)
                         proof_text = re.sub(r"< 2(?![0-9])", "< 4", proof_text)
-                    if module.startswith("ForsForest"):
+                    if module.startswith("Fors/Forest/"):
                         proof_text = proof_text.replace("abbrev width := 2", "abbrev width := 4")
                         proof_text = re.sub(r"(?<![0-9])2#usize", "4#usize", proof_text)
                         proof_text = re.sub(r"(?<![0-9])352(?![0-9])", "704", proof_text)
                     proof_path.write_text(proof_text, encoding="utf-8")
         if label.startswith("avx2"):
-            variant_proofs += ['RustCrypto/WotsAvx2Step', 'RustCrypto/WotsAvx2Read', 'RustCrypto/WotsAvx2ReadFull', 'RustCrypto/WotsAvx2Scatter', 'RustCrypto/WotsAvx2ScatterNative', 'RustCrypto/WotsAvx2Positions', 'RustCrypto/WotsAvx2Gather', 'RustCrypto/WotsAvx2Group', 'RustCrypto/WotsAvx2Queue', 'RustCrypto/WotsAvx2QueueFacts', 'RustCrypto/WotsAvx2ScanValue', 'RustCrypto/WotsAvx2ScanBody', 'RustCrypto/WotsAvx2ScanInvariant', 'RustCrypto/WotsAvx2ScanLoop', 'RustCrypto/WotsAvx2TailBody', 'RustCrypto/WotsAvx2TailLoop', 'RustCrypto/WotsAvx2RoundValue', 'RustCrypto/WotsAvx2RoundBody', 'RustCrypto/WotsAvx2Window', 'RustCrypto/WotsAvx2Prefix', 'RustCrypto/WotsAvx2ChainsBody', 'RustCrypto/WotsAvx2ChainsLoop', 'RustCrypto/WotsAvx2ChainsShort', 'RustCrypto/WotsAvx2ChainsTotal', 'RustCrypto/WotsAvx2Entry', 'RustCrypto/RecoverLayerAvx2']
+            variant_proofs += ['RustCrypto/Wots/Avx2/Step', 'RustCrypto/Wots/Avx2/Read', 'RustCrypto/Wots/Avx2/ReadFull', 'RustCrypto/Wots/Avx2/Scatter', 'RustCrypto/Wots/Avx2/ScatterNative', 'RustCrypto/Wots/Avx2/Positions', 'RustCrypto/Wots/Avx2/Gather', 'RustCrypto/Wots/Avx2/Group', 'RustCrypto/Wots/Avx2/Queue', 'RustCrypto/Wots/Avx2/QueueFacts', 'RustCrypto/Wots/Avx2/ScanValue', 'RustCrypto/Wots/Avx2/ScanBody', 'RustCrypto/Wots/Avx2/ScanInvariant', 'RustCrypto/Wots/Avx2/ScanLoop', 'RustCrypto/Wots/Avx2/TailBody', 'RustCrypto/Wots/Avx2/TailLoop', 'RustCrypto/Wots/Avx2/RoundValue', 'RustCrypto/Wots/Avx2/RoundBody', 'RustCrypto/Wots/Avx2/Window', 'RustCrypto/Wots/Avx2/Prefix', 'RustCrypto/Wots/Avx2/ChainsBody', 'RustCrypto/Wots/Avx2/ChainsLoop', 'RustCrypto/Wots/Avx2/ChainsShort', 'RustCrypto/Wots/Avx2/ChainsTotal', 'RustCrypto/Wots/Avx2/Entry', 'RustCrypto/Verification/Layer/Avx2']
         if not label.startswith("avx2"):
-            variant_proofs += ['RustCrypto/WotsScalarBody', 'RustCrypto/WotsScalarLoop', 'RustCrypto/WotsScalarShort', 'RustCrypto/WotsScalarChains', 'RustCrypto/WotsScalarEntry', 'RustCrypto/RecoverLayerScalar']
+            variant_proofs += ['RustCrypto/Wots/Scalar/Body', 'RustCrypto/Wots/Scalar/Loop', 'RustCrypto/Wots/Scalar/Short', 'RustCrypto/Wots/Scalar/Chains', 'RustCrypto/Wots/Scalar/Entry', 'RustCrypto/Verification/Layer/Scalar']
         if label == "scalar":
-            variant_proofs += ["RustCrypto/WholeForsScalar", "RustCrypto/WholeRootScalar", "RustCrypto/CanonicalSigningScalar"]
+            variant_proofs += ["RustCrypto/Verification/Fors/Scalar", "RustCrypto/Verification/Root/Scalar", "RustCrypto/Correctness/Signing/Scalar"]
         elif label.startswith("avx2"):
-            variant_proofs += ["RustCrypto/WholeForsSimd", "RustCrypto/WholeRootAvx2", "RustCrypto/CanonicalSigningAvx2"]
+            variant_proofs += ["RustCrypto/Verification/Fors/Simd", "RustCrypto/Verification/Root/Avx2", "RustCrypto/Correctness/Signing/Avx2"]
         else:
-            variant_proofs += ["RustCrypto/WholeForsSimd", "RustCrypto/WholeRootSse2", "RustCrypto/CanonicalSigningSse2"]
-        audit_file = folder / "RustCrypto/SourceAudit.lean"
+            variant_proofs += ["RustCrypto/Verification/Fors/Simd", "RustCrypto/Verification/Root/Sse2", "RustCrypto/Correctness/Signing/Sse2"]
+        audit_file = folder / "RustCrypto/Audit/Source.lean"
         audit = audit_file.read_text(encoding="utf-8")
         audit = audit.replace("import all LeanSphincs.Funs\n", "import all LeanSphincs.Funs\n" +
             "".join("import all " + module.replace("/", ".") + "\n" for module in variant_proofs), 1)
         audit_file.write_text(audit, encoding="utf-8")
         env["LEAN_PATH"] = os.pathsep.join([str(folder), *lake_paths,
             str(ROOT / "formal/.lake/build/lib/lean")])
-        modules = ["Batching/Keccak", "Batching/Constants", "RustParser/Models", "RustCrypto/Simd", "RustCrypto/Compat", "RustCrypto/Chunks",
+        modules = ["Batching/Keccak", "Batching/Constants", "RustCrypto/Models/Parser", "RustCrypto/Models/Simd", "RustCrypto/Models/Compat", "RustCrypto/Common/Chunks",
                    "LeanSphincs/TypesExternal", "LeanSphincs/Types", "LeanSphincs/FunsExternal",
-                   "LeanSphincs/Funs", "RustParser", "RustIndex", "RustCrypto/Hash", "RustCrypto/HashPrimitives", "RustCrypto/Verifier", "RustCrypto/Writer", "RustCrypto/Codeword", "RustCrypto/CodewordBridge", "RustCrypto/WotsChain", "RustCrypto/CounterSearch", "RustCrypto/ByteBridge", "RustCrypto/ReadBytes", "RustCrypto/WriteBytes",
-                   "RustCrypto/ByteRelations", "RustCrypto/SigningBytes", "RustCrypto/Climb",
-                   "RustCrypto/WotsSource", "RustCrypto/BigEndian", "RustCrypto/AddressBridge",
-                   "RustCrypto/TweakableBridge", "RustCrypto/ChainOrder", "RustCrypto/WotsEthlib", "RustCrypto/DomainFrame", "RustCrypto/WotsPrf", "RustCrypto/OrderedVector", "RustCrypto/VectorFlatten", "RustCrypto/WotsPublic", "RustCrypto/PublicLeafBridge", "RustCrypto/WotsSignSource", "RustCrypto/WotsSignBridge", "RustCrypto/EncodingBridge",
-                   "RustCrypto/CounterBridge", "RustCrypto/SearchBridge", "RustCrypto/WotsSignFull", "RustCrypto/ParentBridge",
-                   "RustCrypto/TreePrimitives", "RustCrypto/ForsPositions", "RustCrypto/ForsPrimitives", "RustCrypto/ClimbBridge", "RustCrypto/ForsClimb",
-                   "RustCrypto/ForsWindow", "RustCrypto/ForsDigest", "RustCrypto/ForsDigestBridge", "RustCrypto/BuildFinish", "RustCrypto/BuildRoot", "RustCrypto/RootBridge", "RustCrypto/Selection", "RustCrypto/BuildSecret", "RustCrypto/SecretBridge", "RustCrypto/FinishPath", "RustCrypto/Coverage", "RustCrypto/PathPatch", "RustCrypto/BuildPath", "RustCrypto/RootCoverage", "RustCrypto/MerklePath",
-                   "RustCrypto/MerkleBuilt", "RustCrypto/ConstructionModels", "RustCrypto/ConstructorPath", "RustCrypto/TreeConstruction",
-                   "RustCrypto/OrderedPrefix", "RustCrypto/ForsSigning", "RustCrypto/ForsSigningLoop", "RustCrypto/ForsSigningFull",
-                   "RustCrypto/ForsScalarBytes", "RustCrypto/ForsScalarLayout", "RustCrypto/ClimbShort",
-                   "RustCrypto/WotsRecoverModel", "RustCrypto/WotsRecoverLayout", "RustCrypto/WotsRecoverCanonical",
-                   "RustCrypto/WotsCounterBytes", "RustCrypto/WotsEncodingRead", "RustCrypto/WotsBackend", "RustCrypto/WotsEntry", "RustCrypto/KeyMaterial", "RustCrypto/ContextFrame", "RustCrypto/KeyGen", "RustCrypto/TopCacheModel", "RustCrypto/TopCacheLeaf", "RustCrypto/TopCacheLeafLoop", "RustCrypto/TopCacheParentBody", "RustCrypto/TopCacheUpdate", "RustCrypto/TopCacheParentLoop", "RustCrypto/TopCacheLevelsBody", "RustCrypto/TopCacheLevelsLoop", "RustCrypto/TopCacheNew", "RustCrypto/TopCachePathIndex", "RustCrypto/TopCachePath", "RustCrypto/MessageHashBridge", "RustCrypto/MessageHashFull", "RustCrypto/DigestIndexBridge", "RustCrypto/DigestIndexMachine", "RustCrypto/LayerInput", "RustCrypto/LayerIndex", "RustCrypto/RecoverLayer", "RustCrypto/RecoverLayerShort", "RustCrypto/LayoutRead", "RustCrypto/LayoutNode", "RustCrypto/LayoutCounter", "RustCrypto/LayoutDigests", "RustCrypto/LayoutLayer", "RustCrypto/LayoutOpening", "RustCrypto/LayoutFors", "RustCrypto/LayoutSignature",
-                   "RustCrypto/FmtNumeric", "RustCrypto/FmtLaws", "RustCrypto/FmtTemplate", "RustCrypto/FmtSource", "RustCrypto/FmtOutput", "RustCrypto/CanonicalMerkle", "RustCrypto/CanonicalTrees", "RustCrypto/WholeVerifyModel", "RustCrypto/WholeVerifyIndex", "RustCrypto/WholeVerifyCompare", "RustCrypto/WholeVerifyApi", "RustCrypto/WholeVerifyDecoded", "RustCrypto/WholeRoot",
-                   "RustCrypto/FullSignWots", "RustCrypto/FullSignPath", "RustCrypto/FullSignConstants", "RustCrypto/FullSignModel", "RustCrypto/FullSignBuffer", "RustCrypto/FullSignFailure", "RustCrypto/FullSignSelectPath", "RustCrypto/FullSignSuccess", "RustCrypto/FullSignLoop", "RustCrypto/FullSignNative", "RustCrypto/FullSignIndex", "RustCrypto/FullSignPublic", "RustCrypto/FullSign", "RustCrypto/CanonicalWots", "RustCrypto/CanonicalPublicKey", "RustCrypto/CanonicalSigningSerialization", "RustCrypto/CanonicalSigning", "RustCrypto/CanonicalSigningSuccess", "RustCrypto/CanonicalSigningApi",
-                   *variant_proofs, "RustCrypto/SourceAudit"]
+                   "LeanSphincs/Funs", "RustCrypto/Serialization/Parser", "RustCrypto/Serialization/Index", "RustCrypto/Hash/Core", "RustCrypto/Hash/Primitives", "RustCrypto/Verification/Core", "RustCrypto/Serialization/Writer", "RustCrypto/Wots/Encoding/Codeword", "RustCrypto/Wots/Encoding/CodewordBridge", "RustCrypto/Wots/Chain", "RustCrypto/Wots/Encoding/CounterSearch", "RustCrypto/Common/ByteBridge", "RustCrypto/Serialization/ReadBytes", "RustCrypto/Serialization/WriteBytes",
+                   "RustCrypto/Common/ByteRelations", "RustCrypto/Signing/Bytes", "RustCrypto/Tree/Climb",
+                   "RustCrypto/Wots/Source", "RustCrypto/Common/BigEndian", "RustCrypto/Hash/AddressBridge",
+                   "RustCrypto/Hash/TweakableBridge", "RustCrypto/Wots/ChainOrder", "RustCrypto/Wots/Ethlib", "RustCrypto/Hash/DomainFrame", "RustCrypto/Wots/Prf", "RustCrypto/Common/OrderedVector", "RustCrypto/Common/VectorFlatten", "RustCrypto/Wots/Public", "RustCrypto/Wots/PublicLeafBridge", "RustCrypto/Wots/Signing/Source", "RustCrypto/Wots/Signing/Bridge", "RustCrypto/Wots/Encoding/EncodingBridge",
+                   "RustCrypto/Wots/Encoding/CounterBridge", "RustCrypto/Wots/Encoding/SearchBridge", "RustCrypto/Wots/Signing/Full", "RustCrypto/Tree/ParentBridge",
+                   "RustCrypto/Tree/Primitives", "RustCrypto/Fors/Positions", "RustCrypto/Fors/Primitives", "RustCrypto/Tree/ClimbBridge", "RustCrypto/Fors/Climb",
+                   "RustCrypto/Fors/Window", "RustCrypto/Fors/Digest", "RustCrypto/Fors/DigestBridge", "RustCrypto/Tree/Build/Finish", "RustCrypto/Tree/Build/Root", "RustCrypto/Tree/Build/RootBridge", "RustCrypto/Tree/Build/Selection", "RustCrypto/Tree/Build/Secret", "RustCrypto/Tree/Build/SecretBridge", "RustCrypto/Tree/Build/FinishPath", "RustCrypto/Tree/Build/Coverage", "RustCrypto/Tree/Build/PathPatch", "RustCrypto/Tree/Build/Path", "RustCrypto/Tree/Build/RootCoverage", "RustCrypto/Tree/MerklePath",
+                   "RustCrypto/Tree/MerkleBuilt", "RustCrypto/Tree/Build/Models", "RustCrypto/Tree/Build/ConstructorPath", "RustCrypto/Tree/Construction",
+                   "RustCrypto/Common/OrderedPrefix", "RustCrypto/Fors/Signing/Core", "RustCrypto/Fors/Signing/Loop", "RustCrypto/Fors/Signing/Full",
+                   "RustCrypto/Fors/Scalar/Bytes", "RustCrypto/Fors/Scalar/Layout", "RustCrypto/Tree/ClimbShort",
+                   "RustCrypto/Wots/Recovery/Model", "RustCrypto/Wots/Recovery/Layout", "RustCrypto/Wots/Recovery/Canonical",
+                   "RustCrypto/Wots/Encoding/CounterBytes", "RustCrypto/Wots/Encoding/Read", "RustCrypto/Wots/Backend", "RustCrypto/Wots/Entry", "RustCrypto/Keygen/Material", "RustCrypto/Hash/ContextFrame", "RustCrypto/Keygen/KeyGen", "RustCrypto/Tree/Cache/Model", "RustCrypto/Tree/Cache/Leaf", "RustCrypto/Tree/Cache/LeafLoop", "RustCrypto/Tree/Cache/ParentBody", "RustCrypto/Tree/Cache/Update", "RustCrypto/Tree/Cache/ParentLoop", "RustCrypto/Tree/Cache/LevelsBody", "RustCrypto/Tree/Cache/LevelsLoop", "RustCrypto/Tree/Cache/New", "RustCrypto/Tree/Cache/PathIndex", "RustCrypto/Tree/Cache/Path", "RustCrypto/Verification/Message/Bridge", "RustCrypto/Verification/Message/Full", "RustCrypto/Verification/Message/IndexBridge", "RustCrypto/Verification/Message/IndexMachine", "RustCrypto/Verification/Layer/Input", "RustCrypto/Verification/Layer/Index", "RustCrypto/Verification/Layer/Model", "RustCrypto/Verification/Layer/Short", "RustCrypto/Serialization/Layout/Read", "RustCrypto/Serialization/Layout/Node", "RustCrypto/Serialization/Layout/Counter", "RustCrypto/Serialization/Layout/Digests", "RustCrypto/Serialization/Layout/Layer", "RustCrypto/Serialization/Layout/Opening", "RustCrypto/Serialization/Layout/Fors", "RustCrypto/Serialization/Layout/Signature",
+                   "RustCrypto/Formatting/Numeric", "RustCrypto/Formatting/Laws", "RustCrypto/Formatting/Template", "RustCrypto/Formatting/Source", "RustCrypto/Formatting/Output", "RustCrypto/Correctness/Merkle", "RustCrypto/Correctness/Trees", "RustCrypto/Verification/Model", "RustCrypto/Verification/Index", "RustCrypto/Verification/Compare", "RustCrypto/Verification/Api", "RustCrypto/Verification/Decoded", "RustCrypto/Verification/Root/Model",
+                   "RustCrypto/Signing/Full/Wots", "RustCrypto/Signing/Full/Path", "RustCrypto/Signing/Full/Constants", "RustCrypto/Signing/Full/Model", "RustCrypto/Signing/Full/Buffer", "RustCrypto/Signing/Full/Failure", "RustCrypto/Signing/Full/SelectPath", "RustCrypto/Signing/Full/Success", "RustCrypto/Signing/Full/Loop", "RustCrypto/Signing/Full/Native", "RustCrypto/Signing/Full/Index", "RustCrypto/Signing/Full/Public", "RustCrypto/Signing/Full/Core", "RustCrypto/Correctness/Wots", "RustCrypto/Correctness/PublicKey", "RustCrypto/Correctness/Signing/Serialization", "RustCrypto/Correctness/Signing/Core", "RustCrypto/Correctness/Signing/Success", "RustCrypto/Correctness/Signing/Api",
+                   *variant_proofs, "RustCrypto/Audit/Source"]
         checked_sources = {p.relative_to(folder).as_posix(): digest(p) for p in folder.rglob("*.lean")}
         for module in modules:
             checked(["lean", "-R", folder, "-DwarningAsError=true", folder / (module + ".lean"),
@@ -213,7 +238,7 @@ def main():
         if label == "sse2":
             raw = inputs["Funs.lean"].decode("utf-8")
             body = raw.split("def signature.write_nodes_loop.body", 1)[1].split("/--", 1)[0]
-            contract = proof_contents[ROOT / "formal/RustCrypto/Writer.lean"].decode("utf-8")
+            contract = proof_contents[ROOT / "formal/RustCrypto/Serialization/Writer.lean"].decode("utf-8")
             contract = "@[step] theorem body_success" + contract.split("@[step] theorem body_success", 1)[1].split("@[step] theorem body_done", 1)[0]
             contract = contract.replace("lean_sphincs.signature.write_nodes_loop.body", "lean_sphincs.Control.writer_body")
             positive = ("module\nimport LeanSphincs.Funs\nopen Aeneas Aeneas.Std Result ControlFlow\n"
@@ -235,7 +260,7 @@ def main():
                 if failed.returncode == 0 or expected not in log.read_text(encoding="utf-8"):
                     raise RuntimeError("negative control did not fail as expected: " + str(log))
             reject(control_file, "unsolved goals", logs / "negativeWriter.log")
-            audit = (folder / "RustCrypto/SourceAudit.lean").read_text(encoding="utf-8")
+            audit = (folder / "RustCrypto/Audit/Source.lean").read_text(encoding="utf-8")
             injection = ("public axiom lean_sphincs.Control.bad : False\n"
                          "public theorem lean_sphincs.Control.rejected : False := lean_sphincs.Control.bad\n")
             control_file = logs / "negativeAssumption.lean"
@@ -266,7 +291,7 @@ def main():
             # Rechecking the entire false round claim can spend its budget unfolding
             # symbolic word expressions; this control must fail on a concrete mismatch.
             def rotation_control(angle):
-                return ("module\nimport LeanSphincs.Funs\nimport RustCrypto.SimdRound\n"
+                return ("module\nimport LeanSphincs.Funs\nimport RustCrypto.Hash.Keccak.Rotate\n"
                         "open Aeneas Aeneas.Std Result\n"
                         f"example : lean_sphincs.hash.batch.rotate {angle}#u32 (fun _ => 1#u64) "
                         "⦃ out => (out 0).bv = (1#64).rotateLeft 44 ⦄ := by\n"
@@ -300,7 +325,7 @@ def main():
             checked(["lean", "-R", chi_root, "-DwarningAsError=true", chi_file,
                      "-o", chi_root / "LeanSphincs/Funs.olean"], runtime,
                     logs / "negativeChi-valid-source.log", chi_env)
-            chi_contract = (folder / "RustCrypto/Permutation.lean").read_text(encoding="utf-8")
+            chi_contract = (folder / "RustCrypto/Hash/Keccak/Permutation.lean").read_text(encoding="utf-8")
             positive_chi = logs / "positiveChi.lean"
             positive_chi.write_text(chi_contract, encoding="utf-8")
             checked(["lean", "-DwarningAsError=true", positive_chi], runtime,
@@ -329,7 +354,7 @@ def main():
             raise RuntimeError("worker proof sources changed during checking: " + label)
         item = {"variant": label, "local_functions": len(local), "kernel_checked": True,
                          "generated_bodies": body_hashes, "variant_proofs": variant_proofs,
-                         "audit_source_sha256": digest(folder / "RustCrypto/SourceAudit.lean"),
+                         "audit_source_sha256": digest(folder / "RustCrypto/Audit/Source.lean"),
                          "checked_sources": checked_sources,
                          "variant_proof_sha256": {module: digest(folder / (module + ".lean"))
                                                    for module in variant_proofs}}
@@ -351,9 +376,8 @@ def main():
     if stdlib_model != runtime_models.validate_stdlib_model(runtime, backend):
         raise RuntimeError("standard-library model changed during checking")
     current_files = [ROOT / "formal/Batching/Keccak.lean", ROOT / "formal/Batching/Constants.lean",
-                     *sorted((ROOT / "formal/Runtime").rglob("*.lean")), *sorted((ROOT / "formal/RustCrypto").glob("*.lean")),
-                     ROOT / "formal/RustParser/Models.lean", ROOT / "formal/RustParser.lean",
-                     ROOT / "formal/RustIndex.lean"]
+                     *sorted((ROOT / "formal/Runtime").rglob("*.lean")),
+                     *sorted((ROOT / "formal/RustCrypto").rglob("*.lean"))]
     if snapshot != extraction.source_snapshot() or before != {p.relative_to(ROOT).as_posix(): digest(p) for p in current_files}:
         raise RuntimeError("source or proof files changed during checking")
     result = {"scope": "complete deterministic source functional refinement: key generation, bounded/default signing, decoding/public verification, successful-signature roundtrip, all production scalar/SIMD paths, and observable SignError methods under the documented standard-library/external models", "full_crate_formally_verified": True,

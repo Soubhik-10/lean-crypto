@@ -1,8 +1,51 @@
-# Lean proofs, Lean equivalences and Rust conformance
+# Formal verification and conformance
 
-The sections above the source-verification guide describe earlier upstream security,
-Lean-model and finite-conformance work. The [production source contracts](#production-sphincs-source-verification)
-below use a separate EthLib reference and gate.
+The production SPHINCS source proofs establish functional correctness against a
+pinned mathematical specification, under explicit translation and library models.
+Start with [what is proved and how verification works](docs/verification.md).
+It explains the all-input claims, examples, trust boundary, evidence, and reproduction.
+
+The complete source audit passed in all five configurations after this directory
+reorganization. The Rust implementation and every theorem body are unchanged;
+imports and verification-tool paths follow the organized modules. The preceding
+performance-fix baseline was also certified at
+[`b82f2a78`](https://github.com/Soubhik-10/lean-crypto/commit/b82f2a78c6bb1c71ecc14f5ce247aeb7c1982c0a).
+See the guide for checking a run's exact inputs against the intended commit.
+
+## Directory layout
+
+| Location | Contents |
+| --- | --- |
+| [RustCrypto/Keygen](RustCrypto/Keygen) | Secret expansion and public-key generation. |
+| [RustCrypto/Signing](RustCrypto/Signing) | Complete bounded/default signing and exact output/error behavior. |
+| [RustCrypto/Verification](RustCrypto/Verification) | Message/index processing, layers, complete root recovery and public verification. |
+| [RustCrypto/Serialization](RustCrypto/Serialization) | Readers, writers, index arithmetic and typed byte layouts. |
+| [RustCrypto/Hash](RustCrypto/Hash) | Hash/address bridges, batched operations and the complete Keccak permutation. |
+| [RustCrypto/Wots](RustCrypto/Wots) | WOTS+C encoding, counter search, signing and scalar/AVX2 recovery. |
+| [RustCrypto/Fors](RustCrypto/Fors) | FORS signing, scalar/batched recovery and complete forest composition. |
+| [RustCrypto/Tree](RustCrypto/Tree) | Merkle construction, authentication paths and the top-tree cache. |
+| [RustCrypto/Correctness](RustCrypto/Correctness) | Canonical component soundness, serialization and successful-signature roundtrips. |
+| [RustCrypto/Formatting](RustCrypto/Formatting) | Extracted `SignError` methods and observable formatting behavior. |
+| [RustCrypto/Models](RustCrypto/Models), [Common](RustCrypto/Common) | External interfaces, compatibility and shared proof lemmas. |
+| [RustCrypto/Audit](RustCrypto/Audit) | Required theorem inventory and transitive dependency audit. |
+| [Runtime](Runtime/README.md) | The four explicit Aeneas formatting-model replacements. |
+| [Batching](Batching) | Pinned Keccak/constants reference helpers used by the source proofs. |
+| [Implementation](Implementation) | Earlier Lean algorithm equivalences and finite-conformance executables. |
+| [Verifier/Axioms.lean](Verifier/Axioms.lean) | The separate aggregate VM/wire theorem dependency gate. |
+| [docs/verification.md](docs/verification.md) | Detailed explanation of the SPHINCS source-verification claim. |
+
+Lean module imports follow these directories. Declaration namespaces and theorem
+names are unchanged: for example, module `RustCrypto.Signing.Full.Core` contains
+`RustCrypto.FullSign.sign_ethlib_spec`. Generated translations, downloaded pinned
+sources, object files and run evidence live in ignored caches, rather than among
+the maintained proof sources.
+
+## Earlier security and conformance work
+
+The sections below through the trusted-dependency discussion describe the earlier
+upstream security, Lean-model and finite-conformance work. The
+[production source contracts](#production-sphincs-source-verification) use a
+separate pinned EthLib reference and gate.
 
 The reference is [leanEthereum/leanVM at the immutable revision in upstream.json](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal), using Lean 4.36.0. It credits [Verified-zkEVM/leanerVM](https://github.com/Verified-zkEVM/leanerVM) for its vendored formalization. CI fetches its source and licenses into an ignored cache. Our additional modules are in [Implementation](Implementation); `prepare_formal.py` copies them into that build and adds Lake targets, leaving the pinned upstream Lean definitions unchanged. Provenance artifacts include our source hashes.
 
@@ -92,7 +135,7 @@ workflow adds two gates:
 
 * Kernel-check `LeanVM.knowledgeSoundness_holds`, `LeanVM.completeness_holds`,
   `LeanVM.Wire.roundTrip` and `LeanVM.Wire.oneEncoding`, plus the executable
-  verifier and wire models. `VerifierAxioms.lean` requires those four theorems
+  verifier and wire models. [`Verifier/Axioms.lean`](Verifier/Axioms.lean) requires those four theorems
   and rejects transitive dependencies beyond the three foundational axioms.
   Source digests, profile revision, toolchains and forbidden proof escapes are
   checked before building. No kernel-skipping development options are used.
@@ -156,20 +199,22 @@ Rust bodies. It covers scalar, SSE2, AVX2, SSE2 with assembly hashing, and AVX2
 with assembly hashing. Scalar is extracted for `aarch64-unknown-linux-gnu`;
 the four x86 configurations use their production compiler feature selections.
 
-**Final combined audit: passed in all five configurations.** Fresh extraction
-and translation, complete source contracts, concrete backend instances, signing
-roundtrips, and dependency/mutation audits passed against the observable
-standard-library model.
+**Completed baseline audit: all five configurations passed at `b82f2a78`.**
+Fresh extraction and translation, complete source contracts, concrete backend
+instances, signing roundtrips, and dependency/mutation audits passed against the
+observable standard-library model. The reorganized module layout requires a fresh
+complete run. See the [detailed verification guide](docs/verification.md) for what
+this establishes and the status of the evidence.
 
 | Main contracts | Established behavior |
 | --- | --- |
 | `KeyGen.key_gen_ethlib_spec` | Every 32-byte secret produces the encoded public seed and canonical top-tree root. |
-| `FullSign.sign_with_limit_ethlib_spec`, `sign_ethlib_spec` | Complete public signing for every `u64` attempt limit, including zero, exact signature bytes on success, and the precise first exhausted layer on failure. Default signing uses `2^32` trials. |
+| `FullSign.sign_with_limit_ethlib_spec`, `sign_ethlib_spec` | The internal bounded signer for every `u64` attempt limit, including zero, exact signature bytes on success, and the precise first exhausted layer on failure; public `sign` uses `2^32` trials. |
 | `WholeVerifier.verify_*_ethlib_spec` | Actual public verification equals EthLib `decodePublicKey`, `decodeSignature` and `verifyWith` for every signature byte string, including all invalid lengths and layer-encoding rejections. Concrete scalar/SSE2/AVX2 contracts discharge the backend premises. |
-| `CanonicalCorrectness.sign_with_limit_roundtrip_*`, `sign_roundtrip_*` | Actual key generation, signing and verification compose: every successfully generated signature is accepted; counter exhaustion remains an error. Both bounded and default APIs are covered in all five configurations. |
+| `CanonicalCorrectness.sign_with_limit_roundtrip_*`, `sign_roundtrip_*` | Actual key generation, signing and verification compose: every successfully generated signature is accepted; counter exhaustion remains an error. The internal bounded helper and public default API are covered in all five configurations. |
 | `Layout.*`, `CanonicalCorrectness.signature_roundtrip` | Exact public-key and 7,740-byte signature layouts, all counters/FORS/chain/path fields, malformed-length behavior, and lossless typed signature serialization. |
 | Source SIMD, FORS, WOTS, tree and cache contracts | Actual lane arithmetic, all 24 Keccak rounds, 64/80-byte hashing, gathers/scatters, queues and scalar tails; all FORS openings and hypertree layers; complete signing-tree/cache construction and exact reader/buffer updates. |
-| `ErrorFormatting` in `RustCrypto/Fmt*` | Extracted `SignError` Display, Debug, Clone, equality and Error supertraits, including all byte-valued layers, alternate Debug, writer options and retained partial output on failure. |
+| `ErrorFormatting` in [RustCrypto/Formatting](RustCrypto/Formatting) | Extracted `SignError` Display, Debug, Clone, equality and Error supertraits, including all byte-valued layers, alternate Debug, writer options and retained partial output on failure. |
 
 These are source functional proofs in the deterministic `Id` model. They trust
 the Lean kernel and standard foundations, the pinned Charon/Aeneas translation,
@@ -207,6 +252,7 @@ set -euo pipefail
 runtime=/absolute/path/to/sphincs-runtime
 charon=/absolute/path/to/charon
 aeneas=/absolute/path/to/aeneas
+export RUSTUP_TOOLCHAIN=nightly-2026-09-17
 
 python3 -I scripts/prepare_batching.py
 (cd formal && lake build Batching +EthLib.Cryptography.Sphincs.Serialization)
@@ -231,12 +277,13 @@ is not a proof. `prepare_batching.py` prepares the pinned EthLib closure; the La
 the source proofs. Runtime preparation preserves the stock Aeneas sources and
 builds the documented formatting replacements separately with their importers.
 
-`SourceAudit` requires the main contracts by name and audits their transitive
+[`RustCrypto/Audit/Source.lean`](RustCrypto/Audit/Source.lean) requires the main
+contracts by name and audits their transitive
 dependencies, allowing only `propext`, `Classical.choice` and `Quot.sound`.
 Generated local Rust bodies must be present and non-opaque. The gate rejects
 proof holes and kernel shortcuts, checks source/proof/tool/model identities
 before and after checking, and runs rejection controls for changed source,
-serialization, SIMD rotation, injected assumptions and missing required
+serialization, SIMD rotation/chi, injected assumptions and missing required
 contracts. Successful runs write a fresh `formal/.cache/source-runs/*/evidence.json`;
 its trust-boundary and exclusion fields delimit the functional-refinement claim.
 
