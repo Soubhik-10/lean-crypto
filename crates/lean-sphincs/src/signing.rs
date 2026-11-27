@@ -44,12 +44,13 @@ pub fn key_gen(secret_seed: &B256) -> B256 {
     public_key[..NODE_BYTES].copy_from_slice(pk_seed.as_slice());
     let mut address = HashContext::new(&public_key);
     address.set_tree(2, 0);
+    let mut path = [];
     let root = build_xmss(
         &mut address,
         secret_seed,
         MAX_TREE_HEIGHT as u32,
         0,
-        &mut [],
+        &mut path,
     );
     public_key[NODE_BYTES..].copy_from_slice(root.as_slice());
     public_key
@@ -105,24 +106,26 @@ fn sign_with_limit(
 
     let rho = randomizer(&sk_prf, &pk_seed, message);
     let digest = message_digest(&public_key, message, &rho.0);
-    let tree = u32::from_be_bytes([0, digest[30], digest[31], digest[32]]) & ((1 << 18) - 1);
-    let mut index = u64::from((tree << 8) | u32::from(digest[33]));
-    let mut signature = Signature::ZERO;
-    signature[..NODE_BYTES].copy_from_slice(rho.as_slice());
-    address.set_tree(0, u64::from(tree));
+    let tree_index = u32::from_be_bytes([0, digest[30], digest[31], digest[32]]) & ((1 << 18) - 1);
+    let mut index = u64::from((tree_index << 8) | u32::from(digest[33]));
+    let mut serialized = Signature::ZERO;
+    serialized[..NODE_BYTES].copy_from_slice(rho.as_slice());
+    address.set_tree(0, u64::from(tree_index));
     let mut node = fors::sign(
         &mut address,
         seed,
         &digest,
         u32::from(digest[33]),
-        &mut signature[NODE_BYTES..NODE_BYTES + FORS_BYTES],
+        &mut serialized[NODE_BYTES..NODE_BYTES + FORS_BYTES],
     );
     let mut offset = NODE_BYTES + FORS_BYTES;
-    for (layer, height) in LAYER_HEIGHTS.into_iter().enumerate() {
+    let mut layer = 0;
+    while layer < LAYER_HEIGHTS.len() {
+        let height = LAYER_HEIGHTS[layer];
         let leaf = crate::params::take_layer(&mut index, height);
         address.set_tree(layer as u32, index);
         let layer_bytes = WOTS_BYTES + height as usize * NODE_BYTES;
-        let output = &mut signature[offset..offset + layer_bytes];
+        let output = &mut serialized[offset..offset + layer_bytes];
         wots::sign(
             &mut address,
             seed,
@@ -144,12 +147,11 @@ fn sign_with_limit(
                 &mut path[..height as usize],
             );
         }
-        for (output, sibling) in output[WOTS_BYTES..].chunks_exact_mut(NODE_BYTES).zip(path) {
-            output.copy_from_slice(sibling.as_slice());
-        }
+        crate::signature::write_nodes(&mut output[WOTS_BYTES..], &path);
         offset += layer_bytes;
+        layer += 1;
     }
-    Ok(signature)
+    Ok(serialized)
 }
 
 #[cfg(test)]

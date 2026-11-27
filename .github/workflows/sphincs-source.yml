@@ -1,0 +1,141 @@
+name: SPHINCS source verification
+
+on:
+  pull_request:
+    paths:
+      - 'crates/lean-sphincs/src/**'
+      - 'crates/lean-sphincs/Cargo.toml'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'formal/RustCrypto/**'
+      - 'formal/Runtime/**'
+      - 'formal/ethlib.json'
+      - 'formal/extractor.json'
+      - 'formal/lean-toolchain'
+      - 'formal/lakefile.toml'
+      - 'formal/lake-manifest.json'
+      - 'formal/Batching/**'
+      - 'scripts/test_translation.py'
+      - 'scripts/*sphincs*.py'
+      - 'scripts/prepare_rust_runtime.py'
+      - 'scripts/prepare_batching.py'
+      - '.github/workflows/sphincs-source.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'crates/lean-sphincs/src/**'
+      - 'crates/lean-sphincs/Cargo.toml'
+      - 'formal/**'
+      - 'scripts/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/sphincs-source.yml'
+  schedule:
+    - cron: '23 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sphincs-source-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  source:
+    name: Extract and kernel-check every SPHINCS configuration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      CI: 'true'
+      OPAMSWITCH: sphincs-proof
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: { persist-credentials: false }
+      - uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        with:
+          lake-package-directory: formal
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: false
+          use-mathlib-cache: false
+      - name: Fetch the pinned translator source archives
+        run: |
+          python3 - <<'PY'
+          import json, os, re, tarfile, urllib.request
+          from pathlib import Path
+          pin = json.loads(Path('formal/extractor.json').read_text())
+          cache = Path('formal/.cache').resolve()
+          cache.mkdir(parents=True, exist_ok=True)
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              for name in ('aeneas', 'charon'):
+                  entry = pin[name]
+                  assert entry['repository'] == 'AeneasVerif/' + name
+                  assert re.fullmatch('[0-9a-f]{40}', entry['revision'])
+                  archive = cache / (name + '.tar.gz')
+                  url = 'https://codeload.github.com/' + entry['repository'] + '/tar.gz/' + entry['revision']
+                  with urllib.request.urlopen(url, timeout=60) as response:
+                      archive.write_bytes(response.read())
+                  with tarfile.open(archive) as tar:
+                      for member in tar.getmembers():
+                          assert not Path(member.name).is_absolute() and '..' not in Path(member.name).parts
+                      tar.extractall(cache, filter='data')
+                  source = cache / (name + '-' + entry['revision'])
+                  assert source.is_dir()
+                  print(name.upper() + '_SRC=' + str(source), file=env)
+              print('AENEAS_VERSION=' + pin['aeneas']['revision'], file=env)
+              print('CHARON_GIT_COMMIT=' + pin['charon']['revision'], file=env)
+              print('RUSTUP_TOOLCHAIN=' + pin['rust_toolchain'], file=env)
+              print('OCAML_VERSION=' + pin['ocaml'], file=env)
+          PY
+      - name: Build the pinned extraction and translation tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends opam libgmp-dev pkg-config
+          rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal --component rustc-dev,rust-src,llvm-tools --target aarch64-unknown-linux-gnu
+          CARGO_TARGET_DIR="$RUNNER_TEMP/charon-build" cargo build --manifest-path "$CHARON_SRC/charon/Cargo.toml" --locked --release --no-default-features --features rustc --bin charon --bin charon-driver
+          mkdir -p "$RUNNER_TEMP/sphincs-tools"
+          cp "$RUNNER_TEMP/charon-build/release/charon" "$RUNNER_TEMP/charon-build/release/charon-driver" "$RUNNER_TEMP/sphincs-tools/"
+          ln -s "$CHARON_SRC" "$AENEAS_SRC/charon"
+          make -C "$CHARON_SRC" charon-ml/src/CharonVersion.ml
+          env -u OPAMSWITCH opam init --bare --disable-sandboxing --no-setup --yes
+          opam switch create "$OPAMSWITCH" "ocaml-base-compiler.$OCAML_VERSION" --yes
+          cd "$AENEAS_SRC/src"
+          opam install --yes --deps-only ./aeneas.opam ./charon/charon.opam ./charon/name_matcher_parser.opam
+          opam exec -- dune build --build-dir "$RUNNER_TEMP/aeneas-build" main.exe
+          cp "$RUNNER_TEMP/aeneas-build/default/main.exe" "$RUNNER_TEMP/sphincs-tools/aeneas"
+          echo "$RUNNER_TEMP/sphincs-tools" >> "$GITHUB_PATH"
+      - name: Build the pinned reference and observable standard-library models
+        run: |
+          python3 -I scripts/prepare_batching.py
+          (cd formal && lake build Batching +EthLib.Cryptography.Sphincs.Serialization)
+          python3 -I scripts/prepare_rust_runtime.py --runtime "$RUNNER_TEMP/sphincs-runtime" --stdlib-model
+      - name: Check translation provenance guards
+        run: python3 -I -m unittest discover -s scripts -p test_translation.py
+      - name: Extract, translate and prove the actual source
+        run: |
+          set -o pipefail
+          python3 -I scripts/extract_sphincs.py --charon "$(command -v charon)" --target-dir "$RUNNER_TEMP/extraction-targets" | tee "$RUNNER_TEMP/extraction.stdout"
+          extraction=$(tail -n 1 "$RUNNER_TEMP/extraction.stdout")
+          python3 -I scripts/translate_sphincs.py --aeneas "$(command -v aeneas)" --extraction-run "$extraction" | tee "$RUNNER_TEMP/translation.stdout"
+          report=$(tail -n 1 "$RUNNER_TEMP/translation.stdout")
+          python3 -I scripts/check_sphincs_source.py --runtime "$RUNNER_TEMP/sphincs-runtime" --translation-run "$(dirname "$report")" --proof-workspace "$RUNNER_TEMP/sphincs-runtime/source-proof"
+      - name: Save the verification evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: sphincs-source-evidence
+          include-hidden-files: true
+          path: |
+            formal/.cache/extraction-runs/*/manifest.json
+            formal/.cache/translation-runs/*/report.json
+            formal/.cache/source-runs/*/evidence.json
+            ${{ runner.temp }}/sphincs-runtime/stdlib-model/model-manifest.json
+          if-no-files-found: warn
+          retention-days: 14

@@ -59,10 +59,13 @@ stack instead of retaining the full tree.
 
 Conformance fixtures are derived from EthLib's CC0-1.0 test data, with source
 revision and raw-file hashes retained in [tests/vectors](tests/vectors/README.md).
-The scheme and this package remain experimental. The formal CI described below
-checks an upstream Lean model and conformance evidence for this implementation;
-it does not establish a complete formal proof of the Rust source. No independent
-security review or audit is claimed.
+The scheme and this package remain experimental. The older upstream security,
+Lean-model and conformance checks are separate from the
+[production source-verification guide](../../formal/README.md#production-sphincs-source-verification).
+The completed five-configuration source functional-refinement and signing-roundtrip
+audit is documented with its certified revision and trust boundary in the
+[verification guide](../../formal/docs/verification.md). No independent security
+review or audit is claimed.
 
 ## Validation
 
@@ -82,9 +85,28 @@ every-byte mutation checks, malformed encodings, and zero allocations across
 all three operations. The [differential test runner](../../testing/README.md) and
 [coverage-guided fuzzers](../../fuzz/README.md) compare this crate with leanVM.
 
-## Formal verification CI
+## Formal verification
 
-The [formal workflow](../../.github/workflows/formal.yml) uses the Lean 4 specification
+Formal verification checks mathematical claims about all inputs, rather than
+sampling executions. This crate's source contracts relate Charon/Aeneas
+translations of the actual Rust bodies to the pinned EthLib specification and a
+bounded signer composed from its signing primitives.
+
+The completed five-configuration audit covers public `key_gen`, `sign` and
+`verify`, the private signing helper for every `u64` attempt limit, exact signature
+serialization, malformed-input rejection, SIMD/scalar tails, observable error
+methods and successful signing-to-verification roundtrips. Public `sign` retains
+its `2^32` attempt limit and may return `CounterExhausted`; success for every
+seed/message is not assumed.
+
+[What “fully verified” means, examples, the certified revision, model assumptions,
+and reproduction](../../formal/docs/verification.md) explains this functional
+claim. The [source-verification workflow](../../.github/workflows/sphincs-source.yml)
+checks all five production configurations. The proofs trust the pinned
+translation and explicit standard-library/Alloy/`wide` models; cryptographic
+hardness, constant time and compiled-code correctness are outside their scope.
+
+The older [formal workflow](../../.github/workflows/formal.yml) uses the Lean 4 specification
 and security proofs from [leanEthereum/leanVM](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal),
 pinned to `f95bc21a4875e10a733f4b2e56f1d4adb81536eb` in
 [formal/upstream.json](../../formal/upstream.json). leanVM credits
@@ -117,9 +139,9 @@ same pinned Lean specification and check counter/codeword/tree boundaries and
 AVX2 scalar tails. Both real Lean executables must reject deliberately wrong
 expected results in every matrix job.
 
-The evidence has three levels: security theorems about the Lean specification,
+That older evidence has three levels: security theorems about the Lean specification,
 proved relationships between Lean descriptions, and finite Rust-to-Lean
-conformance tests. The new functional equivalences do not transfer oracle-query
+conformance tests. Those Lean equivalences do not transfer oracle-query
 security bounds to Rust's different hash-call order. Rust/backend semantics,
 compilers and test parsers remain trusted; constant time and side channels are
 outside these proofs. [Proof inventory, limits and reproduction](../../formal/README.md).

@@ -1,0 +1,14 @@
+name = "lean_crypto_formal"
+version = "0.1.0"
+
+[[lean_lib]]
+name = "EthLib"
+srcDir = ".cache/ethlib"
+roots = ["EthLib"]
+globs = ["EthLib.+"]
+requiresModuleSystem = true
+
+[[lean_lib]]
+name = "Batching"
+roots = ["Batching.Keccak", "Batching.Constants"]
+moreLeanArgs = ["-DwarningAsError=true"]

@@ -1,4 +1,51 @@
-# Lean proofs, Lean equivalences and Rust conformance
+# Formal verification and conformance
+
+The production SPHINCS source proofs establish functional correctness against a
+pinned mathematical specification, under explicit translation and library models.
+Start with [what is proved and how verification works](docs/verification.md).
+It explains the all-input claims, examples, trust boundary, evidence, and reproduction.
+
+The complete source audit passed in all five configurations after this directory
+reorganization. The Rust implementation and every theorem body are unchanged;
+imports and verification-tool paths follow the organized modules. The preceding
+performance-fix baseline was also certified at
+[`b82f2a78`](https://github.com/Soubhik-10/lean-crypto/commit/b82f2a78c6bb1c71ecc14f5ce247aeb7c1982c0a).
+See the guide for checking a run's exact inputs against the intended commit.
+
+## Directory layout
+
+| Location | Contents |
+| --- | --- |
+| [RustCrypto/Keygen](RustCrypto/Keygen) | Secret expansion and public-key generation. |
+| [RustCrypto/Signing](RustCrypto/Signing) | Complete bounded/default signing and exact output/error behavior. |
+| [RustCrypto/Verification](RustCrypto/Verification) | Message/index processing, layers, complete root recovery and public verification. |
+| [RustCrypto/Serialization](RustCrypto/Serialization) | Readers, writers, index arithmetic and typed byte layouts. |
+| [RustCrypto/Hash](RustCrypto/Hash) | Hash/address bridges, batched operations and the complete Keccak permutation. |
+| [RustCrypto/Wots](RustCrypto/Wots) | WOTS+C encoding, counter search, signing and scalar/AVX2 recovery. |
+| [RustCrypto/Fors](RustCrypto/Fors) | FORS signing, scalar/batched recovery and complete forest composition. |
+| [RustCrypto/Tree](RustCrypto/Tree) | Merkle construction, authentication paths and the top-tree cache. |
+| [RustCrypto/Correctness](RustCrypto/Correctness) | Canonical component soundness, serialization and successful-signature roundtrips. |
+| [RustCrypto/Formatting](RustCrypto/Formatting) | Extracted `SignError` methods and observable formatting behavior. |
+| [RustCrypto/Models](RustCrypto/Models), [Common](RustCrypto/Common) | External interfaces, compatibility and shared proof lemmas. |
+| [RustCrypto/Audit](RustCrypto/Audit) | Required theorem inventory and transitive dependency audit. |
+| [Runtime](Runtime/README.md) | The four explicit Aeneas formatting-model replacements. |
+| [Batching](Batching) | Pinned Keccak/constants reference helpers used by the source proofs. |
+| [Implementation](Implementation) | Earlier Lean algorithm equivalences and finite-conformance executables. |
+| [Verifier/Axioms.lean](Verifier/Axioms.lean) | The separate aggregate VM/wire theorem dependency gate. |
+| [docs/verification.md](docs/verification.md) | Detailed explanation of the SPHINCS source-verification claim. |
+
+Lean module imports follow these directories. Declaration namespaces and theorem
+names are unchanged: for example, module `RustCrypto.Signing.Full.Core` contains
+`RustCrypto.FullSign.sign_ethlib_spec`. Generated translations, downloaded pinned
+sources, object files and run evidence live in ignored caches, rather than among
+the maintained proof sources.
+
+## Earlier security and conformance work
+
+The sections below through the trusted-dependency discussion describe the earlier
+upstream security, Lean-model and finite-conformance work. The
+[production source contracts](#production-sphincs-source-verification) use a
+separate pinned EthLib reference and gate.
 
 The reference is [leanEthereum/leanVM at the immutable revision in upstream.json](https://github.com/leanEthereum/leanVM/tree/f95bc21a4875e10a733f4b2e56f1d4adb81536eb/formal), using Lean 4.36.0. It credits [Verified-zkEVM/leanerVM](https://github.com/Verified-zkEVM/leanerVM) for its vendored formalization. CI fetches its source and licenses into an ignored cache. Our additional modules are in [Implementation](Implementation); `prepare_formal.py` copies them into that build and adds Lake targets, leaving the pinned upstream Lean definitions unchanged. Provenance artifacts include our source hashes.
 
@@ -7,7 +54,7 @@ The reference is [leanEthereum/leanVM at the immutable revision in upstream.json
 | Evidence | What is established | What is not established |
 | --- | --- | --- |
 | Upstream security theorem | `Sphincs.leanSphincsStronglyUnforgeable` proves the statement's scheme strongly unforgeable in the random-permutation model, under the stated signature limit, cryptographic assumptions and query accounting. | Security of every execution of this Rust library with concrete Keccak. |
-| Lean-to-Lean proofs | Upstream connects crate-shaped Lean algorithms to its security model. Our kernel-checked lemmas connect selected Rust-shaped Lean descriptions to that statement, including failure. | A formal semantics or refinement proof for the compiled Rust program, SIMD instructions, byte parser or complete streaming tree builder. |
+| Lean-to-Lean proofs | Upstream connects crate-shaped Lean algorithms to its security model. Our kernel-checked lemmas connect selected Rust-shaped Lean descriptions to that statement, including failure. | Source refinement from those older models alone, or correctness of compiled machine instructions; see the separate source contracts below. |
 | Production Rust-to-Lean comparisons | Actual Rust public-key bytes, deterministic signature bytes, verification/rejection results and component outputs agree with compiled Lean on the saved finite corpus. | Universal equivalence, signing success for every key/message, or automatic transfer of a security bound. |
 
 ### Upstream proof route
@@ -24,10 +71,10 @@ Our Rust signer hashes the public-seed derivation before the PRF-key derivation,
 
 [Implementation/Algorithms.lean](Implementation/Algorithms.lean) proves:
 
-* `indexBefore_eq` and `layer_indices`: the successive divisions in the verifier's 8/8/10-bit index loop give the statement's leaf/tree indices for every 26-bit index and all three layers. Rust's shared, inlined `take_layer` helper is used by signing, verification and the boundary exporter; its machine-word semantics are still tested rather than proved.
+* `indexBefore_eq` and `layer_indices`: the successive divisions in the verifier's 8/8/10-bit index loop give the statement's leaf/tree indices for every 26-bit index and all three layers. Rust's shared, inlined `take_layer` helper is used by signing, verification and the boundary exporter. The source-derived `RustIndex` contracts below now prove its machine-word quotient/remainder behavior at every production layer height; the complete source callers are covered by the source contracts below.
 * `scheduledEnds_eq_walkChain` and `scheduledEnds_eq_recoverChain`: three step-major WOTS passes give the statement's chain-major recovery for every digit, initial value and lane count, instantiated with its addressed hash under a fixed permutation. Original chain order is preserved. These prove the mathematical schedule, not the implementation of the SIMD primitive, buffering, scatter operations or scalar-tail loops.
 * `search_none_iff`, `search_some_spec` and `search_counter_no_wrap`: bounded counter search fails exactly when every attempted encoding fails; success gives the least accepted counter in range, and at the actual `2^32` production limit that counter cannot wrap a 32-bit word.
-* `search_eq_otsSignFrom`: that bounded search followed by chain opening equals the pinned statement's entire WOTS signer for every attempt budget and start counter, including failure. It does not assume signing succeeds. Whole-signature failure propagation, streaming tree construction and byte serialization are not new universal proofs here.
+* `search_eq_otsSignFrom`: that bounded search followed by chain opening equals the pinned statement's entire WOTS signer for every attempt budget and start counter, including failure. It does not assume signing succeeds. These older lemmas do not themselves prove whole-signature failure propagation, streaming tree construction or byte serialization.
 
 `Implementation/Axioms.lean` inspects every theorem in the new namespace and rejects dependencies beyond `propext`, `Classical.choice` and `Quot.sound`. The inventory requires each of the eight documented declarations by name and verifies that it is a theorem; generated equation or auxiliary lemmas cannot replace a missing required theorem. Upstream's escape scanner also checks all of our Lean files. Kernel-skipping options, proof holes and native-decision proof shortcuts are forbidden.
 
@@ -44,7 +91,7 @@ The ignored unit-test exporter in `crates/lean-sphincs/src/formal_tests.rs` is c
 
 `signature-kat` is built from the unchanged pinned CLI and statement. Our `implementation-kat` imports an exact prefix of the pinned CLI, excluding only its global entry point, to reuse its parsing/encoding helpers and compiler-replacement proofs and computes component answers with the **same pinned Lean algorithms**, not a second Rust reference. Both executables are built from the same source tree and toolchain as the checked proofs. The new executable's output formatting/parser is trusted test infrastructure; it is scanned for proof escapes but not itself a parser-correctness theorem.
 
-Malformed signature lengths must first be rejected by Rust. The exporter then records `null` to match the Lean byte parser's `none`. Public-key/message lengths are fixed by Rust's types; invalid typed inputs are parser cases, not executions of a nonexistent Rust byte API. Exact-size invalid signatures compare the actual Boolean verdict. The real `2^32`-attempt exhaustion path is not exhaustively executed; finite small-budget exhaustion tests and the Lean search theorem do not prove Rust's complete failure behavior.
+Malformed signature lengths must first be rejected by Rust. The exporter then records `null` to match the Lean byte parser's `none`. Public-key/message lengths are fixed by Rust's types; invalid typed inputs are parser cases, not executions of a nonexistent Rust byte API. Exact-size invalid signatures compare the actual Boolean verdict. The real `2^32`-attempt exhaustion path is not exhaustively executed by this finite conformance gate. The source contracts below prove bounded exhaustion without executing every trial.
 
 `run_formal.py` requires both manifests, every operation, exact files/results, no duplicate/unexpected/missing/skipped cases, successful process exits and a complete zero-mismatch summary. Eight regression tests protect these rules. Every matrix job also runs `check_formal_rejection.py`, which feeds deliberately wrong expected outputs to **both real Lean executables** and requires rejection. Corpora, build configuration, seeds, logs, source pin, source hashes and dependency reports are saved for replay.
 
@@ -88,7 +135,7 @@ workflow adds two gates:
 
 * Kernel-check `LeanVM.knowledgeSoundness_holds`, `LeanVM.completeness_holds`,
   `LeanVM.Wire.roundTrip` and `LeanVM.Wire.oneEncoding`, plus the executable
-  verifier and wire models. `VerifierAxioms.lean` requires those four theorems
+  verifier and wire models. [`Verifier/Axioms.lean`](Verifier/Axioms.lean) requires those four theorems
   and rejects transitive dependencies beyond the three foundational axioms.
   Source digests, profile revision, toolchains and forbidden proof escapes are
   checked before building. No kernel-skipping development options are used.
@@ -140,6 +187,109 @@ instead of regenerating it.
 
 ## Remaining trusted dependencies and limits
 
-The Lean kernel, foundational axioms and upstream definitions are trusted for proof checking. Execution/conformance additionally trusts Lean's compiler/runtime, both comparison drivers and parsers, Rust/rustc/LLVM, Alloy/RustCrypto or assembly Keccak, `wide`'s SIMD semantics, CPU behavior and CI infrastructure. Our mathematical schedule theorem does not verify the SIMD permutation. No new proof covers concrete Keccak's cryptographic security, constant time, dependency memory safety, compiler correctness or side-channel behavior. The upstream query-accounting assumptions and signature limit remain part of its theorem; the Rust API does not count a key's signing requests.
+The Lean kernel, foundational axioms and upstream definitions are trusted for proof checking. Execution/conformance additionally trusts Lean's compiler/runtime, both comparison drivers and parsers, Rust/rustc/LLVM, Alloy/RustCrypto or assembly Keccak, `wide`'s SIMD semantics, CPU behavior and CI infrastructure. The older mathematical schedule theorem alone does not verify the SIMD permutation; the source contracts below prove its per-lane functional behavior. No new proof covers concrete Keccak's cryptographic security, constant time, dependency memory safety, compiler correctness or side-channel behavior. The upstream query-accounting assumptions and signature limit remain part of its theorem; the Rust API does not count a key's signing requests.
 
 Update `upstream.json` deliberately, review the statement, equivalences, security-transfer conditions and executable at the new pin, and run all proof/conformance gates. Reconcile a changed encoding explicitly; never bypass the kernel, weaken the axiom gate or relax comparisons to accept a mismatch.
+
+## Production SPHINCS source verification
+
+This gate proves deterministic functional refinement of the production
+`lean-sphincs` crate against EthLib, using Charon/Aeneas translations of the actual
+Rust bodies. It covers scalar, SSE2, AVX2, SSE2 with assembly hashing, and AVX2
+with assembly hashing. Scalar is extracted for `aarch64-unknown-linux-gnu`;
+the four x86 configurations use their production compiler feature selections.
+
+**Completed baseline audit: all five configurations passed at `b82f2a78`.**
+Fresh extraction and translation, complete source contracts, concrete backend
+instances, signing roundtrips, and dependency/mutation audits passed against the
+observable standard-library model. The reorganized module layout requires a fresh
+complete run. See the [detailed verification guide](docs/verification.md) for what
+this establishes and the status of the evidence.
+
+| Main contracts | Established behavior |
+| --- | --- |
+| `KeyGen.key_gen_ethlib_spec` | Every 32-byte secret produces the encoded public seed and canonical top-tree root. |
+| `FullSign.sign_with_limit_ethlib_spec`, `sign_ethlib_spec` | The internal bounded signer for every `u64` attempt limit, including zero, exact signature bytes on success, and the precise first exhausted layer on failure; public `sign` uses `2^32` trials. |
+| `WholeVerifier.verify_*_ethlib_spec` | Actual public verification equals EthLib `decodePublicKey`, `decodeSignature` and `verifyWith` for every signature byte string, including all invalid lengths and layer-encoding rejections. Concrete scalar/SSE2/AVX2 contracts discharge the backend premises. |
+| `CanonicalCorrectness.sign_with_limit_roundtrip_*`, `sign_roundtrip_*` | Actual key generation, signing and verification compose: every successfully generated signature is accepted; counter exhaustion remains an error. The internal bounded helper and public default API are covered in all five configurations. |
+| `Layout.*`, `CanonicalCorrectness.signature_roundtrip` | Exact public-key and 7,740-byte signature layouts, all counters/FORS/chain/path fields, malformed-length behavior, and lossless typed signature serialization. |
+| Source SIMD, FORS, WOTS, tree and cache contracts | Actual lane arithmetic, all 24 Keccak rounds, 64/80-byte hashing, gathers/scatters, queues and scalar tails; all FORS openings and hypertree layers; complete signing-tree/cache construction and exact reader/buffer updates. |
+| `ErrorFormatting` in [RustCrypto/Formatting](RustCrypto/Formatting) | Extracted `SignError` Display, Debug, Clone, equality and Error supertraits, including all byte-valued layers, alternate Debug, writer options and retained partial output on failure. |
+
+These are source functional proofs in the deterministic `Id` model. They trust
+the Lean kernel and standard foundations, the pinned Charon/Aeneas translation,
+and explicit interface models for Rust standard-library operations, Alloy Keccak
+and `wide` words. Alloy streaming hashing is modeled as the accumulated byte
+stream hashed by EthLib Keccak; `wide` operations are modeled as ordered 64-bit
+lanes. The dependency implementations and their machine code are outside this
+proof boundary. The [formatting model](Runtime/README.md) makes output observable;
+Rust's default `Error::source` body is not extracted and remains a standard-library
+boundary.
+
+No claim is made about cryptographic hardness, constant time or side channels,
+hash-query trace equivalence, compiler correctness, or CPU correctness. In
+particular, these results do not transfer the older reference's security theorem
+or query budget to this Rust execution order. Exhaustion is proved as behavior;
+signing success for every key/message is not assumed or promised.
+
+### Pins and reproduction
+
+[`ethlib.json`](ethlib.json) pins EthLib to
+`ec1f398c9427e374160e68ce158a39e40805fd25` and records the reference source hashes.
+[`extractor.json`](extractor.json) pins Aeneas to
+`fb44cb400eb6bfe7dce97422ebe8fa748b7e4f9b`, Charon to
+`695be3d6292e988eedd8afcb7a709146a0ff4f01` (version `0.1.324`), Rust to
+`nightly-2026-09-17`, OCaml to `5.3.0`, and Lean to `4.36.0`.
+Use Linux/WSL, Python 3 and a C toolchain. Build the pinned Charon/Aeneas binaries
+and install the Rust extraction components and aarch64 target as shown in the
+[source workflow](../.github/workflows/sphincs-source.yml). Keep WSL runtime and
+Cargo caches on native Linux storage.
+
+From the repository root, with those binaries and Lean on `PATH`:
+
+```sh
+set -euo pipefail
+runtime=/absolute/path/to/sphincs-runtime
+charon=/absolute/path/to/charon
+aeneas=/absolute/path/to/aeneas
+export RUSTUP_TOOLCHAIN=nightly-2026-09-17
+
+python3 -I scripts/prepare_batching.py
+(cd formal && lake build Batching +EthLib.Cryptography.Sphincs.Serialization)
+python3 -I scripts/prepare_rust_runtime.py --runtime "$runtime" --stdlib-model
+python3 -I -m unittest discover -s scripts -p test_translation.py
+
+python3 -I scripts/extract_sphincs.py --charon "$charon" \
+  --target-dir "$runtime/extraction-targets" | tee "$runtime/extraction.stdout"
+extraction=$(tail -n 1 "$runtime/extraction.stdout")
+python3 -I scripts/translate_sphincs.py --aeneas "$aeneas" \
+  --extraction-run "$extraction" | tee "$runtime/translation.stdout"
+report=$(tail -n 1 "$runtime/translation.stdout")
+python3 -I scripts/check_sphincs_source.py --runtime "$runtime" \
+  --translation-run "$(dirname "$report")" \
+  --proof-workspace "$runtime/source-proof" --jobs 2
+```
+
+Extraction automatically supplies Charon's `--sysroot default`. All five
+configurations are required by the source gate. Extraction or translation alone
+is not a proof. `prepare_batching.py` prepares the pinned EthLib closure; the Lake
+`Batching` target retains only `Batching.Keccak` and `Batching.Constants`, used by
+the source proofs. Runtime preparation preserves the stock Aeneas sources and
+builds the documented formatting replacements separately with their importers.
+
+[`RustCrypto/Audit/Source.lean`](RustCrypto/Audit/Source.lean) requires the main
+contracts by name and audits their transitive
+dependencies, allowing only `propext`, `Classical.choice` and `Quot.sound`.
+Generated local Rust bodies must be present and non-opaque. The gate rejects
+proof holes and kernel shortcuts, checks source/proof/tool/model identities
+before and after checking, and runs rejection controls for changed source,
+serialization, SIMD rotation/chi, injected assumptions and missing required
+contracts. Successful runs write a fresh `formal/.cache/source-runs/*/evidence.json`;
+its trust-boundary and exclusion fields delimit the functional-refinement claim.
+
+[`.github/workflows/sphincs-source.yml`](../.github/workflows/sphincs-source.yml)
+rebuilds the pinned tools, extracts/translates the five configurations, checks the
+observable runtime and runs the source gate on relevant pull requests, pushes to
+`main`, weekly, and manually. It retains extraction, translation, runtime-model
+and proof evidence. The older security/conformance workflow remains a separate
+scope.
