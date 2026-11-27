@@ -349,6 +349,7 @@ run_cmd do
     `RustCrypto.SimdRound.rotate_spec,
     `RustCrypto.Constants.rotation_table_spec,
     `RustCrypto.RoundConstants.round_table_exact_spec,
+    `RustCrypto.Permutation.chi_array_spec,
     `RustCrypto.Permutation.permute_ethlib_spec,
     `RustCrypto.ShortHash.hash_64_spec,
     `RustCrypto.ShortHash.hash_80_spec,

@@ -75,16 +75,32 @@ def chi (rotated : State) (i : Nat) : Word := fun lane =>
   wordAt rotated i lane ^^^ (~~~(wordAt rotated (i/5*5+(i%5+1)%5) lane) &&&
     wordAt rotated (i/5*5+(i%5+2)%5) lane)
 
-@[step] theorem chi_call_spec (rotated : State) (index : Usize) (hi : index.val < 25) :
-    lean_sphincs.hash.batch.permute.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeu64x2.call_mut
-      rotated index ⦃ out => out.1 = chi rotated index.val ∧ out.2 = rotated ⦄ := by
-  unfold lean_sphincs.hash.batch.permute.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeu64x2.call_mut
+/-- One lane of the source helper, retaining all checked index arithmetic. -/
+def chiElement (rotated : State) (index : Usize) : Result Word := do
+  let ux ← Aeneas.Std.Array.index_usize rotated index
+  let row ← index / 5#usize
+  let base ← row * 5#usize
+  let plusOne ← index + 1#usize
+  let next ← plusOne % 5#usize
+  let first ← base + next
+  let ux1 ← Aeneas.Std.Array.index_usize rotated first
+  let ux2 ← wide.u64x2_.u64x2.Insts.CoreOpsBitNotu64x2.not ux1
+  let baseAgain ← row * 5#usize
+  let plusTwo ← index + 2#usize
+  let nextTwo ← plusTwo % 5#usize
+  let second ← baseAgain + nextTwo
+  let ux3 ← Aeneas.Std.Array.index_usize rotated second
+  let ux4 ← wide.u64x2_.u64x2.Insts.CoreOpsBitBitAndu64x2u64x2.bitand ux2 ux3
+  wide.u64x2_.u64x2.Insts.CoreOpsBitBitXoru64x2u64x2.bitxor ux ux4
+
+@[step] theorem chiElement_spec (rotated : State) (index : Usize) (hi : index.val < 25) :
+    chiElement rotated index ⦃ out => out = chi rotated index.val ⦄ := by
+  unfold chiElement
   step*
   funext lane
   simp_all [chi, wordAt, Aeneas.Std.Array.getElem!_Nat_eq]
   simp (disch := scalar_tac) only [getElem?_pos, Option.getD_some]
   rfl
-
 
 def tabulate (n : Usize) (fn : Nat → Word) : Aeneas.Std.Array Word n :=
   Aeneas.Std.Array.from (List.ofFn fun i : Fin n.val => fn i.val) (by simp)
@@ -94,6 +110,18 @@ def tabulate (n : Usize) (fn : Nat → Word) : Aeneas.Std.Array Word n :=
   unfold wordAt
   rw [Aeneas.Std.Array.getElem!_Nat_eq, getElem!_pos (tabulate n fn).val i (by simpa using hi)]
   simp only [tabulate, Aeneas.Std.Array.from_val, List.getElem_ofFn]
+
+/-- Constant lane expressions enumerate the same 25 entries as the existing tabulation model. -/
+theorem literal25_tabulate (fn : Nat → Word) :
+    Aeneas.Std.Array.make 25#usize [
+      fn 0, fn 1, fn 2, fn 3, fn 4,
+      fn 5, fn 6, fn 7, fn 8, fn 9,
+      fn 10, fn 11, fn 12, fn 13, fn 14,
+      fn 15, fn 16, fn 17, fn 18, fn 19,
+      fn 20, fn 21, fn 22, fn 23, fn 24] = tabulate 25#usize fn := by
+  apply Aeneas.Std.Array.ext
+  simp only [Aeneas.Std.Array.make_val, tabulate, Aeneas.Std.Array.from_val]
+  rfl
 
 theorem from_fn_exact {F : Type} (n : Usize) (cb : core.ops.function.FnMut F Usize Word)
     (state : F) (fn : Nat → Word)
@@ -127,14 +155,55 @@ theorem from_fn_exact {F : Type} (n : Usize) (cb : core.ops.function.FnMut F Usi
   intro i hi
   exact theta_call_spec columns i (by simpa using hi)
 
-@[step] theorem chi_array_spec (rotated : State) :
-    core.array.from_fn 25#usize
-      lean_sphincs.hash.batch.permute.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeu64x2 rotated ⦃ out =>
-        out = tabulate 25#usize (chi rotated) ⦄ := by
-  apply from_fn_exact
-  intro i hi
-  exact chi_call_spec rotated i (by simpa using hi)
+/-- Factoring the extracted helper into its 25 checked lane computations. -/
+def chiElements (rotated : State) : Result State := do
+  let lane0 ← chiElement rotated 0#usize
+  let lane1 ← chiElement rotated 1#usize
+  let lane2 ← chiElement rotated 2#usize
+  let lane3 ← chiElement rotated 3#usize
+  let lane4 ← chiElement rotated 4#usize
+  let lane5 ← chiElement rotated 5#usize
+  let lane6 ← chiElement rotated 6#usize
+  let lane7 ← chiElement rotated 7#usize
+  let lane8 ← chiElement rotated 8#usize
+  let lane9 ← chiElement rotated 9#usize
+  let lane10 ← chiElement rotated 10#usize
+  let lane11 ← chiElement rotated 11#usize
+  let lane12 ← chiElement rotated 12#usize
+  let lane13 ← chiElement rotated 13#usize
+  let lane14 ← chiElement rotated 14#usize
+  let lane15 ← chiElement rotated 15#usize
+  let lane16 ← chiElement rotated 16#usize
+  let lane17 ← chiElement rotated 17#usize
+  let lane18 ← chiElement rotated 18#usize
+  let lane19 ← chiElement rotated 19#usize
+  let lane20 ← chiElement rotated 20#usize
+  let lane21 ← chiElement rotated 21#usize
+  let lane22 ← chiElement rotated 22#usize
+  let lane23 ← chiElement rotated 23#usize
+  let lane24 ← chiElement rotated 24#usize
+  ok (Aeneas.Std.Array.make 25#usize [
+    lane0, lane1, lane2, lane3, lane4,
+    lane5, lane6, lane7, lane8, lane9,
+    lane10, lane11, lane12, lane13, lane14,
+    lane15, lane16, lane17, lane18, lane19,
+    lane20, lane21, lane22, lane23, lane24])
 
+set_option maxRecDepth 65536 in
+theorem source_chi_eq_elements (rotated : State) :
+    lean_sphincs.hash.batch.chi rotated = chiElements rotated := by
+  conv_rhs => simp only [chiElements, chiElement, Aeneas.Std.bind_assoc, Aeneas.Std.bind_ok]
+  rfl
+
+/-- The source helper implements the unchanged lane-wise chi model. -/
+@[step] theorem chi_array_spec (rotated : State) :
+    lean_sphincs.hash.batch.chi rotated ⦃ out =>
+      out = tabulate 25#usize (chi rotated) ⦄ := by
+  rw [source_chi_eq_elements]
+  unfold chiElements
+  step*
+  rw [← literal25_tabulate (chi rotated)]
+  simp_all
 
 @[step] theorem xor_assign_spec (a b : Word) :
     wide.u64x2_.u64x2.Insts.CoreOpsBitBitXorAssignu64x2.bitxor_assign a b ⦃ out =>

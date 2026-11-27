@@ -287,11 +287,42 @@ def main():
                     cwd=runtime, env=mutation_env, stdout=stream, stderr=subprocess.STDOUT)
             if failed.returncode == 0 or "type mismatch" not in (logs / "negativeRho.log").read_text(encoding="utf-8").lower():
                 raise RuntimeError("wrong SIMD rotation was not rejected with the concrete witness")
+            chi_site = "let ux ← Array.index_usize rotated 0#usize"
+            if raw.count(chi_site) != 1:
+                raise RuntimeError("SIMD chi mutation site changed")
+            chi_root = workspace / "negative-chi"
+            shutil.copytree(folder / "LeanSphincs", chi_root / "LeanSphincs", dirs_exist_ok=True)
+            chi_file = chi_root / "LeanSphincs/Funs.lean"
+            chi_file.write_text(raw.replace(chi_site,
+                "let ux ← Array.index_usize rotated 1#usize"), encoding="utf-8")
+            chi_env = env.copy()
+            chi_env["LEAN_PATH"] = str(chi_root) + os.pathsep + env["LEAN_PATH"]
+            checked(["lean", "-R", chi_root, "-DwarningAsError=true", chi_file,
+                     "-o", chi_root / "LeanSphincs/Funs.olean"], runtime,
+                    logs / "negativeChi-valid-source.log", chi_env)
+            chi_contract = (folder / "RustCrypto/Permutation.lean").read_text(encoding="utf-8")
+            positive_chi = logs / "positiveChi.lean"
+            positive_chi.write_text(chi_contract, encoding="utf-8")
+            checked(["lean", "-DwarningAsError=true", positive_chi], runtime,
+                    logs / "positiveChi.log", env)
+            negative_chi = logs / "negativeChi.lean"
+            negative_chi.write_text(chi_contract, encoding="utf-8")
+            chi_log = logs / "negativeChi.log"
+            with chi_log.open("w", encoding="utf-8") as stream:
+                failed = subprocess.run(["lean", "-DwarningAsError=true", str(negative_chi)],
+                    cwd=runtime, env=chi_env, stdout=stream, stderr=subprocess.STDOUT)
+            chi_diagnostic = chi_log.read_text(encoding="utf-8").lower()
+            if failed.returncode == 0 or not any(marker in chi_diagnostic for marker in
+                    ["unsolved goals", "type mismatch", "tactic `rfl` failed", "tactic 'rfl' failed"]):
+                raise RuntimeError("wrong SIMD chi index was not rejected by its source contract")
             controls = {"unchanged_source_iteration": "accepted", "skipped_node_iteration": "rejected",
                         "injected_assumption": "rejected", "missing_required_contract": "rejected",
                         "unchanged_simd_round": "accepted",
                         "incorrect_simd_rotation": "rejected with concrete lane witness",
-                        "rho_control_scope": "immediate call extracted from mutated source round"}
+                        "rho_control_scope": "immediate call extracted from mutated source round",
+                        "unchanged_chi_contract": "accepted",
+                        "incorrect_chi_lane_index": "rejected by rechecked source contract",
+                        "chi_control_scope": "full permutation proof against typed mutated chi body"}
         if body_hashes != {name: hashlib.sha256((folder / "LeanSphincs" / name).read_bytes()).hexdigest() for name in body_hashes}:
             raise RuntimeError("generated body changed during checking: " + label)
         if checked_sources != {p.relative_to(folder).as_posix(): digest(p) for p in folder.rglob("*.lean")}:

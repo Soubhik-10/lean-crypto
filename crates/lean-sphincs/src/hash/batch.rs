@@ -88,6 +88,45 @@ fn rotate<const N: u32>(word: Word) -> Word {
     }
 }
 
+// Keep chi's lane indices constant, like rho/pi, so the compiler avoids a
+// runtime indexing loop.
+#[inline(always)]
+fn chi(rotated: &[Word; STATE_LANES]) -> [Word; STATE_LANES] {
+    macro_rules! chi {
+        ($i:literal) => {
+            rotated[$i]
+                ^ (!rotated[($i / 5) * 5 + (($i + 1) % 5)] & rotated[($i / 5) * 5 + (($i + 2) % 5)])
+        };
+    }
+    [
+        chi!(0),
+        chi!(1),
+        chi!(2),
+        chi!(3),
+        chi!(4),
+        chi!(5),
+        chi!(6),
+        chi!(7),
+        chi!(8),
+        chi!(9),
+        chi!(10),
+        chi!(11),
+        chi!(12),
+        chi!(13),
+        chi!(14),
+        chi!(15),
+        chi!(16),
+        chi!(17),
+        chi!(18),
+        chi!(19),
+        chi!(20),
+        chi!(21),
+        chi!(22),
+        chi!(23),
+        chi!(24),
+    ]
+}
+
 fn permute(state: &mut [Word; STATE_LANES]) {
     let mut round = 0;
     while round < ROUNDS {
@@ -112,11 +151,7 @@ fn permute(state: &mut [Word; STATE_LANES]) {
             lane!(4), lane!(5), lane!(11), lane!(17), lane!(23),
             lane!(2), lane!(8), lane!(14), lane!(15), lane!(21),
         ];
-        *state = core::array::from_fn(|i| {
-            let row = i / 5 * 5;
-            let x = i % 5;
-            rotated[i] ^ (!rotated[row + (x + 1) % 5] & rotated[row + (x + 2) % 5])
-        });
+        *state = chi(&rotated);
         state[0] ^= Word::new([constant; WIDTH]);
         round += 1;
     }
